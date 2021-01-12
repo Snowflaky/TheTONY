@@ -19,6 +19,8 @@ int main(void)
 
     //HeJSa
 
+    hello();
+
   while(1)
   {
 

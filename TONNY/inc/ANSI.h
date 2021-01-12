@@ -4,9 +4,15 @@
 #include "stdint.h"
 
 
-#ifndef _ansi_H_
-#define _ansi_H_
+#ifndef _ANSI_H_
+#define _ANIS_H_
 #define ESC 0x1B
 #define FIX14_SHIFT 14
 #define FIX14_MULT(a, b) ( (a)*(b) >> FIX14_SHIFT )
 #define FIX14_DIV(a, b) ( ((a) << FIX14_SHIFT) / b )
+
+
+
+void hello();
+
+#endif
