@@ -11,7 +11,7 @@
 #define FIX14_MULT(a, b) ( (a)*(b) >> FIX14_SHIFT )
 #define FIX14_DIV(a, b) ( ((a) << FIX14_SHIFT) / b )
 
-
+new struct trang(); swdåvmswådkpvm
 
 void hello();
 void fgcolor(uint8_t foreground);
