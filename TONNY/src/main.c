@@ -17,13 +17,11 @@
 int main(void)
 {
     uart_init (9600);
+    moveShip();
 
-    hello();
-    clrscr();
-    window();
-
-  while(1)
+    while(1)
   {
+        //printf("%c",uart_get_char());
 
   }
 }

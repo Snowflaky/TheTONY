@@ -105,4 +105,15 @@ void window() {
     printf(" ");
 }
 
-void obstacles1 ();
+void moveShip(){
+    while(1){
+        if (uart_get_char()=='d'){
+            printf("up");
+        }
+    }
+}
+
+
+
+
+
