@@ -14,5 +14,12 @@
 
 
 void hello();
+void fgcolor(uint8_t foreground);
+void bgcolor(uint8_t background);
+void color(uint8_t foreground, uint8_t background);
+void resetbgcolor();
+void clrscr ();
+void gotoxy (uint32_t c, uint32_t r);
+void window();
 
 #endif

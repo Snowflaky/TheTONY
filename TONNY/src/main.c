@@ -17,9 +17,9 @@ int main(void)
 {
     uart_init (9600);
 
-    //HeJSa
-
     hello();
+    clrscr();
+    window();
 
   while(1)
   {
