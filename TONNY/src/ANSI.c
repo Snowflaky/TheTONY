@@ -104,3 +104,5 @@ void window() {
     color(15,0);
     printf(" ");
 }
+
+void obstacles1 ();
