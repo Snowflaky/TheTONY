@@ -105,4 +105,19 @@ void window() {
     printf(" ");
 }
 
-void obstacles1 ();
+void fixtrangPos(struct trang (*b)) {
+//Converts balls position and velocity to 18.14 (from 32.0)
+    (*b).x=(*b).x<<14;
+    (*b).y=(*b).y<<14;
+    (*b).vx=(*b).vx<<14;
+    (*b).vy=(*b).vy<<14;
+}
+
+void trangNextPos(struct trang (*b)) {
+//Calculate new position for trang enemy Input is a pointer.
+    int32_t k = 1.3;
+    (*b).x = (*b).x + (*b).vx*k;
+    (*b).y = (*b).y + (*b).vy*k;
+}
+
+

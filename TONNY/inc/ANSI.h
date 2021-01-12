@@ -11,7 +11,13 @@
 #define FIX14_MULT(a, b) ( (a)*(b) >> FIX14_SHIFT )
 #define FIX14_DIV(a, b) ( ((a) << FIX14_SHIFT) / b )
 
-new struct trang(); swdåvmswådkpvm
+struct vector_t {
+    int32_t x, y;
+};
+
+struct trang { //One of the baddest bois around!, he's got two things inside him,- burning hatred for the player, and 180 degrees
+    int32_t x, y, vx, vy;
+};
 
 void hello();
 void fgcolor(uint8_t foreground);
@@ -21,5 +27,9 @@ void resetbgcolor();
 void clrscr ();
 void gotoxy (uint32_t c, uint32_t r);
 void window();
+
+//TRANG BOIIIIIIII
+void fixtrangPos(struct trang (*b));
+void trangNextPos(struct trang (*b));
 
 #endif
