@@ -22,5 +22,16 @@ int main(void)
     clrscr();
     window();
 
+    struct trang trang;
+    trang.x = 130;
+    trang.y = 25;
+    trang.vx = -2;
+    trang.vy = -1;
+    trang.hp = 5;
+
+    fixtrangPos(&trang);
+    trangNextPos(&trang);
+    drawTrang(trang);
+
   while(1){}
 }

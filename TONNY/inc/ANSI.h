@@ -16,7 +16,7 @@ struct vector_t {
 };
 
 struct trang { //One of the baddest bois around!, he's got two things inside him,- burning hatred for the player, and 180 degrees
-    int32_t x, y, vx, vy;
+    int32_t x, y, vx, vy, hp;
 };
 
 void hello();
@@ -29,7 +29,8 @@ void gotoxy (uint32_t c, uint32_t r);
 void window();
 
 //TRANG BOIIIIIIII
-void fixtrangPos(struct trang (*b));
-void trangNextPos(struct trang (*b));
+void fixtrangPos(struct trang (*t));
+void trangNextPos(struct trang (*t));
+void drawTrang (struct trang t);
 
 #endif

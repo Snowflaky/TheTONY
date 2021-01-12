@@ -105,19 +105,48 @@ void window() {
     printf(" ");
 }
 
-void fixtrangPos(struct trang (*b)) {
+void fixtrangPos(struct trang (*t)) {
 //Converts balls position and velocity to 18.14 (from 32.0)
-    (*b).x=(*b).x<<14;
-    (*b).y=(*b).y<<14;
-    (*b).vx=(*b).vx<<14;
-    (*b).vy=(*b).vy<<14;
+    (*t).x=(*t).x<<14;
+    (*t).y=(*t).y<<14;
+    (*t).vx=(*t).vx<<14;
+    (*t).vy=(*t).vy<<14;
 }
 
-void trangNextPos(struct trang (*b)) {
+void trangNextPos(struct trang (*t)) {
 //Calculate new position for trang enemy Input is a pointer.
     int32_t k = 1.3;
-    (*b).x = (*b).x + (*b).vx*k;
-    (*b).y = (*b).y + (*b).vy*k;
+    (*t).x = (*t).x + (*t).vx*k;
+    (*t).y = (*t).y + (*t).vy*k;
+}
+
+void drawTrang (struct trang t) {
+    color(0,0);
+    //print the dark spots on trang
+    gotoxy(t.x>>14,t.y>>14);
+    color(6,5);
+    gotoxy(t.x>>14,t.y>>14);
+    printf("-");
+    gotoxy((t.x>>14 + 1),(t.y>>14 - 1));
+    printf("-");
+    gotoxy((t.x>>14 + 1),(t.y>>14 + 1));
+    printf("-");
+    //print the shields of trang
+    color(2,2);
+    gotoxy(t.x>>14 - 2,t.y>>14);
+    printf(" ");
+    gotoxy(t.x>>14 - 1,t.y>>14 - 1);
+    printf(" ");
+    gotoxy(t.x>>14 - 1,t.y>>14 + 1);
+    printf(" ");
+    gotoxy(t.x>>14,t.y>>14 - 2);
+    printf(" ");
+    gotoxy(t.x>>14,t.y>>14 + 2);
+    printf(" ");
+    gotoxy(t.x>>14 + 1,t.y>>14 - 3);
+    printf(" ");
+    gotoxy(t.x>>14 + 1,t.y>>14 + 3);
+    printf(" ");
 }
 
 
