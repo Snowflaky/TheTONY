@@ -15,8 +15,12 @@
 
 int main(void)
 {
+    uart_init (9600);
+
+    //HeJSa
+
   while(1)
   {
-  
+
   }
 }
