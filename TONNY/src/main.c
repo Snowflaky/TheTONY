@@ -18,20 +18,24 @@ int main(void)
 {
     uart_init (9600);
 
-    hello();
+    color(0,0);
     clrscr();
-    window();
+    //window();
 
-    struct trang trang;
-    trang.x = 130;
-    trang.y = 25;
-    trang.vx = -2;
-    trang.vy = -1;
-    trang.hp = 5;
+    struct trang tra;
+    tra.position.x = 110;
+    tra.position.y = 21;
+    tra.velocity.x = -2;
+    tra.velocity.y = 0;
+    tra.hp = 5;
 
-    fixtrangPos(&trang);
-    trangNextPos(&trang);
-    drawTrang(trang);
+    //fixtrangPos(&tra);
 
-  while(1){}
+    for(int i = 0; i < 20; i++) {
+        trangNextPos(&tra);
+        drawTrang(tra);
+        eraseTrang(tra);
+    }
+
+    while(1){}
 }

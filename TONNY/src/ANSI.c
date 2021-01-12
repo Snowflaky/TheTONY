@@ -105,48 +105,81 @@ void window() {
     printf(" ");
 }
 
+void moveShip(){
+    while(1){
+        if (uart_get_char()=='d'){
+            printf("up");
+        }
+    }
+}
+
 void fixtrangPos(struct trang (*t)) {
 //Converts balls position and velocity to 18.14 (from 32.0)
-    (*t).x=(*t).x<<14;
-    (*t).y=(*t).y<<14;
-    (*t).vx=(*t).vx<<14;
-    (*t).vy=(*t).vy<<14;
+    (*t).position.x=(*t).position.x<<14;
+    (*t).position.y=(*t).position.y<<14;
+    (*t).velocity.x=(*t).velocity.x<<14;
+    (*t).velocity.y=(*t).velocity.y<<14;
 }
 
 void trangNextPos(struct trang (*t)) {
 //Calculate new position for trang enemy Input is a pointer.
     int32_t k = 1.3;
-    (*t).x = (*t).x + (*t).vx*k;
-    (*t).y = (*t).y + (*t).vy*k;
+    (*t).position.x = (*t).position.x + (*t).velocity.x*k;
+    (*t).position.y = (*t).position.y + (*t).velocity.y*k;
 }
 
 void drawTrang (struct trang t) {
     color(0,0);
-    //print the dark spots on trang
-    gotoxy(t.x>>14,t.y>>14);
+    //print the Trang alien ship
+    gotoxy(t.position.x,t.position.y);
     color(6,5);
-    gotoxy(t.x>>14,t.y>>14);
+    gotoxy(t.position.x,t.position.y);
+    printf("<");
+    gotoxy(t.position.x + 1,t.position.y - 1);
     printf("-");
-    gotoxy((t.x>>14 + 1),(t.y>>14 - 1));
-    printf("-");
-    gotoxy((t.x>>14 + 1),(t.y>>14 + 1));
+    gotoxy(t.position.x + 1,t.position.y + 1);
     printf("-");
     //print the shields of trang
-    color(2,2);
-    gotoxy(t.x>>14 - 2,t.y>>14);
+    color(2,0);
+    gotoxy(t.position.x - 2,t.position.y);
+    printf("<");
+    gotoxy(t.position.x - 1,t.position.y - 1);
+    printf("/");
+    gotoxy(t.position.x - 1,t.position.y + 1);
+    printf("\\");
+    gotoxy(t.position.x,t.position.y - 2);
+    printf("/");
+    gotoxy(t.position.x,t.position.y + 2);
+    printf("\\");
+}
+
+void eraseTrang (struct trang t) { //erases Trang with the same
+    color(0,0);                    //method as Trang is drawn
+    //erase the Trang alien ship
+    gotoxy(t.position.x,t.position.y);
+    color(0,0);
+    gotoxy(t.position.x,t.position.y);
     printf(" ");
-    gotoxy(t.x>>14 - 1,t.y>>14 - 1);
+    gotoxy(t.position.x + 1,t.position.y - 1);
     printf(" ");
-    gotoxy(t.x>>14 - 1,t.y>>14 + 1);
+    gotoxy(t.position.x + 1,t.position.y + 1);
     printf(" ");
-    gotoxy(t.x>>14,t.y>>14 - 2);
+    //erase the shields of the Trang alien ship
+    color(0,0);
+    gotoxy(t.position.x - 2,t.position.y);
     printf(" ");
-    gotoxy(t.x>>14,t.y>>14 + 2);
+    gotoxy(t.position.x - 1,t.position.y - 1);
     printf(" ");
-    gotoxy(t.x>>14 + 1,t.y>>14 - 3);
+    gotoxy(t.position.x - 1,t.position.y + 1);
     printf(" ");
-    gotoxy(t.x>>14 + 1,t.y>>14 + 3);
+    gotoxy(t.position.x,t.position.y - 2);
+    printf(" ");
+    gotoxy(t.position.x,t.position.y + 2);
     printf(" ");
 }
+
+/*void trangColl (struct trang (*t)) {
+    if ((*t).position.y < )
+}*/
 
 

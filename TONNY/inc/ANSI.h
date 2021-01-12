@@ -12,11 +12,18 @@
 #define FIX14_DIV(a, b) ( ((a) << FIX14_SHIFT) / b )
 
 struct vector_t {
-    int32_t x, y;
+    uint32_t x, y;
 };
 
 struct trang { //One of the baddest bois around!, he's got two things inside him,- burning hatred for the player, and 180 degrees
-    int32_t x, y, vx, vy, hp;
+    struct vector_t position;
+    struct vector_t velocity;
+    uint32_t hp;
+};
+
+struct ship {
+    struct position;
+    uint32_t hp;
 };
 
 void hello();
@@ -29,8 +36,9 @@ void gotoxy (uint32_t c, uint32_t r);
 void window();
 
 //TRANG BOIIIIIIII
-void fixtrangPos(struct trang (*t));
+//void fixtrangPos(struct trang (*t));
 void trangNextPos(struct trang (*t));
 void drawTrang (struct trang t);
+void eraseTrang (struct trang t);
 
 #endif
