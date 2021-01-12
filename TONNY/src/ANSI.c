@@ -73,47 +73,96 @@ void gotoxy (uint32_t c, uint32_t r) {
     printf("%c[%lu;%luH", ESC, r, c);
 }
 
-void window() {
-    //Size of window:
+void window(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2, uint8_t lineColor) {
+//Outline game borders. Border is drawn by printing colored background spaces.
+//Input: x start point, x end point, y start point, y end point, color of border (number between 0 and 7 (see bgcolor))
+    //Game borders
+    /*
     uint8_t x1 = 0;
     uint8_t y1 = 0;
     uint8_t x2 = 140;
-    uint8_t y2 = 40;
+    uint8_t y2 = 40;*/
     uint8_t i;
-
     for (i = 0; i < (y2-y1); i++) {
+    //Left border
         gotoxy(x1,y1+i);
-        color(0,7);
+        color(0,lineColor);
         printf(" ");
     }
     for (i = 0; i < (y2-y1); i++) {
+    //Right border
         gotoxy(x2,y1+i);
-        color(0,7);
+        color(0,lineColor);
         printf(" ");
     }
     for (i = 0; i < ((x2-x1)+1); i++) {
+    //Upper border
         gotoxy(x1+i,y1);
-        color(0,7);
+        color(0,lineColor);
         printf(" ");
     }
     for (i = 0; i < (x2-x1); i++) {
+    //Lower border
         gotoxy((x1+i)+1,y2);
-        color(0,7);
+        color(0,lineColor);
         printf(" ");
     }
-    color(15,0);
+    color(15,0);//resets background and foreground colors
     printf(" ");
 }
 
-void moveShip(){
-    while(1){
-        if (uart_get_char()=='d'){
-            printf("up");
-        }
+uint8_t keyInput(){
+//Detect if keyboard input is w (up) or s (down).
+//Any other key --> return 0.
+    uint8_t x=0;
+    uint8_t input=uart_get_char();
+    if (uart_get_char()=='w'){
+        x=1;
+    }
+    if (uart_get_char()=='s'){
+        x=2;
+    }
+    return x;
+}
+
+void moveShip (uint8_t x, struct ship_t *ship){
+//If up/down keyInput (x) detected, function updates spaceship position.
+//Input: keyInput (up/down/null), pointer to ship structure.
+    if (x==1 && (*ship).position.y>2){
+        (*ship).position.y--;
+    }
+    if (x==2 && (*ship).position.y<39){
+        (*ship).position.y++;
     }
 }
 
-void fixtrangPos(struct trang (*t)) {
+void printShip (struct ship_t ship) {
+//Delete ship at old position and prints spaceship at position (x,y).
+//Input: pointer to ship structure.
+    printf("%c[1D",ESC);
+    printf(" ");
+    gotoxy(ship.position.x,ship.position.y);
+    printf("o");
+}
+
+void moveAsteroid (uint8_t x, struct asteroid_t *asteroid) {
+//Moves asteroid 1 downwards (along y-axis).
+//Input: x-axis position, pointer to asteroid structure.
+    (*asteroid).position.x=x;
+    (*asteroid).position.y++;
+}
+
+void printAsteroid (struct asteroid_t asteroid){
+//Delete asteroid at old position and prints asteroid at position (x,y).
+//Input: pointer to asteroid structure.
+    printf("%c[1D",ESC);
+    printf(" ");
+    gotoxy(asteroid.position.x,asteroid.position.y);
+    printf("l");//Insert asteroid graphic
+}
+
+
+/*void fixtrangPos(struct trang (*t)) {
 //Converts balls position and velocity to 18.14 (from 32.0)
     (*t).x=(*t).x<<14;
     (*t).y=(*t).y<<14;
@@ -156,5 +205,5 @@ void drawTrang (struct trang t) {
     gotoxy(t.x>>14 + 1,t.y>>14 + 3);
     printf(" ");
 }
-
+*/
 
