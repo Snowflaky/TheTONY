@@ -64,11 +64,11 @@ int main(void)
         u=keyInput();
 
         printAsteroid(asteroid);
-        //printShip(ship);
+        printShip(ship);
 
         if (timeFlag==1){
             moveShip(u,&ship);
-            printShip(ship);
+
             if (w==1){
                 moveAsteroid(asteroid.position.x, &asteroid);
             }

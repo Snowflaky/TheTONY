@@ -57,3 +57,4 @@ dkms.conf
 *.ebp
 *.depend
 *.depend
+*.depend
