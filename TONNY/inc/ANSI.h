@@ -18,7 +18,13 @@ struct vector_t {
 struct trang { //One of the baddest bois around!, he's got two things inside him,- burning hatred for the player, and 180 degrees
     struct vector_t position;
     struct vector_t velocity;
-    uint32_t hp;
+    uint8_t hp;
+};
+
+struct sqwog { //One of the baddest bois around!, he's got two things inside him,- burning hatred for the player, and 180 degrees
+    struct vector_t position;
+    struct vector_t velocity;
+    uint8_t hp;
 };
 
 struct ship {
@@ -33,12 +39,21 @@ void color(uint8_t foreground, uint8_t background);
 void resetbgcolor();
 void clrscr ();
 void gotoxy (uint32_t c, uint32_t r);
-void window();
+void window(uint8_t x11, uint8_t y11, uint8_t x22, uint8_t y22);
 
 //TRANG BOIIIIIIII
 //void fixtrangPos(struct trang (*t));
 void trangNextPos(struct trang (*t));
 void drawTrang (struct trang t);
 void eraseTrang (struct trang t);
+void trangZag(struct trang (*t));
+int8_t randoms(uint8_t lower, uint8_t upper);
+void awakenTrang(uint8_t spawn);
+
+void sqwogNextPos(struct sqwog (*t));
+void drawSqwog (struct sqwog t);
+void eraseSqwog (struct sqwog t);
+void sqwogBox (struct sqwog (*t));
+void awakenSqwog(uint8_t spawn);
 
 #endif

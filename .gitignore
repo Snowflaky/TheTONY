@@ -57,3 +57,5 @@ dkms.conf
 *.ebp
 *.depend
 TONNY/TONNY.depend
+*.depend
+TONNY/TONNY.depend
