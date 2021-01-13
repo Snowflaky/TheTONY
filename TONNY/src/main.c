@@ -16,14 +16,14 @@
 
 int main(void)
 {
-    uart_init (19200);
+    uart_init (115200);
         //1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200
 
     //Initiate timer (interrupt is set to one every 0.01 second)
     RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2;
     TIM2->CR1 = 0x0000;//0000 0000 0000 0000
-    TIM2->ARR = 0x000003E7;//set reload value to 999
-    TIM2->PSC = 0x027F;//set prescale to 639
+    TIM2->ARR = 0x0000F9FF;//set reload value to 999
+    TIM2->PSC = 0x0000;//set prescale to 639
     TIM2->CR1 |= 0x0001;//enable timer
     TIM2->DIER |= 0x0001; // Enable timer 2 interrupts
     NVIC_SetPriority(TIM2_IRQn, 0001); // Set interrupt priority=1 (high)
@@ -61,12 +61,18 @@ int main(void)
         }
         //countFlag
 
-        u=keyInput();
+
+
+        if (timeFlag2==9){
 
         printAsteroid(asteroid);
         printShip(ship);
 
+        timeFlag2=0;
+        }
+
         if (timeFlag==1){
+            u=keyInput();
             moveShip(u,&ship);
 
             if (w==1){

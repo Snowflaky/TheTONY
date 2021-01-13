@@ -201,14 +201,19 @@ void printBullet (struct bullet_t bullet) {
 
 void TIM2_IRQHandler() {
 //Counts 100ths of a second, seconds and minutes.
-    time.centiSec++;
-    timeFlag=1;
-    if (time.centiSec>=100){
-        time.second++;
-        time.centiSec=0;
-        if (time.second>=60){
-            time.minute++;
-            time.second=0;
+    time.milliSec++;
+    timeFlag2++;
+    if (time.milliSec>=10) {
+        time.centiSec++;
+        time.milliSec=0;
+        timeFlag=1;
+        if (time.centiSec>=100){
+            time.second++;
+            time.centiSec=0;
+            if (time.second>=60){
+                time.minute++;
+                time.second=0;
+            }
         }
     }
     TIM2->SR &= ~0x0001; // Clear interrupt bit

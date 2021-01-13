@@ -12,9 +12,10 @@
 #define FIX14_DIV(a, b) ( ((a) << FIX14_SHIFT) / b )
 
 volatile uint8_t timeFlag;
+volatile uint8_t timeFlag2;
 
 struct time_t {
-    volatile uint32_t centiSec, second, minute;
+    volatile uint32_t milliSec, centiSec, second, minute;
 };
 
 volatile struct time_t time;
