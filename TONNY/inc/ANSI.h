@@ -11,6 +11,14 @@
 #define FIX14_MULT(a, b) ( (a)*(b) >> FIX14_SHIFT )
 #define FIX14_DIV(a, b) ( ((a) << FIX14_SHIFT) / b )
 
+volatile uint8_t timeFlag;
+
+struct time_t {
+    volatile uint32_t centiSec, second, minute;
+};
+
+volatile struct time_t time;
+
 struct vector_t {
     uint32_t x;
     uint32_t y;
@@ -35,6 +43,11 @@ struct asteroid_t {
     struct vector_t position;
 };
 
+struct bullet_t {
+    struct vector_t position;
+    struct vector_t velocity;
+};
+
 void hello();
 void fgcolor(uint8_t foreground);
 void bgcolor(uint8_t background);
@@ -48,6 +61,10 @@ void moveShip (uint8_t x, struct ship_t *ship);
 void printShip (struct ship_t ship);
 void moveAsteroid (uint8_t x, struct asteroid_t *asteroid);
 void printAsteroid (struct asteroid_t asteroid);
+void boss (uint8_t x);
+void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)[512]);
+void moveBullet (struct bullet_t *bullet, uint8_t y);
+void printBullet (struct bullet_t bullet);
 
 //TRANG BOIIIIIIII
 void fixtrangPos(struct trang (*t));
