@@ -154,21 +154,33 @@ void printShip (struct ship_t ship) {
 void moveAsteroid (uint8_t x, struct asteroid_t *asteroid) {
 //Moves asteroid 1 downwards (along y-axis).
 //Input: x-axis position, pointer to asteroid structure.
+    uint8_t k=1;
     (*asteroid).position.x=x;
-    (*asteroid).position.y++;
+    (*asteroid).position.y=(*asteroid).position.y+(*asteroid).velocity.y*k;
 }
 
 void printAsteroid (struct asteroid_t asteroid){
 //Delete asteroid at old position and prints asteroid at position (x,y).
 //Input: pointer to asteroid structure.
-    if (asteroid.position.y<40){
+    if (asteroid.position.y<40){;
         printf("%c[1D",ESC);
         printf(" ");
         gotoxy(asteroid.position.x,asteroid.position.y);
-        printf("l");//Insert asteroid graphic
+        printf("l",ESC);
     }
-
 }
+
+void eraseAsteroid (struct asteroid_t asteroid){
+uint8_t i;
+    gotoxy(asteroid.position.x,asteroid.position.y);
+    bgcolor(0);
+        for (i=0; i<=4; i++){
+            printf(" ");//Insert asteroid graphic
+            printf("%c[1D",ESC);
+            printf("%c[1A",ESC);
+        }
+        color(15,0);
+    }
 
 void boss (uint8_t x){
 //Clears screen and shows a window stating "WORKING HARD!!!" (The boss will never know you were playing a computer game)
@@ -182,12 +194,21 @@ void boss (uint8_t x){
     }
 }
 
-void moveBullet (struct bullet_t *bullet, uint8_t y){
-    //uint8_t k = 1;
-    if (y==4){
-        (*bullet).position.x++;// = (*bullet).position.x++// (*bullet).velocity.x*k;
-        (*bullet).position.y = y;
+uint8_t startBullet (struct ship_t ship, uint8_t p){
+    uint8_t k = 0;
+    if (p==4){
+        k=ship.position.y;//(*bullet).position.x++;// = (*bullet).position.x++// (*bullet).velocity.x*k;
+        //(*bullet).position.y = (*bullet).position.y;
     }
+    return k;
+}
+
+void moveBullet (uint8_t y, struct bullet_t *bullet) {
+//Moves asteroid 1 downwards (along y-axis).
+//Input: x-axis position, pointer to asteroid structure.
+    uint8_t k=1;
+    (*bullet).position.x=(*bullet).position.x + (*bullet).velocity.x*k;
+    (*bullet).position.y=y;
 }
 
 void printBullet (struct bullet_t bullet) {

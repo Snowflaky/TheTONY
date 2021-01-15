@@ -54,6 +54,7 @@ struct ship_t {
 
 struct asteroid_t {
     struct vector_t position;
+    struct vector_t velocity;
 };
 
 struct bullet_t {
@@ -77,11 +78,13 @@ void printShip (struct ship_t ship);
 
 void moveAsteroid (uint8_t x, struct asteroid_t *asteroid);
 void printAsteroid (struct asteroid_t asteroid);
+void eraseAsteroid (struct asteroid_t asteroid);
 
 void boss (uint8_t x);
 void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)[512]);
 
-void moveBullet (struct bullet_t *bullet, uint8_t y);
+uint8_t startBullet(struct ship_t ship, uint8_t p);
+void moveBullet (uint8_t y, struct bullet_t *bullet);
 void printBullet (struct bullet_t bullet);
 
 //TRANG BOIIIIIIII

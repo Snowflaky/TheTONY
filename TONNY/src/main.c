@@ -31,7 +31,6 @@ int main(void)
 
     color(15,0);
     clrscr();
-    //window(2, 2, 139, 39);
 
     window(0,140,0,40,7);
     /*while(){
@@ -45,10 +44,19 @@ int main(void)
     uint8_t u = 0;
     uint8_t w = 0;
     uint8_t v = 0;
+    uint8_t shooting = 0;
 
     struct asteroid_t asteroid;
     asteroid.position.x=10;
     asteroid.position.y=2;
+    asteroid.velocity.x=0;
+    asteroid.velocity.y=1;
+
+    struct bullet_t bullet;
+    bullet.position.x = 3;
+    bullet.position.y = ship.position.y;
+    bullet.velocity.x = 1;
+    bullet.velocity.y = 0;
 
    struct sqwog skr;
    skr.position.x = 110;
@@ -76,12 +84,25 @@ int main(void)
         }
         if (timeFlag2==9){
             printShip(ship);
+            if (shooting>0){
+                printBullet(bullet);
+            }
             timeFlag2=0;
         }
 
         if (timeFlag==1){
             u=keyInput();
             moveShip(u,&ship);
+            shooting=startBullet(ship,u);
+            if(shooting>0){
+                bullet.position.y=shooting;
+                if (w==1){
+                    moveBullet(shooting, &bullet);
+                }
+                if (bullet.position.x==139){
+                    shooting=0;
+                }
+            }
 
             if (w==1){
                 moveAsteroid(asteroid.position.x,&asteroid);
@@ -99,12 +120,8 @@ int main(void)
     }
 
 
-    /*struct bullet_t bullet;
-        bullet.position.x = 3;
-        bullet.position.y = ship.position.y;
-        bullet.velocity.x = 1;
-        bullet.velocity.y = 0;
-    uint8_t y=0;
+
+   /* uint8_t y=0;
     while(1){
         while (y<1){
             y=keyInput();
