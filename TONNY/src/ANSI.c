@@ -203,6 +203,7 @@ void TIM2_IRQHandler() {
 //Counts 100ths of a second, seconds and minutes.
     time.milliSec++;
     timeFlag2++;
+    timeFlag3++;
     if (time.milliSec>=10) {
         time.centiSec++;
         time.milliSec=0;

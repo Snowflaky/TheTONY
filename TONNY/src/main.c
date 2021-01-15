@@ -30,15 +30,15 @@ int main(void)
     NVIC_EnableIRQ(TIM2_IRQn); // Enable interrupt
 
 
-
+    //hello();
     bgcolor(0);
-    hello();
+
     clrscr();
     window(0,140,0,40,7);
     /*while(){
     boss(keyInput());
     }*/
-//Asteroid and ship will not print together.
+
     struct ship_t ship;
     ship.position.x = 2;
     ship.position.y=19;
@@ -61,14 +61,18 @@ int main(void)
         }
         //countFlag
 
+        if (timeFlag3==20){
 
+            printAsteroid(asteroid);
+
+            timeFlag3=0;
+        }
 
         if (timeFlag2==9){
 
-        printAsteroid(asteroid);
-        printShip(ship);
+            printShip(ship);
 
-        timeFlag2=0;
+            timeFlag2=0;
         }
 
         if (timeFlag==1){
