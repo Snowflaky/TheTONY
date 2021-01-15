@@ -258,7 +258,7 @@ void fixtrangPos(struct trang (*t)) {
 //Cosine DOOM, TRANG!!!
 void trangNextPos(struct trang (*t)) {
 //Calculate new position for Trang. Input is a pointer.
-    uint32_t k = 2;
+    uint32_t k = 1;
     (*t).position.x = (*t).position.x + (*t).velocity.x*k;
     (*t).position.y = (*t).position.y + (*t).velocity.y*k;
 }
@@ -311,6 +311,7 @@ void eraseTrang (struct trang t) { //erases Trang with the same
     printf(" ");
     gotoxy(t.position.x,t.position.y + 2);
     printf(" ");
+    color(15,0);
 }
 
 void trangZag (struct trang (*t)) { //Moves Trang in a zig zag
@@ -343,12 +344,11 @@ void awakenTrang(uint8_t spawn) {    //Bring Trang, the bringer
     }
 }
 
-
 //The following functions are dedicated to the warriors of the
 //Alik'r homeworlds; the one the call SQWOG
 void sqwogNextPos(struct sqwog (*t)) {
 //Calculate new position for Trang. Input is a pointer.
-    uint32_t k = 2;
+    uint8_t k = 1;
     (*t).position.x = (*t).position.x + (*t).velocity.x*k;
     (*t).position.y = (*t).position.y + (*t).velocity.y*k;
 }
@@ -420,26 +420,22 @@ void eraseSqwog (struct sqwog t) { //erases Sqwog with the same
     printf(" ");
     gotoxy(t.position.x + 2,t.position.y);
     printf(" ");
+    color(15,0);
 }
 
 void sqwogBox (struct sqwog (*t)) { //Moves Sqwog in a square
-    for (uint8_t i = 0; i < 5; i++) {    // motion
-        for (uint8_t j = 0; j < 3; j++) {
-            (*t).velocity.x = -1;
-        }
+    if ((*t).position.x - (*t).firstx == -5 && (*t).position.y - (*t).firsty == 0) {
+        (*t).velocity.y = -1;
         (*t).velocity.x = 0;
-        for (uint8_t j = 0; j < 3; j++) {
-            (*t).velocity.y = -1;
-        }
+    }  else if ((*t).position.y - (*t).firsty == -5 && (*t).position.x - (*t).firstx == -5) {
         (*t).velocity.y = 0;
-        for (uint8_t j = 0; j < 3; j++) {
-            (*t).velocity.x = -1;
-        }
+        (*t).velocity.x = -1;
+    } else if ((*t).position.x - (*t).firstx == -10 && (*t).position.y - (*t).firsty == -5) {
+        (*t).velocity.y = 1;
         (*t).velocity.x = 0;
-        for (uint8_t j = 0; j < 3; j++) {
-            (*t).velocity.y = 1;
-        }
-        (*t).velocity.x = 0;
+    } else if ((*t).position.y - (*t).firsty == 0 && (*t).position.x - (*t).firstx == -10) {
+        (*t).velocity.y = 0;
+        (*t).velocity.x = -1;
     }
 }
 
@@ -460,4 +456,6 @@ void awakenSqwog(uint8_t spawn) {    //Bring Sqwog, the bringer
     }
 }
 
-
+void menu () {
+    window()
+}

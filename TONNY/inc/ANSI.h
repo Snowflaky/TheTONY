@@ -22,7 +22,7 @@ struct time_t {
 volatile struct time_t time;
 
 struct vector_t {
-    uint32_t x, y;
+    int32_t x, y;
 };
 
 struct position {
@@ -43,6 +43,8 @@ struct sqwog { //One of the baddest bois around!, he's got two things inside him
     struct vector_t position;
     struct vector_t velocity;
     uint8_t hp;
+    int8_t firsty;
+    int8_t firstx;
 };
 
 struct ship_t {
