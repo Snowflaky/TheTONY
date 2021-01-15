@@ -58,4 +58,9 @@ dkms.conf
 *.depend
 TONNY/TONNY.depend
 *.depend
-TONNY/TONNY.depend
+*.elay
+*.depend
+*.depend
+*.ebp
+*.elay
+

@@ -11,8 +11,26 @@
 #define FIX14_MULT(a, b) ( (a)*(b) >> FIX14_SHIFT )
 #define FIX14_DIV(a, b) ( ((a) << FIX14_SHIFT) / b )
 
+volatile uint8_t timeFlag;
+volatile uint8_t timeFlag2;
+volatile uint8_t timeFlag3;
+
+struct time_t {
+    volatile uint32_t milliSec, centiSec, second, minute;
+};
+
+volatile struct time_t time;
+
 struct vector_t {
     uint32_t x, y;
+};
+
+struct position {
+    uint32_t x, y;
+};
+
+struct velocity {
+    uint32_t vx, vy;
 };
 
 struct trang { //One of the baddest bois around!, he's got two things inside him,- burning hatred for the player, and 180 degrees
@@ -27,9 +45,18 @@ struct sqwog { //One of the baddest bois around!, he's got two things inside him
     uint8_t hp;
 };
 
-struct ship {
-    struct position;
+struct ship_t {
+    struct vector_t position;
     uint32_t hp;
+};
+
+struct asteroid_t {
+    struct vector_t position;
+};
+
+struct bullet_t {
+    struct vector_t position;
+    struct vector_t velocity;
 };
 
 void hello();
@@ -39,7 +66,21 @@ void color(uint8_t foreground, uint8_t background);
 void resetbgcolor();
 void clrscr ();
 void gotoxy (uint32_t c, uint32_t r);
-void window(uint8_t x11, uint8_t y11, uint8_t x22, uint8_t y22);
+
+void window(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2, uint8_t lineColor);
+uint8_t keyInput();
+
+void moveShip (uint8_t x, struct ship_t *ship);
+void printShip (struct ship_t ship);
+
+void moveAsteroid (uint8_t x, struct asteroid_t *asteroid);
+void printAsteroid (struct asteroid_t asteroid);
+
+void boss (uint8_t x);
+void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)[512]);
+
+void moveBullet (struct bullet_t *bullet, uint8_t y);
+void printBullet (struct bullet_t bullet);
 
 //TRANG BOIIIIIIII
 //void fixtrangPos(struct trang (*t));
