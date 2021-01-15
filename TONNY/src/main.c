@@ -19,23 +19,21 @@ int main(void)
     uart_init (9600);
     moveShip();
 
-    hello();
+    color(15,0);
     clrscr();
-    window();
+    //window(2, 2, 139, 39);
 
-    struct trang trang;
-    trang.x = 130;
-    trang.y = 25;
-    trang.vx = -2;
-    trang.vy = -1;
-    trang.hp = 5;
+    awakenSqwog(1);
+    awakenSqwog(1);
+    awakenSqwog(1);
+    awakenSqwog(1);
+    awakenSqwog(1);
+
 
     fixtrangPos(&trang);
     trangNextPos(&trang);
     drawTrang(trang);
 
-    while(1)
-  {
+    while(1){}
         //printf("%c",uart_get_char());
-
-}}
+}
