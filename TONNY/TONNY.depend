@@ -196,7 +196,7 @@
 	"stm32f30x_conf.h"
 	<stdio.h>
 
-1610443201 source:c:\users\josefine\documents\dtu\30010progprojekt\projekt\thetony\tonny\src\main.c
+1610701903 source:c:\users\josefine\documents\dtu\30010progprojekt\projekt\thetony\tonny\src\main.c
 	"stm32f30x_conf.h"
 	"ANSI.h"
 
@@ -205,10 +205,10 @@
 1610380848 source:c:\users\josefine\documents\dtu\30010progprojekt\projekt\thetony\tonny\src\system_stm32f30x.c
 	"stm32f30x.h"
 
-1610443459 source:c:\users\josefine\documents\dtu\30010progprojekt\projekt\thetony\tonny\src\ansi.c
+1610701074 source:c:\users\josefine\documents\dtu\30010progprojekt\projekt\thetony\tonny\src\ansi.c
 	"ansi.h"
 
-1610442979 c:\users\josefine\documents\dtu\30010progprojekt\projekt\thetony\tonny\inc\ansi.h
+1610701074 c:\users\josefine\documents\dtu\30010progprojekt\projekt\thetony\tonny\inc\ansi.h
 	"30010_io.h"
 	"stm32f30x_conf.h"
 	"stdio.h"
@@ -414,19 +414,20 @@
 1610438894 source:c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\src\system_stm32f30x.c
 	"stm32f30x.h"
 
-1610442757 source:c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\src\ansi.c
+1610542238 source:c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\src\ansi.c
 	"ansi.h"
 
-1610440902 c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\inc\ansi.h
+1610541212 c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\inc\ansi.h
 	"30010_io.h"
 	"stm32f30x_conf.h"
 	"stdio.h"
 	"stdint.h"
 
-1610440918 source:c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\src\main.c
+1610543455 source:c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\src\main.c
 	"stm32f30x_conf.h"
+	"ANSI.h"
 
-1610440131 source:c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\src\startup_stm32f30x.s
+1610448398 source:c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\src\startup_stm32f30x.s
 
 1610442594 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\spl\src\stm32f30x_adc.c
 	"stm32f30x_adc.h"

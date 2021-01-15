@@ -60,7 +60,6 @@ void color(uint8_t foreground, uint8_t background) {
 }
 
 void resetbgcolor() {
-
 // gray on black text, no underline, no blink, no reverse
     printf("%c[m", ESC);
 }
@@ -70,56 +69,190 @@ void clrscr () {
 }
 
 void gotoxy (uint32_t c, uint32_t r) {
+//Moves cursor to position (c,r).
     printf("%c[%lu;%luH", ESC, r, c);
 }
 
-void window(uint8_t x11, uint8_t y11, uint8_t x22, uint8_t y22) {
-    //Size of window:
-    uint8_t x1 = x11;
-    uint8_t y1 = y11;
-    uint8_t x2 = x22;
-    uint8_t y2 = y22;
+void window(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2, uint8_t lineColor) {
+//Outline game borders. Border is drawn by printing colored background spaces.
+//Input: x start point, x end point, y start point, y end point, color of border (number between 0 and 7 (see bgcolor))
+    //Game borders
+    /*
+    uint8_t x1 = 0;
+    uint8_t y1 = 0;
+    uint8_t x2 = 140;
+    uint8_t y2 = 40;*/
     uint8_t i;
-
     for (i = 0; i < (y2-y1); i++) {
+    //Left border
         gotoxy(x1,y1+i);
-        color(0,7);
+        color(0,lineColor);
         printf(" ");
     }
     for (i = 0; i < (y2-y1); i++) {
+    //Right border
         gotoxy(x2,y1+i);
-        color(0,7);
+        color(0,lineColor);
         printf(" ");
     }
     for (i = 0; i < ((x2-x1)+1); i++) {
+    //Upper border
         gotoxy(x1+i,y1);
-        color(0,7);
+        color(0,lineColor);
         printf(" ");
     }
     for (i = 0; i < (x2-x1); i++) {
+    //Lower border
         gotoxy((x1+i)+1,y2);
-        color(0,7);
+        color(0,lineColor);
         printf(" ");
     }
-    color(15,0);
+    color(15,0);//resets background and foreground colors
     printf(" ");
 }
 
-void moveShip(){
-    while(1){
-        if (uart_get_char()=='d'){
-            printf("up");
-        }
+uint8_t keyInput(){
+//Detect if keyboard input is w (up), s (down), b (boss) or p (shoot, phew!)
+//Any other key --> return 0.
+    uint8_t x=0;
+    uint8_t input=uart_get_char();
+    if (input=='w'){
+        x=1;
+    }
+    else if (input=='s'){
+        x=2;
+    }
+    else if (input=='b'){
+        x=3;
+    }
+    else if (input=='p'){  //phew!
+        x=4;
+    }
+    return x;
+}
+
+void moveShip (uint8_t x, struct ship_t *ship){
+//If up/down keyInput (x) detected, function updates spaceship position.
+//Input: keyInput (up/down/null), pointer to ship structure.
+    if (x==1 && (*ship).position.y>2){
+        (*ship).position.y--;
+    }
+    if (x==2 && (*ship).position.y<39){
+        (*ship).position.y++;
     }
 }
 
-/*void fixtrangPos(struct trang (*t)) {
+void printShip (struct ship_t ship) {
+//Delete ship at old position and prints spaceship at position (x,y).
+//Input: pointer to ship structure.
+    printf("%c[1D",ESC);
+    printf(" ");
+    gotoxy(ship.position.x,ship.position.y);
+    printf("o");
+}
+
+void moveAsteroid (uint8_t x, struct asteroid_t *asteroid) {
+//Moves asteroid 1 downwards (along y-axis).
+//Input: x-axis position, pointer to asteroid structure.
+    (*asteroid).position.x=x;
+    (*asteroid).position.y++;
+}
+
+void printAsteroid (struct asteroid_t asteroid){
+//Delete asteroid at old position and prints asteroid at position (x,y).
+//Input: pointer to asteroid structure.
+    if (asteroid.position.y<40){
+        printf("%c[1D",ESC);
+        printf(" ");
+        gotoxy(asteroid.position.x,asteroid.position.y);
+        printf("l");//Insert asteroid graphic
+    }
+
+}
+
+void boss (uint8_t x){
+//Clears screen and shows a window stating "WORKING HARD!!!" (The boss will never know you were playing a computer game)
+//Function is only initiated if boss key 'b' is pressed.
+//Input: return from keyInput function.
+    if (x==3){
+        clrscr();
+        window(60,90,20,30,1);
+        gotoxy(63,25);
+        printf("WORKING HARD!!!\n");
+    }
+}
+
+void moveBullet (struct bullet_t *bullet, uint8_t y){
+    //uint8_t k = 1;
+    if (y==4){
+        (*bullet).position.x++;// = (*bullet).position.x++// (*bullet).velocity.x*k;
+        (*bullet).position.y = y;
+    }
+}
+
+void printBullet (struct bullet_t bullet) {
+    printf("%c[1D",ESC);
+    printf(" ");
+    gotoxy(bullet.position.x,bullet.position.y);
+    printf("Q");
+}
+
+void TIM2_IRQHandler() {
+//Counts 100ths of a second, seconds and minutes.
+    time.milliSec++;
+    timeFlag2++;
+    timeFlag3++;
+    if (time.milliSec>=10) {
+        time.centiSec++;
+        time.milliSec=0;
+        timeFlag=1;
+        if (time.centiSec>=100){
+            time.second++;
+            time.centiSec=0;
+            if (time.second>=60){
+                time.minute++;
+                time.second=0;
+            }
+        }
+    }
+    TIM2->SR &= ~0x0001; // Clear interrupt bit
+ }
+
+void countFlag(uint8_t *v){
+    if (timeFlag==1){
+        (*v)++;
+    }
+}
+
+
+/*void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)[512]){
+//Writes string on LCD display on location specified by slice and row.
+//Input: string, slice (0-127), row (1-4), pointer to buffer array.
+    uint8_t h;
+    uint8_t g;
+    if (row==2){
+        slice+=128;
+    }
+    if (row==3){
+        slice+=256;
+    }
+    if (row==4){
+        slice+=384;
+    }
+    for (h=0;h<strlen(text);h++) {  //for each letter in string
+        for (g=0;g<5;g++){  //for each slice in letter
+            (*buff)[slice+g+6*h]=character_data[text[h]-0x20][g];
+        }
+   }
+}*/
+
+void fixtrangPos(struct trang (*t)) {
 //Converts Trangs position and velocity to 18.14 (from 32.0)
     (*t).position.x=(*t).position.x<<14;
     (*t).position.y=(*t).position.y<<14;
     (*t).velocity.x=(*t).velocity.x<<14;
     (*t).velocity.y=(*t).velocity.y<<14;
-}*/
+}
 
 //The next few functions are dedicated to the harbringer of
 //Cosine DOOM, TRANG!!!
@@ -326,10 +459,5 @@ void awakenSqwog(uint8_t spawn) {    //Bring Sqwog, the bringer
         }
     }
 }
-
-
-
-
-
 
 
