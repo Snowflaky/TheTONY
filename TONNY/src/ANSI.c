@@ -188,7 +188,7 @@ void trangZag (struct trang (*t)) { //Moves Trang in a zig zag
 }                              //than 3, y velocity is reversed
 
 // generate random numbers in range [lower, upper].
-int8_t randoms(uint8_t lower, uint8_t upper) {
+uint8_t randoms(uint8_t lower, uint8_t upper) {
     uint8_t num = (rand() % (upper - lower + 1)) + lower;
 }
 
@@ -290,10 +290,23 @@ void eraseSqwog (struct sqwog t) { //erases Sqwog with the same
 }
 
 void sqwogBox (struct sqwog (*t)) { //Moves Sqwog in a square
-    uint8_t firstx = (*t).position.x;// motion
-    uint8_t firsty = (*t).position.y;
-    if ((*t).position.y - firsty < -4) {
-        (*t).velocity.y *= -1;
+    for (uint8_t i = 0; i < 5; i++) {    // motion
+        for (uint8_t j = 0; j < 3; j++) {
+            (*t).velocity.x = -1;
+        }
+        (*t).velocity.x = 0;
+        for (uint8_t j = 0; j < 3; j++) {
+            (*t).velocity.y = -1;
+        }
+        (*t).velocity.y = 0;
+        for (uint8_t j = 0; j < 3; j++) {
+            (*t).velocity.x = -1;
+        }
+        (*t).velocity.x = 0;
+        for (uint8_t j = 0; j < 3; j++) {
+            (*t).velocity.y = 1;
+        }
+        (*t).velocity.x = 0;
     }
 }
 
@@ -313,6 +326,8 @@ void awakenSqwog(uint8_t spawn) {    //Bring Sqwog, the bringer
         }
     }
 }
+
+
 
 
 

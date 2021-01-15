@@ -23,6 +23,10 @@ int main(void)
     //window(2, 2, 139, 39);
 
     awakenSqwog(1);
+    awakenSqwog(1);
+    awakenSqwog(1);
+    awakenSqwog(1);
+    awakenSqwog(1);
 
     while(1){}
 }

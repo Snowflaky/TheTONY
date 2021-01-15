@@ -1,8 +1,8 @@
 #include "30010_io.h"
 #include "stm32f30x_conf.h"
-#include "stdio.h"
-#include "stdint.h"
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 
 #ifndef _ANSI_H_
 #define _ANIS_H_
@@ -47,7 +47,7 @@ void trangNextPos(struct trang (*t));
 void drawTrang (struct trang t);
 void eraseTrang (struct trang t);
 void trangZag(struct trang (*t));
-int8_t randoms(uint8_t lower, uint8_t upper);
+uint8_t randoms(uint8_t lower, uint8_t upper);
 void awakenTrang(uint8_t spawn);
 
 void sqwogNextPos(struct sqwog (*t));
