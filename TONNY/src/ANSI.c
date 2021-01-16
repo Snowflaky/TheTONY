@@ -227,6 +227,7 @@ void printBullet (struct bullet_t bullet, struct bullet_t oldBullet) {
 void TIM2_IRQHandler() {
 //Counts 100ths of a second, seconds and minutes.
     timeFlagPrint=1;
+    timeFlagDrawT++;
     time.mikroSec++;
     if (time.mikroSec>=1000){
         time.milliSec++;
@@ -235,6 +236,7 @@ void TIM2_IRQHandler() {
             timeFlagBullet++;
             timeFlagA1++;
             timeFlagA2++;
+            timeFlagTra++;
             time.centiSec++;
             time.milliSec=0;
             if (time.centiSec>=100){
@@ -336,10 +338,11 @@ void drawTrang (struct trang t) {
     printf("/");
     gotoxy(t.position.x,t.position.y + 2);
     printf("\\");
+    color(15,0);
 }
 
 void eraseTrang (struct trang t) { //erases Trang with the same
-    color(0,0);                    //method as Trang is drawn
+    //color(0,0);                    //method as Trang is drawn
     //erase the Trang alien ship
     gotoxy(t.position.x,t.position.y);
     color(0,0);
@@ -365,7 +368,7 @@ void eraseTrang (struct trang t) { //erases Trang with the same
 }
 
 void trangZag (struct trang (*t)) { //Moves Trang in a zig zag
-    uint8_t firsty = (*t).position.y;// motion
+    uint8_t firsty = (*t).firsty;// motion
     if ((*t).position.y - firsty > 4 || (*t).position.y - firsty < -4) {
         (*t).velocity.y *= -1; //If the current y position is
     }                          //farther from starting position
@@ -474,7 +477,7 @@ void eraseSqwog (struct sqwog t) { //erases Sqwog with the same
 }
 
 void sqwogBox (struct sqwog (*t)) { //Moves Sqwog in a square
-    if ((*t).position.x - (*t).firstx == -5 && (*t).position.y - (*t).firsty == 0) {
+    if (((*t).position.x - (*t).firstx == -5) && ((*t).position.y - (*t).firsty == 0)) {
         (*t).velocity.y = -1;
         (*t).velocity.x = 0;
     }  else if ((*t).position.y - (*t).firsty == -5 && (*t).position.x - (*t).firstx == -5) {
@@ -504,6 +507,16 @@ void awakenSqwog(uint8_t spawn) {    //Bring Sqwog, the bringer
             eraseSqwog(skr);
         }
     }
+}
+
+uint8_t compare(struct bullet_t bullet, struct asteroid_t asteroid){
+    uint8_t g=0;
+
+    if (bullet.position.x==asteroid.position.x-1 && bullet.position.y==asteroid.position.y){
+        g=1;
+    }
+
+    return g;
 }
 
 /*void menu () {
