@@ -75,11 +75,12 @@ int main(void)
         else{
             w=0;
         }
+        w=1;
         //countFlag
 
         if (timeFlag3==20){
-            printAsteroid(asteroid);
-            drawSqwog(skr);
+            //printAsteroid(asteroid);
+            //drawSqwog(skr);
             timeFlag3=0;
         }
         if (timeFlag2==9){
@@ -90,27 +91,36 @@ int main(void)
             timeFlag2=0;
         }
 
-        if (timeFlag==1){
+       if (timeFlag==1){
             u=keyInput();
             moveShip(u,&ship);
             shooting=startBullet(ship,u);
-            if(shooting>0){
-                bullet.position.y=shooting;
-                if (w==1){
+            gotoxy(3,47);
+            printf("%d",shooting);
+            if (timeFlag4==25){
+                //if(shooting>0){
+                    bullet.position.y=shooting;
+                    bullet.position.x++;
                     moveBullet(shooting, &bullet);
-                }
+                    gotoxy(3,45);
+                    printf("%d",bullet.position.x);
+
+
+                //moveAsteroid(asteroid.position.x,&asteroid);
+
                 if (bullet.position.x==139){
                     shooting=0;
+                timeFlag4=0;
                 }
             }
 
-            if (w==1){
-                moveAsteroid(asteroid.position.x,&asteroid);
+            /*if (w==1){
+
                 eraseSqwog(skr);
                 sqwogBox(&skr);
                 sqwogNextPos(&skr);
 
-            }
+            }*/
             /*if (asteroidFlag==1){
                 struct asteroid_t asteroid
             }*/

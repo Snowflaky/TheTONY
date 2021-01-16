@@ -227,6 +227,7 @@ void TIM2_IRQHandler() {
         time.centiSec++;
         time.milliSec=0;
         timeFlag=1;
+        timeFlag4++;
         if (time.centiSec>=100){
             time.second++;
             time.centiSec=0;
@@ -477,6 +478,6 @@ void awakenSqwog(uint8_t spawn) {    //Bring Sqwog, the bringer
     }
 }
 
-void menu () {
+/*void menu () {
     window()
-}
+}*/

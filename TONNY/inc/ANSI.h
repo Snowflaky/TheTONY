@@ -14,6 +14,7 @@
 volatile uint8_t timeFlag;
 volatile uint8_t timeFlag2;
 volatile uint8_t timeFlag3;
+volatile uint8_t timeFlag4;
 
 struct time_t {
     volatile uint32_t milliSec, centiSec, second, minute;
