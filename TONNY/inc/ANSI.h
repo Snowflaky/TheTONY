@@ -14,10 +14,10 @@
 volatile uint8_t timeFlag;
 volatile uint8_t timeFlag2;
 volatile uint8_t timeFlag3;
-volatile uint8_t timeFlag4;
+//volatile uint8_t timeFlag4;
 
 struct time_t {
-    volatile uint32_t milliSec, centiSec, second, minute;
+    volatile uint32_t mikroSec, milliSec, centiSec, second, minute;
 };
 
 volatile struct time_t time;
@@ -74,19 +74,18 @@ void gotoxy (uint32_t c, uint32_t r);
 void window(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2, uint8_t lineColor);
 uint8_t keyInput();
 
-void moveShip (uint8_t x, struct ship_t *ship);
-void printShip (struct ship_t ship);
+void moveShip (uint8_t x, struct ship_t *ship, struct ship_t *oldShip);
+void printShip (struct ship_t ship, struct ship_t oldShip);
 
-void moveAsteroid (uint8_t x, struct asteroid_t *asteroid);
-void printAsteroid (struct asteroid_t asteroid);
-void eraseAsteroid (struct asteroid_t asteroid);
+void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *oldAsteroid);
+void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid);
 
 void boss (uint8_t x);
 void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)[512]);
 
 uint8_t startBullet(struct ship_t ship, uint8_t p);
-void moveBullet (uint8_t y, struct bullet_t *bullet);
-void printBullet (struct bullet_t bullet);
+void moveBullet (uint8_t y, struct bullet_t *bullet, struct bullet_t *oldBullet);
+void printBullet (struct bullet_t bullet, struct bullet_t oldBullet);
 
 //TRANG BOIIIIIIII
 //void fixtrangPos(struct trang (*t));

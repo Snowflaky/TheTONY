@@ -131,9 +131,11 @@ uint8_t keyInput(){
     return x;
 }
 
-void moveShip (uint8_t x, struct ship_t *ship){
+void moveShip (uint8_t x, struct ship_t *ship, struct ship_t *oldShip){
 //If up/down keyInput (x) detected, function updates spaceship position.
 //Input: keyInput (up/down/null), pointer to ship structure.
+    (*oldShip).position.x=(*ship).position.x;
+    (*oldShip).position.y=(*ship).position.y;
     if (x==1 && (*ship).position.y>2){
         (*ship).position.y--;
     }
@@ -142,45 +144,42 @@ void moveShip (uint8_t x, struct ship_t *ship){
     }
 }
 
-void printShip (struct ship_t ship) {
+void printShip (struct ship_t ship, struct ship_t oldShip) {
 //Delete ship at old position and prints spaceship at position (x,y).
 //Input: pointer to ship structure.
-    printf("%c[1D",ESC);
+    gotoxy(oldShip.position.x,oldShip.position.y);
     printf(" ");
     gotoxy(ship.position.x,ship.position.y);
     printf("o");
 }
 
-void moveAsteroid (uint8_t x, struct asteroid_t *asteroid) {
+void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *oldAsteroid) {
 //Moves asteroid 1 downwards (along y-axis).
 //Input: x-axis position, pointer to asteroid structure.
+    if ((*asteroid).position.y>=39){
+        gotoxy((*asteroid).position.x,(*asteroid).position.y);
+        printf(" ",ESC);
+        (*asteroid).position.y=2;
+    }
+    (*oldAsteroid).position.x=(*asteroid).position.x;
+    (*oldAsteroid).position.y=(*asteroid).position.y;
     uint8_t k=1;
     (*asteroid).position.x=x;
     (*asteroid).position.y=(*asteroid).position.y+(*asteroid).velocity.y*k;
 }
 
-void printAsteroid (struct asteroid_t asteroid){
+void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid){
 //Delete asteroid at old position and prints asteroid at position (x,y).
 //Input: pointer to asteroid structure.
-    if (asteroid.position.y<40){;
-        printf("%c[1D",ESC);
-        printf(" ");
+    //if (asteroid.position.y<40){
+        gotoxy(oldAsteroid.position.x,oldAsteroid.position.y);
+        printf(" ",ESC);
+        /*printf("%c[1D",ESC);
+        printf(" ");*/
         gotoxy(asteroid.position.x,asteroid.position.y);
-        printf("l",ESC);
-    }
+        printf("l");
+    //}
 }
-
-void eraseAsteroid (struct asteroid_t asteroid){
-uint8_t i;
-    gotoxy(asteroid.position.x,asteroid.position.y);
-    bgcolor(0);
-        for (i=0; i<=4; i++){
-            printf(" ");//Insert asteroid graphic
-            printf("%c[1D",ESC);
-            printf("%c[1A",ESC);
-        }
-        color(15,0);
-    }
 
 void boss (uint8_t x){
 //Clears screen and shows a window stating "WORKING HARD!!!" (The boss will never know you were playing a computer game)
@@ -203,24 +202,57 @@ uint8_t startBullet (struct ship_t ship, uint8_t p){
     return k;
 }
 
-void moveBullet (uint8_t y, struct bullet_t *bullet) {
+void moveBullet (uint8_t y, struct bullet_t *bullet, struct bullet_t *oldBullet) {
 //Moves asteroid 1 downwards (along y-axis).
 //Input: x-axis position, pointer to asteroid structure.
+    if ((*bullet).position.x>=139){
+        (*bullet).position.x=3;
+    }
+    (*oldBullet).position.x=(*bullet).position.x;
+    (*oldBullet).position.y=(*bullet).position.y;
     uint8_t k=1;
     (*bullet).position.x=(*bullet).position.x + (*bullet).velocity.x*k;
     (*bullet).position.y=y;
 }
 
-void printBullet (struct bullet_t bullet) {
-    printf("%c[1D",ESC);
-    printf(" ");
-    gotoxy(bullet.position.x,bullet.position.y);
-    printf("Q");
+void printBullet (struct bullet_t bullet, struct bullet_t oldBullet) {
+    if(bullet.position.x>3){
+        gotoxy(oldBullet.position.x,oldBullet.position.y);
+        printf(" ");
+        gotoxy(bullet.position.x,bullet.position.y);
+        printf("Q");
+    }
 }
 
 void TIM2_IRQHandler() {
 //Counts 100ths of a second, seconds and minutes.
-    time.milliSec++;
+    timeFlag=1;
+    time.mikroSec++;
+    if (time.mikroSec>=1000){
+        time.milliSec++;
+        time.mikroSec=0;
+        if (time.milliSec>=10) {
+            timeFlag2++;
+            timeFlag3++;
+            time.centiSec++;
+            time.milliSec=0;
+            if (time.centiSec>=100){
+                time.second++;
+                time.centiSec=0;
+                if (time.second>=60){
+                    time.minute++;
+                    time.second=0;
+                }
+            }
+
+        }
+    }
+    TIM2->SR &= ~0x0001; // Clear interrupt bit
+ }
+
+
+
+    /*time.milliSec++;
     timeFlag2++;
     timeFlag3++;
     if (time.milliSec>=10) {
@@ -238,7 +270,7 @@ void TIM2_IRQHandler() {
         }
     }
     TIM2->SR &= ~0x0001; // Clear interrupt bit
- }
+ }*/
 
 void countFlag(uint8_t *v){
     if (timeFlag==1){
