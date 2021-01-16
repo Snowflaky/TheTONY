@@ -17,6 +17,7 @@ volatile uint8_t timeFlagBullet;
 volatile uint8_t timeFlagA2;
 volatile uint8_t timeFlagTra;
 volatile uint8_t timeFlagDrawT;
+volatile uint32_t timeGlobal;
 
 struct time_t {
     volatile uint32_t mikroSec, milliSec, centiSec, second, minute;
@@ -58,8 +59,10 @@ struct ship_t {
 };
 
 struct asteroid_t {
+    uint32_t time;
     struct vector_t position;
     struct vector_t velocity;
+    struct vector_t oldposition;
 };
 
 struct bullet_t {
@@ -81,7 +84,7 @@ uint8_t keyInput();
 void moveShip (uint8_t x, struct ship_t *ship, struct ship_t *oldShip);
 void printShip (struct ship_t ship, struct ship_t oldShip);
 
-void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *oldAsteroid);
+void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *oldAsteroid,uint32_t time,uint32_t hast);
 void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid);
 
 void boss (uint8_t x);

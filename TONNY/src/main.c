@@ -41,6 +41,10 @@ int main(void)
     ship.hp=0;
     struct ship_t oldShip;
 
+    struct asteroid_t asteroids[5];
+
+    //asteroids[0].position.x
+
     struct asteroid_t asteroid1;
     asteroid1.position.x=20;
     asteroid1.position.y=2;
@@ -72,6 +76,10 @@ int main(void)
     asteroid5.velocity.y=1;
     struct asteroid_t oldAsteroid5;
 
+    asteroids[0]=asteroid1;
+    asteroids[1]=asteroid2;
+
+
     struct bullet_t bullet;
     bullet.position.x = 3;
     bullet.position.y = ship.position.y;
@@ -79,7 +87,7 @@ int main(void)
     bullet.velocity.y = 0;
     struct bullet_t oldBullet;
 
-    /*struct trang sqr;
+    struct trang tra;
     tra.position.x = 135;
     tra.position.y = 20;
     tra.velocity.x = -1;
@@ -88,7 +96,7 @@ int main(void)
     tra.firstx = 135;
     tra.firsty = 20;
 
-    struct sqwog sqr;
+    /*struct sqwog sqr;
     sqr.position.x = 135;
     sqr.position.y = 20;
     sqr.velocity.x = -1;
@@ -97,9 +105,14 @@ int main(void)
     sqr.firstx = 135;
     sqr.firsty = 20;*/
 
+    uint32_t asteroidTime = timeGlobal;
+    uint32_t asteroidTime2 = timeGlobal;
+
     while(1){
-        if(timeFlagPrint==1){
-            //drawSqwog(sqr);
+
+        uint32_t currentTime = timeGlobal;
+
+            drawTrang(tra);
             printShip(ship, oldShip);
             printAsteroid(asteroid1, oldAsteroid1);
             printAsteroid(asteroid2, oldAsteroid2);
@@ -115,24 +128,24 @@ int main(void)
             bullet.position.y=shooting;
 
             timeFlagPrint=0;
-        }
+
 
         /*if (timeFlagDrawT==15){
 
             timeFlagDrawT=0;
         }*/
 
-        if(timeFlagA1==10){//change this number for change of asteroid speed
-            moveAsteroid(asteroid1.position.x,&asteroid1,&oldAsteroid1);
-            moveAsteroid(asteroid2.position.x,&asteroid2,&oldAsteroid2);
-            moveAsteroid(asteroid4.position.x,&asteroid4,&oldAsteroid4);
-            timeFlagA1=0;
-        }
-        if(timeFlagA2==6){//change this number for change of asteroid speed
-            moveAsteroid(asteroid3.position.x,&asteroid3,&oldAsteroid3);
-            moveAsteroid(asteroid5.position.x,&asteroid5,&oldAsteroid5);
-            timeFlagA2=0;
-        }
+        //change this number for change of asteroid speed
+            moveAsteroid(asteroid1.position.x,&asteroid1,&oldAsteroid1,currentTime,100000);
+            moveAsteroid(asteroid2.position.x,&asteroid2,&oldAsteroid2,currentTime,90000);
+            moveAsteroid(asteroid4.position.x,&asteroid4,&oldAsteroid4,currentTime,80000);
+
+
+        //change this number for change of asteroid speed
+            moveAsteroid(asteroid3.position.x,&asteroid3,&oldAsteroid3,currentTime,150000);
+            moveAsteroid(asteroid5.position.x,&asteroid5,&oldAsteroid5,currentTime,60000);
+
+
 
         if(timeFlagBullet==1){//change this number for change of bullet speed
             if (shooting>0){
@@ -165,8 +178,8 @@ int main(void)
             bullet.velocity.x=1;
         }
         /*if (timeFlagTra==4){
-            eraseSqwog(sqr);
-            sqwogNextPos(&sqr);
+            eraseTrang(tra);
+            sqwogNextPos(&tre);
             sqwogBox(&sqr);
             timeFlagTra=0;
         }*/

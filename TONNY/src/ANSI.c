@@ -153,19 +153,24 @@ void printShip (struct ship_t ship, struct ship_t oldShip) {
     printf("o");
 }
 
-void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *oldAsteroid) {
+void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *oldAsteroid, uint32_t time,uint32_t hast) {
 //Moves asteroid 1 downwards (along y-axis).
 //Input: x-axis position, pointer to asteroid structure.
-    if ((*asteroid).position.y>=39){
-        gotoxy((*asteroid).position.x,(*asteroid).position.y);
-        printf(" ",ESC);
-        (*asteroid).position.y=2;
-    }
-    (*oldAsteroid).position.x=(*asteroid).position.x;
-    (*oldAsteroid).position.y=(*asteroid).position.y;
-    uint8_t k=1;
-    (*asteroid).position.x=x;
-    (*asteroid).position.y=(*asteroid).position.y+(*asteroid).velocity.y*k;
+    uint32_t DT = time-asteroid->time;
+     uint32_t moves = DT/hast;
+
+        if ((*asteroid).position.y>=39){
+            gotoxy((*asteroid).position.x,(*asteroid).position.y);
+            printf(" ",ESC);
+            (*asteroid).position.y=2;
+        }
+        (*oldAsteroid).position.x=(*asteroid).position.x;
+        (*oldAsteroid).position.y=(*asteroid).position.y;
+        uint8_t k=1;
+        (*asteroid).position.x=x;
+        (*asteroid).position.y=(*asteroid).position.y+(*asteroid).velocity.y*k*moves;
+        asteroid->time += hast*moves;
+
 }
 
 void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid){
@@ -219,13 +224,16 @@ void printBullet (struct bullet_t bullet, struct bullet_t oldBullet) {
     if(bullet.position.x>3){
         gotoxy(oldBullet.position.x,oldBullet.position.y);
         printf(" ");
+        if (bullet.position.x<139){
         gotoxy(bullet.position.x,bullet.position.y);
         printf("Q");
+        }
     }
 }
 
 void TIM2_IRQHandler() {
 //Counts 100ths of a second, seconds and minutes.
+    timeGlobal++;
     timeFlagPrint=1;
     timeFlagDrawT++;
     time.mikroSec++;
