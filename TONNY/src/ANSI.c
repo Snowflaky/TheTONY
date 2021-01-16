@@ -122,10 +122,10 @@ uint8_t keyInput(){
     else if (input=='s'){
         x=2;
     }
-    else if (input=='b'){
+    else if (input=='b'){   //boss-button
         x=3;
     }
-    else if (input=='p'){  //phew!
+    else if (input=='p'){  //phew! gun trigger
         x=4;
     }
     return x;

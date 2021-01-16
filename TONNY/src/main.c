@@ -37,11 +37,11 @@ int main(void)
     clrscr();
     //window(2, 2, 139, 39);
 
-    awakenSqwog(1);
-    awakenSqwog(1);
-    awakenSqwog(1);
-    awakenSqwog(1);
-    awakenSqwog(1);
+    //awakenSqwog(1);
+    //awakenSqwog(1);
+    //awakenSqwog(1);
+    //awakenSqwog(1);
+    //awakenSqwog(1);
 
     clrscr();
     window(0,140,0,40,7);
@@ -60,6 +60,10 @@ int main(void)
     struct asteroid_t asteroid;
     asteroid.position.x=10;
     asteroid.position.y=2;
+
+
+    awakenTrang(1);
+    color(15,0);
 
     while(1){
    //read
