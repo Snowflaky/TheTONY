@@ -11,10 +11,10 @@
 #define FIX14_MULT(a, b) ( (a)*(b) >> FIX14_SHIFT )
 #define FIX14_DIV(a, b) ( ((a) << FIX14_SHIFT) / b )
 
-volatile uint8_t timeFlag;
-volatile uint8_t timeFlag2;
-volatile uint8_t timeFlag3;
-//volatile uint8_t timeFlag4;
+volatile uint8_t timeFlagPrint;
+volatile uint8_t timeFlagA1;
+volatile uint8_t timeFlagBullet;
+volatile uint8_t timeFlagA2;
 
 struct time_t {
     volatile uint32_t mikroSec, milliSec, centiSec, second, minute;

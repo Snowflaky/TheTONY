@@ -226,14 +226,15 @@ void printBullet (struct bullet_t bullet, struct bullet_t oldBullet) {
 
 void TIM2_IRQHandler() {
 //Counts 100ths of a second, seconds and minutes.
-    timeFlag=1;
+    timeFlagPrint=1;
     time.mikroSec++;
     if (time.mikroSec>=1000){
         time.milliSec++;
         time.mikroSec=0;
         if (time.milliSec>=10) {
-            timeFlag2++;
-            timeFlag3++;
+            timeFlagBullet++;
+            timeFlagA1++;
+            timeFlagA2++;
             time.centiSec++;
             time.milliSec=0;
             if (time.centiSec>=100){
@@ -272,11 +273,6 @@ void TIM2_IRQHandler() {
     TIM2->SR &= ~0x0001; // Clear interrupt bit
  }*/
 
-void countFlag(uint8_t *v){
-    if (timeFlag==1){
-        (*v)++;
-    }
-}
 
 
 /*void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)[512]){

@@ -40,30 +40,37 @@ int main(void)
     ship.position.y=19;
     ship.hp=0;
     struct ship_t oldShip;
-    ship.position.x = 2;
-    ship.position.y=19;
-    ship.hp=0;
 
     struct asteroid_t asteroid1;
-    asteroid1.position.x=10;
+    asteroid1.position.x=20;
     asteroid1.position.y=2;
     asteroid1.velocity.x=0;
     asteroid1.velocity.y=1;
     struct asteroid_t oldAsteroid1;
-    asteroid1.position.x=10;
-    asteroid1.position.y=2;
-    asteroid1.velocity.x=0;
-    asteroid1.velocity.y=1;
     struct asteroid_t asteroid2;
-    asteroid2.position.x=50;
+    asteroid2.position.x=35;
     asteroid2.position.y=20;
     asteroid2.velocity.x=0;
     asteroid2.velocity.y=1;
     struct asteroid_t oldAsteroid2;
-    asteroid2.position.x=50;
-    asteroid2.position.y=20;
-    asteroid2.velocity.x=0;
-    asteroid2.velocity.y=1;
+    struct asteroid_t asteroid3;
+    asteroid3.position.x=50;
+    asteroid3.position.y=2;
+    asteroid3.velocity.x=0;
+    asteroid3.velocity.y=1;
+    struct asteroid_t oldAsteroid3;
+    struct asteroid_t asteroid4;
+    asteroid4.position.x=62;
+    asteroid4.position.y=32;
+    asteroid4.velocity.x=0;
+    asteroid4.velocity.y=1;
+    struct asteroid_t oldAsteroid4;
+    struct asteroid_t asteroid5;
+    asteroid5.position.x=70;
+    asteroid5.position.y=10;
+    asteroid5.velocity.x=0;
+    asteroid5.velocity.y=1;
+    struct asteroid_t oldAsteroid5;
 
     struct bullet_t bullet;
     bullet.position.x = 3;
@@ -71,16 +78,15 @@ int main(void)
     bullet.velocity.x = 1;
     bullet.velocity.y = 0;
     struct bullet_t oldBullet;
-    bullet.position.x = 3;
-    bullet.position.y = ship.position.y;
-    bullet.velocity.x = 1;
-    bullet.velocity.y = 0;
 
     while(1){
-        if(timeFlag==1){
+        if(timeFlagPrint==1){
             printShip(ship, oldShip);
             printAsteroid(asteroid1, oldAsteroid1);
             printAsteroid(asteroid2, oldAsteroid2);
+            printAsteroid(asteroid3, oldAsteroid3);
+            printAsteroid(asteroid4, oldAsteroid4);
+            printAsteroid(asteroid5, oldAsteroid5);
             printBullet(bullet, oldBullet);
             u=keyInput();
             moveShip(u,&ship, &oldShip);
@@ -89,23 +95,29 @@ int main(void)
             }
             bullet.position.y=shooting;
 
-            timeFlag=0;
+            timeFlagPrint=0;
 
         }
-        if(timeFlag2==4){//change this number for change of asteroid speed
+        if(timeFlagA1==4){//change this number for change of asteroid speed
             moveAsteroid(asteroid1.position.x,&asteroid1,&oldAsteroid1);
             moveAsteroid(asteroid2.position.x,&asteroid2,&oldAsteroid2);
-            timeFlag2=0;
+            moveAsteroid(asteroid4.position.x,&asteroid4,&oldAsteroid4);
+            timeFlagA1=0;
+        }
+        if(timeFlagA2==6){//change this number for change of asteroid speed
+            moveAsteroid(asteroid3.position.x,&asteroid3,&oldAsteroid3);
+            moveAsteroid(asteroid5.position.x,&asteroid5,&oldAsteroid5);
+            timeFlagA2=0;
         }
 
-        if(timeFlag3==1){//change this number for change of bullet speed
+        if(timeFlagBullet==1){//change this number for change of bullet speed
             if (shooting>0){
                 moveBullet(shooting, &bullet, &oldBullet);
             }
             if (bullet.position.x==139){
                 shooting=0;
             }
-            timeFlag3=0;
+            timeFlagBullet=0;
         }
 
     }
