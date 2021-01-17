@@ -104,9 +104,9 @@ void moveBullet (uint8_t y, struct bullet_t *bullet, struct bullet_t *oldBullet)
 void printBullet (struct bullet_t bullet, struct bullet_t oldBullet);
 
 uint8_t compBuAs(struct bullet_t bullet, struct asteroid_t asteroid);
-uint8_t compBuEn(struct bullet_t bullet, struct trang tra);
+uint8_t compBuEn(struct bullet_t bullet, struct enemy e);
 
-uint8_t trangBreach(struct trang t);
+uint8_t enemyBreach(struct enemy e);
 
 //TRANG BOIIIIIIII
 void fixtrangPos(struct trang (*t));
@@ -125,8 +125,9 @@ void sqwogBox (struct sqwog (*t));
 void awakenSqwog(uint8_t spawn);
 
 //Generalised enemy functions
-void enemyNexPos (struct enemy *e);
+void enemyNextPos (struct enemy *e);
 void drawEnemy (struct enemy e);
-void eraseEnemy (struct enemy *e);
+void eraseEnemy (struct enemy e);
+void enemyMotion (struct enemy *e);
 
 #endif
