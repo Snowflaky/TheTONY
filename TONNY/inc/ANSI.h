@@ -44,7 +44,7 @@ struct trang { //One of the baddest bois around!, he's got two things inside him
     int8_t firstx;
 };
 
-struct sqwog { //One of the baddest bois around!, he's got two things inside him,- burning hatred for the player, and 180 degrees
+struct sqwog { //Originally a general in the Alik'r army who was dishonoured by a great military defeat, he wanders the stars looking for players to kill such that he may regain his honour.
     struct vector_t position;
     struct vector_t velocity;
     uint8_t hp;
@@ -53,8 +53,8 @@ struct sqwog { //One of the baddest bois around!, he's got two things inside him
 };
 
 struct enemy {
-    int8_t randomNo;
-    uint8_t
+    uint8_t randomNo;
+    uint8_t enemyType;
     struct vector_t position;
     struct vector_t velocity;
     uint8_t hp;
@@ -102,7 +102,7 @@ void moveBullet (uint8_t y, struct bullet_t *bullet, struct bullet_t *oldBullet)
 void printBullet (struct bullet_t bullet, struct bullet_t oldBullet);
 
 //TRANG BOIIIIIIII
-//void fixtrangPos(struct trang (*t));
+void fixtrangPos(struct trang (*t));
 void trangNextPos(struct trang (*t));
 void drawTrang (struct trang t);
 void eraseTrang (struct trang t);
@@ -110,10 +110,16 @@ void trangZag(struct trang (*t));
 uint8_t randoms(uint8_t lower, uint8_t upper);
 void awakenTrang(uint8_t spawn);
 
+//C'EST LE MEILLEUR SQUWOGUE
 void sqwogNextPos(struct sqwog (*t));
 void drawSqwog (struct sqwog t);
 void eraseSqwog (struct sqwog t);
 void sqwogBox (struct sqwog (*t));
 void awakenSqwog(uint8_t spawn);
+
+//Generalised enemy functions
+void enemyNexPos (struct enemy *e);
+void drawEnemy (struct enemy e);
+void eraseEnemy (struct enemy *e);
 
 #endif
