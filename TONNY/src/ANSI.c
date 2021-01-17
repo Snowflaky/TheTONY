@@ -147,10 +147,38 @@ void moveShip (uint8_t x, struct ship_t *ship, struct ship_t *oldShip){
 void printShip (struct ship_t ship, struct ship_t oldShip) {
 //Delete ship at old position and prints spaceship at position (x,y).
 //Input: pointer to ship structure.
+    color(0,0);
+    gotoxy(oldShip.position.x + 1,oldShip.position.y);
+    printf(" ");
+    gotoxy(oldShip.position.x,oldShip.position.y - 1);
+    printf(" ");
+    gotoxy(oldShip.position.x,oldShip.position.y + 1);
+    printf(" ");
     gotoxy(oldShip.position.x,oldShip.position.y);
     printf(" ");
+    gotoxy(oldShip.position.x + 1,oldShip.position.y - 1);
+    printf(" ");
+    gotoxy(oldShip.position.x + 1,oldShip.position.y + 1);
+    printf(" ");
+//Draw Tonny's ship in it's current position
+    color(0,1);
+    gotoxy(ship.position.x + 1,ship.position.y);
+    printf("O");
+    color(9,1);
+    gotoxy(ship.position.x,ship.position.y - 1);
+    printf("D");
+    gotoxy(ship.position.x,ship.position.y + 1);
+    printf("D");
+    color(10,1);
     gotoxy(ship.position.x,ship.position.y);
-    printf("o");
+    printf("=");
+    color(1,0);
+    printf("%c[1m", ESC);
+    gotoxy(ship.position.x + 1,ship.position.y - 1);
+    printf("-");
+    gotoxy(ship.position.x + 1,ship.position.y + 1);
+    printf("-");
+    printf("%c[22m", ESC);
 }
 
 void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *oldAsteroid) {
@@ -547,6 +575,7 @@ void drawEnemy (struct enemy e) {
         printf("-");
         //print the Trang alien ships (ineffective) shields
         color(2,0);
+        printf("%c[1m", ESC);
         gotoxy(e.position.x - 2,e.position.y);
         printf("<");
         gotoxy(e.position.x - 1,e.position.y - 1);
@@ -557,6 +586,7 @@ void drawEnemy (struct enemy e) {
         printf("/");
         gotoxy(e.position.x,e.position.y + 2);
         printf("\\");
+        printf("%c[22m", ESC);
         color(15,0);
     } else if (e.enemyType == 2) {
         color(0,0);
@@ -575,6 +605,7 @@ void drawEnemy (struct enemy e) {
         printf("-");
         //print the Sqwog alien ships (also ineffective) shields
         color(9,0);
+        printf("%c[1m", ESC);
         gotoxy(e.position.x - 2,e.position.y);
         printf("<");
         gotoxy(e.position.x - 1,e.position.y - 1);
@@ -591,6 +622,8 @@ void drawEnemy (struct enemy e) {
         printf("/");
         gotoxy(e.position.x + 2,e.position.y);
         printf(">");
+        printf("%c[22m", ESC);
+        color(15,0);
     }
 }
 
