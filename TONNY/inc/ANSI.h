@@ -118,8 +118,9 @@ void sqwogBox (struct sqwog (*t));
 void awakenSqwog(uint8_t spawn);
 
 //Generalised enemy functions
-void enemyNexPos (struct enemy *e);
+void enemyNextPos (struct enemy *e);
 void drawEnemy (struct enemy e);
 void eraseEnemy (struct enemy *e);
+void enemyMotion (struct enemy *e);
 
 #endif
