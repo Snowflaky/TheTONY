@@ -29,6 +29,8 @@ int main(void)
 
     uint8_t u=0;
     uint8_t shooting=0;
+    uint16_t breach=0;
+    int32_t goTime=10000;
 
 
     color(15,0);
@@ -110,6 +112,7 @@ int main(void)
     sqr.firsty = 20;
 
     while(1){
+        breach=0;
         if(timeFlagPrint==1){
             drawTrang(tra1);
             drawTrang(tra2);
@@ -174,6 +177,17 @@ int main(void)
             bullet.velocity.x=-1;
         }
 
+        if(compBuEn(bullet,tra1)==1){
+            eraseTrang(tra1);
+            tra1.position.x = 135;
+            tra1.position.y = tra1.random;
+        }
+        if(compBuEn(bullet,tra2)==1){
+            eraseTrang(tra2);
+            tra2.position.x = 135;
+            tra2.position.y = tra2.random;
+        }
+
         if (bullet.position.x==3 && bullet.velocity.x==-1){
             shooting=0;
             bullet.velocity.x=1;
@@ -182,11 +196,33 @@ int main(void)
             eraseTrang(tra1);
             trangNextPos(&tra1);
             trangZag(&tra1);
+            if (trangBreach(tra1)==1){
+                breach=400;
+                gotoxy(100,12);
+                printf("hey1");
+            }
             eraseTrang(tra2);
             trangNextPos(&tra2);
             trangZag(&tra2);
             timeFlagTra=0;
+            if (trangBreach(tra2)==1){
+                breach=100;
+                gotoxy(100,13);
+                printf("hey2");
+            }
         }
+
+
+
+
+        gotoxy(100,8);
+        printf("%d",breach);
+
+        gotoxy(100,10);
+        printf("     ");
+        gotoxy(100,10);
+        goTime=goTime-timeFlagScore-breach;
+        printf("%d",goTime);
     }
 
 

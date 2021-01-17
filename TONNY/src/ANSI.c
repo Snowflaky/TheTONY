@@ -242,6 +242,7 @@ void TIM2_IRQHandler() {
             time.centiSec++;
             time.milliSec=0;
             if (time.centiSec>=100){
+                timeFlagScore++;
                 time.second++;
                 time.centiSec=0;
                 if (time.second>=60){
@@ -313,8 +314,19 @@ void fixtrangPos(struct trang (*t)) {
 void trangNextPos(struct trang (*t)) {
 //Calculate new position for Trang. Input is a pointer.
     uint32_t k = 1;
+    if ((*t).position.x<5){
+        (*t).position.x=135;
+    }
     (*t).position.x = (*t).position.x + (*t).velocity.x*k;
     (*t).position.y = (*t).position.y + (*t).velocity.y*k;
+}
+
+uint8_t trangBreach(struct trang t){
+    uint8_t breach=0;
+    if (t.position.x<5){
+        breach=1;
+    }
+    return breach;
 }
 
 void drawTrang (struct trang t) {
@@ -512,13 +524,26 @@ void awakenSqwog(uint8_t spawn) {    //Bring Sqwog, the bringer
     }
 }
 
+
+
 uint8_t compBuAs(struct bullet_t bullet, struct asteroid_t asteroid){
     uint8_t g=0;
-
     if (bullet.position.x==asteroid.position.x-1 && bullet.position.y==asteroid.position.y){
         g=1;
     }
 
+    return g;
+}
+
+uint8_t compBuEn(struct bullet_t bullet, struct trang tra){
+    uint8_t g=0;
+    if (bullet.position.x==tra.position.x && (bullet.position.y==tra.position.y ||
+                                              bullet.position.y==tra.position.y+1 ||
+                                              bullet.position.y==tra.position.y+2 ||
+                                              bullet.position.y==tra.position.y-1 ||
+                                              bullet.position.y==tra.position.y-2)){
+        g=1;
+    }
     return g;
 }
 

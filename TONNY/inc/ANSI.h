@@ -17,6 +17,7 @@ volatile uint8_t timeFlagBullet;
 volatile uint8_t timeFlagA2;
 volatile uint8_t timeFlagTra;
 volatile uint8_t timeFlagDrawT;
+volatile uint32_t timeFlagScore;
 
 struct time_t {
     volatile uint32_t mikroSec, milliSec, centiSec, second, minute;
@@ -93,6 +94,9 @@ void moveBullet (uint8_t y, struct bullet_t *bullet, struct bullet_t *oldBullet)
 void printBullet (struct bullet_t bullet, struct bullet_t oldBullet);
 
 uint8_t compBuAs(struct bullet_t bullet, struct asteroid_t asteroid);
+uint8_t compBuEn(struct bullet_t bullet, struct trang tra);
+
+uint8_t trangBreach(struct trang t);
 
 //TRANG BOIIIIIIII
 //void fixtrangPos(struct trang (*t));
