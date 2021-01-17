@@ -219,8 +219,10 @@ void printBullet (struct bullet_t bullet, struct bullet_t oldBullet) {
     if(bullet.position.x>3){
         gotoxy(oldBullet.position.x,oldBullet.position.y);
         printf(" ");
-        gotoxy(bullet.position.x,bullet.position.y);
-        printf("Q");
+        if (bullet.position.x<139){
+            gotoxy(bullet.position.x,bullet.position.y);
+            printf("Q");
+        }
     }
 }
 
@@ -376,7 +378,8 @@ void trangZag (struct trang (*t)) { //Moves Trang in a zig zag
 
 // generate random numbers in range [lower, upper].
 uint8_t randoms(uint8_t lower, uint8_t upper) {
-    uint8_t num = (rand() % (upper - lower + 1)) + lower;
+    uint8_t num=0;
+    num = (rand() % (upper - lower + 1)) + lower;
 }
 
 void awakenTrang(uint8_t spawn) {    //Bring Trang, the bringer
@@ -509,7 +512,7 @@ void awakenSqwog(uint8_t spawn) {    //Bring Sqwog, the bringer
     }
 }
 
-uint8_t compare(struct bullet_t bullet, struct asteroid_t asteroid){
+uint8_t compBuAs(struct bullet_t bullet, struct asteroid_t asteroid){
     uint8_t g=0;
 
     if (bullet.position.x==asteroid.position.x-1 && bullet.position.y==asteroid.position.y){

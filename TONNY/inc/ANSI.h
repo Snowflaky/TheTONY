@@ -37,6 +37,7 @@ struct velocity {
 };
 
 struct trang { //One of the baddest bois around!, he's got two things inside him,- burning hatred for the player, and 180 degrees
+    uint8_t random;
     struct vector_t position;
     struct vector_t velocity;
     uint8_t hp;
@@ -90,6 +91,8 @@ void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)
 uint8_t startBullet(struct ship_t ship, uint8_t p);
 void moveBullet (uint8_t y, struct bullet_t *bullet, struct bullet_t *oldBullet);
 void printBullet (struct bullet_t bullet, struct bullet_t oldBullet);
+
+uint8_t compBuAs(struct bullet_t bullet, struct asteroid_t asteroid);
 
 //TRANG BOIIIIIIII
 //void fixtrangPos(struct trang (*t));

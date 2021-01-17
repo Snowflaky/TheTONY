@@ -79,14 +79,26 @@ int main(void)
     bullet.velocity.y = 0;
     struct bullet_t oldBullet;
 
-    /*struct trang sqr;
-    tra.position.x = 135;
-    tra.position.y = 20;
-    tra.velocity.x = -1;
-    tra.velocity.y = 1;
-    tra.hp = 2;
-    tra.firstx = 135;
-    tra.firsty = 20;
+    //randomTra1=randoms(5,35);
+    struct trang tra1;
+    tra1.random = randoms(9,32);
+    tra1.position.x = 135;
+    tra1.position.y = tra1.random;
+    tra1.velocity.x = -1;
+    tra1.velocity.y = 1;
+    tra1.hp = 2;
+    tra1.firstx = 135;
+    tra1.firsty = tra1.random;
+
+    struct trang tra2;
+    tra2.random = randoms(9,32);
+    tra2.position.x = 135;
+    tra2.position.y = tra2.random;
+    tra2.velocity.x = -1;
+    tra2.velocity.y = 1;
+    tra2.hp = 2;
+    tra2.firstx = 135;
+    tra2.firsty = tra2.random;
 
     struct sqwog sqr;
     sqr.position.x = 135;
@@ -95,11 +107,12 @@ int main(void)
     sqr.velocity.y = 0;
     sqr.hp = 2;
     sqr.firstx = 135;
-    sqr.firsty = 20;*/
+    sqr.firsty = 20;
 
     while(1){
         if(timeFlagPrint==1){
-            //drawSqwog(sqr);
+            drawTrang(tra1);
+            drawTrang(tra2);
             printShip(ship, oldShip);
             printAsteroid(asteroid1, oldAsteroid1);
             printAsteroid(asteroid2, oldAsteroid2);
@@ -122,19 +135,8 @@ int main(void)
             timeFlagDrawT=0;
         }*/
 
-        if(timeFlagA1==10){//change this number for change of asteroid speed
-            moveAsteroid(asteroid1.position.x,&asteroid1,&oldAsteroid1);
-            moveAsteroid(asteroid2.position.x,&asteroid2,&oldAsteroid2);
-            moveAsteroid(asteroid4.position.x,&asteroid4,&oldAsteroid4);
-            timeFlagA1=0;
-        }
-        if(timeFlagA2==6){//change this number for change of asteroid speed
-            moveAsteroid(asteroid3.position.x,&asteroid3,&oldAsteroid3);
-            moveAsteroid(asteroid5.position.x,&asteroid5,&oldAsteroid5);
-            timeFlagA2=0;
-        }
 
-        if(timeFlagBullet==1){//change this number for change of bullet speed
+        if(timeFlagBullet>=1){//change this number for change of bullet speed
             if (shooting>0){
                 moveBullet(shooting, &bullet, &oldBullet);
             }
@@ -144,19 +146,31 @@ int main(void)
             timeFlagBullet=0;
         }
 
-        if (compare(bullet,asteroid1)==1){
+        if(timeFlagA1>=10){//change this number for change of asteroid speed
+            moveAsteroid(asteroid1.position.x,&asteroid1,&oldAsteroid1);
+            moveAsteroid(asteroid2.position.x,&asteroid2,&oldAsteroid2);
+            moveAsteroid(asteroid4.position.x,&asteroid4,&oldAsteroid4);
+            timeFlagA1=0;
+        }
+        if(timeFlagA2>=6){//change this number for change of asteroid speed
+            moveAsteroid(asteroid3.position.x,&asteroid3,&oldAsteroid3);
+            moveAsteroid(asteroid5.position.x,&asteroid5,&oldAsteroid5);
+            timeFlagA2=0;
+        }
+
+        if (compBuAs(bullet,asteroid1)==1){
             bullet.velocity.x=-1;
         }
-        if (compare(bullet,asteroid2)==1){
+        if (compBuAs(bullet,asteroid2)==1){
             bullet.velocity.x=-1;
         }
-        if (compare(bullet,asteroid3)==1){
+        if (compBuAs(bullet,asteroid3)==1){
             bullet.velocity.x=-1;
         }
-        if (compare(bullet,asteroid4)==1){
+        if (compBuAs(bullet,asteroid4)==1){
             bullet.velocity.x=-1;
         }
-        if (compare(bullet,asteroid5)==1){
+        if (compBuAs(bullet,asteroid5)==1){
             bullet.velocity.x=-1;
         }
 
@@ -164,12 +178,15 @@ int main(void)
             shooting=0;
             bullet.velocity.x=1;
         }
-        /*if (timeFlagTra==4){
-            eraseSqwog(sqr);
-            sqwogNextPos(&sqr);
-            sqwogBox(&sqr);
+        if (timeFlagTra>=4){
+            eraseTrang(tra1);
+            trangNextPos(&tra1);
+            trangZag(&tra1);
+            eraseTrang(tra2);
+            trangNextPos(&tra2);
+            trangZag(&tra2);
             timeFlagTra=0;
-        }*/
+        }
     }
 
 
