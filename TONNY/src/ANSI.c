@@ -219,8 +219,10 @@ void printBullet (struct bullet_t bullet, struct bullet_t oldBullet) {
     if(bullet.position.x>3){
         gotoxy(oldBullet.position.x,oldBullet.position.y);
         printf(" ");
-        gotoxy(bullet.position.x,bullet.position.y);
-        printf("Q");
+        if (bullet.position.x<139){
+            gotoxy(bullet.position.x,bullet.position.y);
+            printf("Q");
+        }
     }
 }
 
@@ -240,6 +242,7 @@ void TIM2_IRQHandler() {
             time.centiSec++;
             time.milliSec=0;
             if (time.centiSec>=100){
+                timeFlagScore++;
                 time.second++;
                 time.centiSec=0;
                 if (time.second>=60){
@@ -252,28 +255,6 @@ void TIM2_IRQHandler() {
     }
     TIM2->SR &= ~0x0001; // Clear interrupt bit
  }
-
-
-
-    /*time.milliSec++;
-    timeFlag2++;
-    timeFlag3++;
-    if (time.milliSec>=10) {
-        time.centiSec++;
-        time.milliSec=0;
-        timeFlag=1;
-        timeFlag4++;
-        if (time.centiSec>=100){
-            time.second++;
-            time.centiSec=0;
-            if (time.second>=60){
-                time.minute++;
-                time.second=0;
-            }
-        }
-    }
-    TIM2->SR &= ~0x0001; // Clear interrupt bit
- }*/
 
 
 
@@ -311,8 +292,19 @@ void fixtrangPos(struct trang (*t)) {
 void trangNextPos(struct trang (*t)) {
 //Calculate new position for Trang. Input is a pointer.
     uint32_t k = 1;
+    if ((*t).position.x<5){
+        (*t).position.x=135;
+    }
     (*t).position.x = (*t).position.x + (*t).velocity.x*k;
     (*t).position.y = (*t).position.y + (*t).velocity.y*k;
+}
+
+uint8_t trangBreach(struct trang t){
+    uint8_t breach=0;
+    if (t.position.x<5){
+        breach=1;
+    }
+    return breach;
 }
 
 void drawTrang (struct trang t) {
@@ -376,7 +368,8 @@ void trangZag (struct trang (*t)) { //Moves Trang in a zig zag
 
 // generate random numbers in range [lower, upper].
 uint8_t randoms(uint8_t lower, uint8_t upper) {
-    uint8_t num = (rand() % (upper - lower + 1)) + lower;
+    uint8_t num=0;
+    num = (rand() % (upper - lower + 1)) + lower;
 }
 
 void awakenTrang(uint8_t spawn) {    //Bring Trang, the bringer
@@ -509,15 +502,25 @@ void awakenSqwog(uint8_t spawn) {    //Bring Sqwog, the bringer
     }
 }
 
-uint8_t compare(struct bullet_t bullet, struct asteroid_t asteroid){
+uint8_t compBuAs(struct bullet_t bullet, struct asteroid_t asteroid){
     uint8_t g=0;
-
     if (bullet.position.x==asteroid.position.x-1 && bullet.position.y==asteroid.position.y){
         g=1;
     }
 
     return g;
 }
+
+uint8_t compBuEn(struct bullet_t bullet, struct trang tra){
+    uint8_t g=0;
+    if (bullet.position.x==tra.position.x && (bullet.position.y==tra.position.y ||
+                                              bullet.position.y==tra.position.y+1 ||
+                                              bullet.position.y==tra.position.y+2 ||
+                                              bullet.position.y==tra.position.y-1 ||
+                                              bullet.position.y==tra.position.y-2)){
+        g=1;
+    }
+    return g;
 
 // The following functions are a generalised form of the
 //aforementioned enemy generation functions
@@ -652,9 +655,11 @@ void eraseEnemy (struct enemy e) {
 }
 
 void enemyMotion (struct enemy *e) {
+    if ((*e).position.x<5){
+        (*e).position.x=135;}
     if (e.enemyType == 1) {
-        if ((*e).position.y - (*e).firsty > 4 || (*e).position.y - (*e).firsty < -4) {
-        (*e).velocity.y *= -1;
+        (*e).position.x = (*e).position.x + (*e).velocity.x*k;
+        (*e).position.y = (*e).position.y + (*e).velocity.y*k;
     } else if (e.enemyType == 2) {
         if (((*e).position.x - (*e).firstx == -5) && ((*e).position.y - (*e).firsty == 0)) {
             (*e).velocity.y = -1;
