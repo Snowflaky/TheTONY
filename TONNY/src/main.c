@@ -27,6 +27,27 @@ int main(void)
     NVIC_SetPriority(TIM2_IRQn, 0001); // Set interrupt priority=1 (high)
     NVIC_EnableIRQ(TIM2_IRQn); // Enable interrupt
 
+    /*clrscr();
+    while(1){
+    gotoxy(1,1);
+    printf("         ");
+    gotoxy(1,1);
+    printf("%d",time.milliSec);
+    gotoxy(1,3);
+    printf("         ");
+    gotoxy(1,3);
+    printf("%d",time.centiSec);
+    gotoxy(1,5);
+    printf("         ");
+    gotoxy(1,5);
+    printf("%d",time.second);
+    gotoxy(1,7);
+    printf("         ");
+    gotoxy(1,7);
+    printf("%d",time.minute);
+    }*/
+
+
     uint8_t u=0;
     uint8_t shooting=0;
     uint16_t breach=0;
@@ -84,26 +105,36 @@ int main(void)
     //randomTra1=randoms(5,35);
     struct enemy e1;
     e1.randomNo = randoms(9,32);
-    e1.enemyType = randoms(1,2);
+    e1.enemyType = 1;
     e1.position.x = 135;
     e1.position.y = e1.randomNo;
     e1.velocity.x = -1;
-    e1.velocity.y = 1;
     e1.hp = 2;
     e1.firstx = 135;
     e1.firsty = e1.randomNo;
 
     struct enemy e2;
     e2.randomNo = randoms(9,32);
-    e2.enemyType = randoms(1,2);
+    e2.enemyType = 2;
     e2.position.x = 135;
     e2.position.y = e2.randomNo;
     e2.velocity.x = -1;
-    e2.velocity.y = 1;
     e2.hp = 2;
     e2.firstx = 135;
     e2.firsty = e2.randomNo;
 
+    if (e1.enemyType==1){
+        e1.velocity.y=1;
+    }
+    else if (e1.enemyType==2){
+        e1.velocity.y=0;
+    }
+    if (e2.enemyType==1){
+        e2.velocity.y=1;
+    }
+    else if (e2.enemyType==2){
+        e2.velocity.y=0;
+    }
 
     while(1){
         breach=0;
@@ -127,10 +158,6 @@ int main(void)
             timeFlagPrint=0;
         }
 
-        /*if (timeFlagDrawT==15){
-
-            timeFlagDrawT=0;
-        }*/
 
 
         if(timeFlagBullet>=1){//change this number for change of bullet speed
@@ -191,18 +218,16 @@ int main(void)
             enemyNextPos(&e1);
             enemyMotion(&e1);
             if (enemyBreach(e1)==1){
-                breach=400;
+                breach=1000;
                 gotoxy(100,12);
-                printf("hey1");
             }
             eraseEnemy(e2);
             enemyNextPos(&e2);
             enemyMotion(&e2);
             timeFlagTra=0;
             if (enemyBreach(e2)==1){
-                breach=100;
+                breach=1000;
                 gotoxy(100,13);
-                printf("hey2");
             }
         }
 
@@ -213,7 +238,7 @@ int main(void)
         printf("%d",breach);
 
         gotoxy(100,10);
-        printf("     ");
+        printf("          ");
         gotoxy(100,10);
         goTime=goTime-timeFlagScore-breach;
         printf("%d",goTime);
