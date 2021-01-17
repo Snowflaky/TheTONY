@@ -179,6 +179,7 @@ void printShip (struct ship_t ship, struct ship_t oldShip) {
     gotoxy(ship.position.x + 1,ship.position.y + 1);
     printf("-");
     printf("%c[22m", ESC);
+    color(15,0);
 }
 
 void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *oldAsteroid) {
@@ -251,7 +252,11 @@ void printBullet (struct bullet_t bullet, struct bullet_t oldBullet) {
         printf(" ");
         if (bullet.position.x<139){
             gotoxy(bullet.position.x,bullet.position.y);
-            printf("Q");
+            fgcolor(6);
+            printf("%c[1m",ESC);
+            printf("=");
+            fgcolor(15);
+            printf("%c[22m",ESC);
         }
     }
 }
@@ -262,18 +267,15 @@ void TIM2_IRQHandler() {
     timeFlagDrawT++;
     time.mikroSec++;
     if (time.mikroSec>=1000){
+        timeFlagBullet++;
         time.milliSec++;
         time.mikroSec=0;
         if (time.milliSec>=10) {
-            timeFlagBullet++;
             timeFlagA1++;
             timeFlagA2++;
             timeFlagTra++;
             time.centiSec++;
             time.milliSec=0;
-            if (time.centiSec>=500){
-                timeFlagScore++;
-            }
             if (time.centiSec>=50){
                 time.second++;
                 time.centiSec=0;
