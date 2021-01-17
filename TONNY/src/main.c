@@ -82,40 +82,34 @@ int main(void)
     struct bullet_t oldBullet;
 
     //randomTra1=randoms(5,35);
-    struct trang tra1;
-    tra1.random = randoms(9,32);
-    tra1.position.x = 135;
-    tra1.position.y = tra1.random;
-    tra1.velocity.x = -1;
-    tra1.velocity.y = 1;
-    tra1.hp = 2;
-    tra1.firstx = 135;
-    tra1.firsty = tra1.random;
+    struct enemy e1;
+    e1.randomNo = randoms(9,32);
+    e1.enemyType = randoms(1,2);
+    e1.position.x = 135;
+    e1.position.y = e1.randomNo;
+    e1.velocity.x = -1;
+    e1.velocity.y = 1;
+    e1.hp = 2;
+    e1.firstx = 135;
+    e1.firsty = e1.randomNo;
 
-    struct trang tra2;
-    tra2.random = randoms(9,32);
-    tra2.position.x = 135;
-    tra2.position.y = tra2.random;
-    tra2.velocity.x = -1;
-    tra2.velocity.y = 1;
-    tra2.hp = 2;
-    tra2.firstx = 135;
-    tra2.firsty = tra2.random;
+    struct enemy e2;
+    e2.randomNo = randoms(9,32);
+    e2.enemyType = randoms(1,2);
+    e2.position.x = 135;
+    e2.position.y = e2.randomNo;
+    e2.velocity.x = -1;
+    e2.velocity.y = 1;
+    e2.hp = 2;
+    e2.firstx = 135;
+    e2.firsty = e2.randomNo;
 
-    struct sqwog sqr;
-    sqr.position.x = 135;
-    sqr.position.y = 20;
-    sqr.velocity.x = -1;
-    sqr.velocity.y = 0;
-    sqr.hp = 2;
-    sqr.firstx = 135;
-    sqr.firsty = 20;
 
     while(1){
         breach=0;
         if(timeFlagPrint==1){
-            drawTrang(tra1);
-            drawTrang(tra2);
+            drawEnemy(e1);
+            drawEnemy(e2);
             printShip(ship, oldShip);
             printAsteroid(asteroid1, oldAsteroid1);
             printAsteroid(asteroid2, oldAsteroid2);
@@ -177,15 +171,15 @@ int main(void)
             bullet.velocity.x=-1;
         }
 
-        if(compBuEn(bullet,tra1)==1){
-            eraseTrang(tra1);
-            tra1.position.x = 135;
-            tra1.position.y = tra1.random;
+        if(compBuEn(bullet,e1)==1){
+            eraseEnemy(e1);
+            e1.position.x = 135;
+            e1.position.y = e1.randomNo;
         }
-        if(compBuEn(bullet,tra2)==1){
-            eraseTrang(tra2);
-            tra2.position.x = 135;
-            tra2.position.y = tra2.random;
+        if(compBuEn(bullet,e2)==1){
+            eraseEnemy(e2);
+            e2.position.x = 135;
+            e2.position.y = e2.randomNo;
         }
 
         if (bullet.position.x==3 && bullet.velocity.x==-1){
@@ -193,19 +187,19 @@ int main(void)
             bullet.velocity.x=1;
         }
         if (timeFlagTra>=4){
-            eraseTrang(tra1);
-            trangNextPos(&tra1);
-            trangZag(&tra1);
-            if (trangBreach(tra1)==1){
+            eraseEnemy(e1);
+            enemyNextPos(&e1);
+            enemyMotion(&e1);
+            if (enemyBreach(e1)==1){
                 breach=400;
                 gotoxy(100,12);
                 printf("hey1");
             }
-            eraseTrang(tra2);
-            trangNextPos(&tra2);
-            trangZag(&tra2);
+            eraseEnemy(e2);
+            enemyNextPos(&e2);
+            enemyMotion(&e2);
             timeFlagTra=0;
-            if (trangBreach(tra2)==1){
+            if (enemyBreach(e2)==1){
                 breach=100;
                 gotoxy(100,13);
                 printf("hey2");

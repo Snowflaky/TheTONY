@@ -299,9 +299,9 @@ void trangNextPos(struct trang (*t)) {
     (*t).position.y = (*t).position.y + (*t).velocity.y*k;
 }
 
-uint8_t trangBreach(struct trang t){
+uint8_t enemyBreach(struct enemy e){
     uint8_t breach=0;
-    if (t.position.x<5){
+    if (e.position.x<5){
         breach=1;
     }
     return breach;
@@ -511,21 +511,22 @@ uint8_t compBuAs(struct bullet_t bullet, struct asteroid_t asteroid){
     return g;
 }
 
-uint8_t compBuEn(struct bullet_t bullet, struct trang tra){
+uint8_t compBuEn(struct bullet_t bullet, struct enemy e){
     uint8_t g=0;
-    if (bullet.position.x==tra.position.x && (bullet.position.y==tra.position.y ||
-                                              bullet.position.y==tra.position.y+1 ||
-                                              bullet.position.y==tra.position.y+2 ||
-                                              bullet.position.y==tra.position.y-1 ||
-                                              bullet.position.y==tra.position.y-2)){
+    if (bullet.position.x==e.position.x && (bullet.position.y==e.position.y ||
+                                              bullet.position.y==e.position.y+1 ||
+                                              bullet.position.y==e.position.y+2 ||
+                                              bullet.position.y==e.position.y-1 ||
+                                              bullet.position.y==e.position.y-2)){
         g=1;
     }
     return g;
+}
 
 // The following functions are a generalised form of the
 //aforementioned enemy generation functions
 
-void enemyNexPos (struct enemy *e) {
+void enemyNextPos (struct enemy *e) {
     //Calculate new position for Trang. Input is a pointer.
     uint32_t k = 1;
     (*e).position.x = (*e).position.x + (*e).velocity.x*k;
@@ -655,22 +656,28 @@ void eraseEnemy (struct enemy e) {
 }
 
 void enemyMotion (struct enemy *e) {
+    uint8_t k=1;
     if ((*e).position.x<5){
-        (*e).position.x=135;}
-    if (e.enemyType == 1) {
+        (*e).position.x=135;
+    }
+    if ((*e).enemyType == 1) {
         (*e).position.x = (*e).position.x + (*e).velocity.x*k;
         (*e).position.y = (*e).position.y + (*e).velocity.y*k;
-    } else if (e.enemyType == 2) {
+    }
+    else if ((*e).enemyType == 2) {
         if (((*e).position.x - (*e).firstx == -5) && ((*e).position.y - (*e).firsty == 0)) {
             (*e).velocity.y = -1;
             (*e).velocity.x = 0;
-        }  else if ((*e).position.y - (*e).firsty == -5 && (*e).position.x - (*e).firstx == -5) {
+        }
+        else if ((*e).position.y - (*e).firsty == -5 && (*e).position.x - (*e).firstx == -5) {
             (*e).velocity.y = 0;
             (*e).velocity.x = -1;
-        } else if ((*e).position.x - (*e).firstx == -10 && (*e).position.y - (*e).firsty == -5) {
+        }
+        else if ((*e).position.x - (*e).firstx == -10 && (*e).position.y - (*e).firsty == -5) {
             (*e).velocity.y = 1;
             (*e).velocity.x = 0;
-        } else if ((*e).position.y - (*e).firsty == 0 && (*e).position.x - (*e).firstx == -10) {
+        }
+        else if ((*e).position.y - (*e).firsty == 0 && (*e).position.x - (*e).firstx == -10) {
             (*e).velocity.y = 0;
             (*e).velocity.x = -1;
         }
