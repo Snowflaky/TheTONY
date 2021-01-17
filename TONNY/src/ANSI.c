@@ -136,10 +136,10 @@ void moveShip (uint8_t x, struct ship_t *ship, struct ship_t *oldShip){
 //Input: keyInput (up/down/null), pointer to ship structure.
     (*oldShip).position.x=(*ship).position.x;
     (*oldShip).position.y=(*ship).position.y;
-    if (x==1 && (*ship).position.y>2){
+    if (x==1 && (*ship).position.y>3){
         (*ship).position.y--;
     }
-    if (x==2 && (*ship).position.y<39){
+    if (x==2 && (*ship).position.y<38){
         (*ship).position.y++;
     }
 }
@@ -177,7 +177,9 @@ void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid){
         /*printf("%c[1D",ESC);
         printf(" ");*/
         gotoxy(asteroid.position.x,asteroid.position.y);
-        printf("l");
+        bgcolor(3);
+        printf(" ");
+        bgcolor(0);
     //}
 }
 
@@ -241,10 +243,15 @@ void TIM2_IRQHandler() {
             timeFlagTra++;
             time.centiSec++;
             time.milliSec=0;
-            if (time.centiSec>=100){
+            if (time.centiSec>=500){
                 timeFlagScore++;
+            }
+            if (time.centiSec>=50){
                 time.second++;
                 time.centiSec=0;
+                if (time.second%10==0){
+                    timeFlagScore++;
+                }
                 if (time.second>=60){
                     time.minute++;
                     time.second=0;
@@ -301,7 +308,7 @@ void trangNextPos(struct trang (*t)) {
 
 uint8_t enemyBreach(struct enemy e){
     uint8_t breach=0;
-    if (e.position.x<5){
+    if (e.position.x<6){
         breach=1;
     }
     return breach;
@@ -562,7 +569,7 @@ void drawEnemy (struct enemy e) {
         color(0,0);
         //print the Sqwog alien ship
         gotoxy(e.position.x,e.position.y);
-        color(11,3);
+        color(11,2);
         gotoxy(e.position.x,e.position.y);
         printf("O");
         gotoxy(e.position.x,e.position.y - 1);
@@ -592,6 +599,7 @@ void drawEnemy (struct enemy e) {
         gotoxy(e.position.x + 2,e.position.y);
         printf(">");
     }
+    color(15,0);
 }
 
 void eraseEnemy (struct enemy e) {
@@ -661,9 +669,11 @@ void enemyMotion (struct enemy *e) {
         (*e).position.x=135;
     }
     if ((*e).enemyType == 1) {
-        (*e).position.x = (*e).position.x + (*e).velocity.x*k;
-        (*e).position.y = (*e).position.y + (*e).velocity.y*k;
-    }
+        uint8_t firsty = (*e).firsty;   // motion
+        if ((*e).position.y - firsty > 4 || (*e).position.y - firsty < -4) {
+            (*e).velocity.y *= -1; //If the current y position is
+        }                          //farther from starting position
+    }                             //than 3, y velocity is reversed
     else if ((*e).enemyType == 2) {
         if (((*e).position.x - (*e).firstx == -5) && ((*e).position.y - (*e).firsty == 0)) {
             (*e).velocity.y = -1;
@@ -683,6 +693,7 @@ void enemyMotion (struct enemy *e) {
         }
     }
 }
+
 
 /*void menu () {
     window()
