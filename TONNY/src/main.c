@@ -79,8 +79,27 @@ int main(void)
     bullet.velocity.y = 0;
     struct bullet_t oldBullet;
 
+    /*struct trang sqr;
+    tra.position.x = 135;
+    tra.position.y = 20;
+    tra.velocity.x = -1;
+    tra.velocity.y = 1;
+    tra.hp = 2;
+    tra.firstx = 135;
+    tra.firsty = 20;
+
+    struct sqwog sqr;
+    sqr.position.x = 135;
+    sqr.position.y = 20;
+    sqr.velocity.x = -1;
+    sqr.velocity.y = 0;
+    sqr.hp = 2;
+    sqr.firstx = 135;
+    sqr.firsty = 20;*/
+
     while(1){
         if(timeFlagPrint==1){
+            //drawSqwog(sqr);
             printShip(ship, oldShip);
             printAsteroid(asteroid1, oldAsteroid1);
             printAsteroid(asteroid2, oldAsteroid2);
@@ -96,9 +115,14 @@ int main(void)
             bullet.position.y=shooting;
 
             timeFlagPrint=0;
-
         }
-        if(timeFlagA1==4){//change this number for change of asteroid speed
+
+        /*if (timeFlagDrawT==15){
+
+            timeFlagDrawT=0;
+        }*/
+
+        if(timeFlagA1==10){//change this number for change of asteroid speed
             moveAsteroid(asteroid1.position.x,&asteroid1,&oldAsteroid1);
             moveAsteroid(asteroid2.position.x,&asteroid2,&oldAsteroid2);
             moveAsteroid(asteroid4.position.x,&asteroid4,&oldAsteroid4);
@@ -120,6 +144,32 @@ int main(void)
             timeFlagBullet=0;
         }
 
+        if (compare(bullet,asteroid1)==1){
+            bullet.velocity.x=-1;
+        }
+        if (compare(bullet,asteroid2)==1){
+            bullet.velocity.x=-1;
+        }
+        if (compare(bullet,asteroid3)==1){
+            bullet.velocity.x=-1;
+        }
+        if (compare(bullet,asteroid4)==1){
+            bullet.velocity.x=-1;
+        }
+        if (compare(bullet,asteroid5)==1){
+            bullet.velocity.x=-1;
+        }
+
+        if (bullet.position.x==3 && bullet.velocity.x==-1){
+            shooting=0;
+            bullet.velocity.x=1;
+        }
+        /*if (timeFlagTra==4){
+            eraseSqwog(sqr);
+            sqwogNextPos(&sqr);
+            sqwogBox(&sqr);
+            timeFlagTra=0;
+        }*/
     }
 
 
