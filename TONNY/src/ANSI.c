@@ -365,7 +365,7 @@ void eraseTrang (struct trang t) { //erases Trang with the same
 }
 
 void trangZag (struct trang (*t)) { //Moves Trang in a zig zag
-    uint8_t firsty = (*t).position.y;// motion
+    uint8_t firsty = (*t).firsty;   // motion
     if ((*t).position.y - firsty > 4 || (*t).position.y - firsty < -4) {
         (*t).velocity.y *= -1; //If the current y position is
     }                          //farther from starting position
@@ -505,6 +505,9 @@ void awakenSqwog(uint8_t spawn) {    //Bring Sqwog, the bringer
         }
     }
 }
+
+
+
 
 /*void menu () {
     window()

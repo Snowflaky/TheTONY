@@ -38,9 +38,21 @@ struct trang { //One of the baddest bois around!, he's got two things inside him
     struct vector_t position;
     struct vector_t velocity;
     uint8_t hp;
+    int8_t firsty;
+    int8_t firstx;
 };
 
 struct sqwog { //One of the baddest bois around!, he's got two things inside him,- burning hatred for the player, and 180 degrees
+    struct vector_t position;
+    struct vector_t velocity;
+    uint8_t hp;
+    int8_t firsty;
+    int8_t firstx;
+};
+
+struct enemy {
+    int8_t randomNo;
+    uint8_t
     struct vector_t position;
     struct vector_t velocity;
     uint8_t hp;
