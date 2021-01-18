@@ -11,12 +11,12 @@
 #define FIX14_MULT(a, b) ( (a)*(b) >> FIX14_SHIFT )
 #define FIX14_DIV(a, b) ( ((a) << FIX14_SHIFT) / b )
 
-volatile uint8_t timeFlagPrint;
-volatile uint8_t timeFlagA1;
-volatile uint8_t timeFlagBullet;
-volatile uint8_t timeFlagA2;
-volatile uint8_t timeFlagTra;
-volatile uint8_t timeFlagDrawT;
+volatile uint32_t timeFlagPrint;
+volatile uint32_t timeFlagA1;
+volatile uint32_t timeFlagBullet;
+volatile uint32_t timeFlagA2;
+volatile uint32_t timeFlagTra;
+volatile uint32_t timeFlagDrawT;
 volatile uint32_t timeFlagScore;
 
 struct time_t {
@@ -105,6 +105,7 @@ void printBullet (struct bullet_t bullet, struct bullet_t oldBullet);
 
 uint8_t compBuAs(struct bullet_t bullet, struct asteroid_t asteroid);
 uint8_t compBuEn(struct bullet_t bullet, struct enemy e);
+uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge);
 
 uint8_t enemyBreach(struct enemy e);
 
@@ -129,5 +130,8 @@ void enemyNextPos (struct enemy *e);
 void drawEnemy (struct enemy e);
 void eraseEnemy (struct enemy e);
 void enemyMotion (struct enemy *e);
+
+void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge);
+void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge);
 
 #endif

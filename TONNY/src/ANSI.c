@@ -136,10 +136,10 @@ void moveShip (uint8_t x, struct ship_t *ship, struct ship_t *oldShip){
 //Input: keyInput (up/down/null), pointer to ship structure.
     (*oldShip).position.x=(*ship).position.x;
     (*oldShip).position.y=(*ship).position.y;
-    if (x==1 && (*ship).position.y>2){
+    if (x==1 && (*ship).position.y>3){
         (*ship).position.y--;
     }
-    if (x==2 && (*ship).position.y<39){
+    if (x==2 && (*ship).position.y<38){
         (*ship).position.y++;
     }
 }
@@ -179,6 +179,7 @@ void printShip (struct ship_t ship, struct ship_t oldShip) {
     gotoxy(ship.position.x + 1,ship.position.y + 1);
     printf("-");
     printf("%c[22m", ESC);
+    color(15,0);
 }
 
 void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *oldAsteroid) {
@@ -205,7 +206,9 @@ void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid){
         /*printf("%c[1D",ESC);
         printf(" ");*/
         gotoxy(asteroid.position.x,asteroid.position.y);
-        printf("l");
+        bgcolor(3);
+        printf(" ");
+        bgcolor(0);
     //}
 }
 
@@ -232,7 +235,7 @@ uint8_t startBullet (struct ship_t ship, uint8_t p){
 
 void moveBullet (uint8_t y, struct bullet_t *bullet, struct bullet_t *oldBullet) {
 //Moves asteroid 1 downwards (along y-axis).
-//Input: x-axis position, pointer to asteroid structure.
+//Input: x-axis position, point    (*dodge).position.y=y;er to asteroid structure.
     if ((*bullet).position.x>=139){
         (*bullet).position.x=3;
     }
@@ -249,7 +252,11 @@ void printBullet (struct bullet_t bullet, struct bullet_t oldBullet) {
         printf(" ");
         if (bullet.position.x<139){
             gotoxy(bullet.position.x,bullet.position.y);
-            printf("Q");
+            fgcolor(6);
+            printf("%c[1m",ESC);
+            printf("=");
+            fgcolor(15);
+            printf("%c[22m",ESC);
         }
     }
 }
@@ -260,19 +267,21 @@ void TIM2_IRQHandler() {
     timeFlagDrawT++;
     time.mikroSec++;
     if (time.mikroSec>=1000){
+        timeFlagBullet++;
         time.milliSec++;
         time.mikroSec=0;
         if (time.milliSec>=10) {
-            timeFlagBullet++;
             timeFlagA1++;
             timeFlagA2++;
             timeFlagTra++;
             time.centiSec++;
             time.milliSec=0;
-            if (time.centiSec>=100){
-                timeFlagScore++;
+            if (time.centiSec>=50){
                 time.second++;
                 time.centiSec=0;
+                if (time.second%10==0){
+                    timeFlagScore++;
+                }
                 if (time.second>=60){
                     time.minute++;
                     time.second=0;
@@ -329,7 +338,7 @@ void trangNextPos(struct trang (*t)) {
 
 uint8_t enemyBreach(struct enemy e){
     uint8_t breach=0;
-    if (e.position.x<5){
+    if (e.position.x<6){
         breach=1;
     }
     return breach;
@@ -592,7 +601,7 @@ void drawEnemy (struct enemy e) {
         color(0,0);
         //print the Sqwog alien ship
         gotoxy(e.position.x,e.position.y);
-        color(11,3);
+        color(11,2);
         gotoxy(e.position.x,e.position.y);
         printf("O");
         gotoxy(e.position.x,e.position.y - 1);
@@ -625,6 +634,7 @@ void drawEnemy (struct enemy e) {
         printf("%c[22m", ESC);
         color(15,0);
     }
+    color(15,0);
 }
 
 void eraseEnemy (struct enemy e) {
@@ -694,9 +704,11 @@ void enemyMotion (struct enemy *e) {
         (*e).position.x=135;
     }
     if ((*e).enemyType == 1) {
-        (*e).position.x = (*e).position.x + (*e).velocity.x*k;
-        (*e).position.y = (*e).position.y + (*e).velocity.y*k;
-    }
+        uint8_t firsty = (*e).firsty;   // motion
+        if ((*e).position.y - firsty > 4 || (*e).position.y - firsty < -4) {
+            (*e).velocity.y *= -1; //If the current y position is
+        }                          //farther from starting position
+    }                             //than 3, y velocity is reversed
     else if ((*e).enemyType == 2) {
         if (((*e).position.x - (*e).firstx == -5) && ((*e).position.y - (*e).firsty == 0)) {
             (*e).velocity.y = -1;
@@ -715,6 +727,48 @@ void enemyMotion (struct enemy *e) {
             (*e).velocity.x = -1;
         }
     }
+}
+
+void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge) {
+//Moves asteroid 1 downwards (along y-axis).
+//Input: x-axis position, pointer to asteroid structure.
+    if ((*dodge).position.x<=2){
+        gotoxy((*dodge).position.x,(*dodge).position.y);
+        printf(" ",ESC);
+        (*dodge).position.x=139;
+    }
+    (*oldDodge).position.x=(*dodge).position.x;
+    (*oldDodge).position.y=(*dodge).position.y;
+    uint8_t k=1;
+    (*dodge).position.x=(*dodge).position.x+(*dodge).velocity.x*k;
+    (*dodge).position.y=y;
+}
+
+void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge){
+//Delete asteroid at old position and prints asteroid at position (x,y).
+//Input: pointer to asteroid structure.
+    //if (asteroid.position.y<40){
+        gotoxy(oldDodge.position.x,oldDodge.position.y);
+        printf(" ",ESC);
+        /*printf("%c[1D",ESC);
+        printf(" ");*/
+        gotoxy(dodge.position.x,dodge.position.y);
+        fgcolor(13);
+        printf("%c[1m", ESC);
+        printf("#");
+        fgcolor(15);
+        printf("%c[22m", ESC);
+    //}
+}
+
+uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge){
+    uint8_t g=0;
+    if (ship.position.x==dodge.position.x-1 && (ship.position.y==dodge.position.y ||
+                                                ship.position.y==dodge.position.y+1 ||
+                                                ship.position.y==dodge.position.y-1 )){
+        g=1;
+    }
+    return g;
 }
 
 /*void menu () {
