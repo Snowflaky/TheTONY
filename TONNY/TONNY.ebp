@@ -91,6 +91,7 @@
 		<Unit filename="cmsis\core_cmInstr.h" />
 		<Unit filename="inc\30010_io.h" />
 		<Unit filename="inc\ANSI.h" />
+		<Unit filename="inc\charset.h" />
 		<Unit filename="inc\stm32f30x.h" />
 		<Unit filename="inc\stm32f30x_conf.h" />
 		<Unit filename="inc\system_stm32f30x.h" />
@@ -187,6 +188,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\ANSI.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\charset.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\main.c">

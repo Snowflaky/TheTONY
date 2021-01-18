@@ -131,43 +131,85 @@ uint8_t keyInput(){
     return x;
 }
 
-void moveShip (uint8_t x, struct ship_t *ship){
+void moveShip (uint8_t x, struct ship_t *ship, struct ship_t *oldShip){
 //If up/down keyInput (x) detected, function updates spaceship position.
 //Input: keyInput (up/down/null), pointer to ship structure.
-    if (x==1 && (*ship).position.y>2){
+    (*oldShip).position.x=(*ship).position.x;
+    (*oldShip).position.y=(*ship).position.y;
+    if (x==1 && (*ship).position.y>3){
         (*ship).position.y--;
     }
-    if (x==2 && (*ship).position.y<39){
+    if (x==2 && (*ship).position.y<38){
         (*ship).position.y++;
     }
 }
 
-void printShip (struct ship_t ship) {
+void printShip (struct ship_t ship, struct ship_t oldShip) {
 //Delete ship at old position and prints spaceship at position (x,y).
 //Input: pointer to ship structure.
-    printf("%c[1D",ESC);
+    color(0,0);
+    gotoxy(oldShip.position.x + 1,oldShip.position.y);
     printf(" ");
+    gotoxy(oldShip.position.x,oldShip.position.y - 1);
+    printf(" ");
+    gotoxy(oldShip.position.x,oldShip.position.y + 1);
+    printf(" ");
+    gotoxy(oldShip.position.x,oldShip.position.y);
+    printf(" ");
+    gotoxy(oldShip.position.x + 1,oldShip.position.y - 1);
+    printf(" ");
+    gotoxy(oldShip.position.x + 1,oldShip.position.y + 1);
+    printf(" ");
+//Draw Tonny's ship in it's current position
+    color(0,1);
+    gotoxy(ship.position.x + 1,ship.position.y);
+    printf("O");
+    color(9,1);
+    gotoxy(ship.position.x,ship.position.y - 1);
+    printf("D");
+    gotoxy(ship.position.x,ship.position.y + 1);
+    printf("D");
+    color(10,1);
     gotoxy(ship.position.x,ship.position.y);
-    printf("o");
+    printf("=");
+    color(1,0);
+    printf("%c[1m", ESC);
+    gotoxy(ship.position.x + 1,ship.position.y - 1);
+    printf("-");
+    gotoxy(ship.position.x + 1,ship.position.y + 1);
+    printf("-");
+    printf("%c[22m", ESC);
+    color(15,0);
 }
 
-void moveAsteroid (uint8_t x, struct asteroid_t *asteroid) {
+void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *oldAsteroid) {
 //Moves asteroid 1 downwards (along y-axis).
 //Input: x-axis position, pointer to asteroid structure.
+    if ((*asteroid).position.y>=39){
+        gotoxy((*asteroid).position.x,(*asteroid).position.y);
+        printf(" ",ESC);
+        (*asteroid).position.y=2;
+    }
+    (*oldAsteroid).position.x=(*asteroid).position.x;
+    (*oldAsteroid).position.y=(*asteroid).position.y;
+    uint8_t k=1;
     (*asteroid).position.x=x;
-    (*asteroid).position.y++;
+    (*asteroid).position.y=(*asteroid).position.y+(*asteroid).velocity.y*k;
 }
 
-void printAsteroid (struct asteroid_t asteroid){
+void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid){
 //Delete asteroid at old position and prints asteroid at position (x,y).
 //Input: pointer to asteroid structure.
-    if (asteroid.position.y<40){
-        printf("%c[1D",ESC);
-        printf(" ");
+    //if (asteroid.position.y<40){
+        gotoxy(oldAsteroid.position.x,oldAsteroid.position.y);
+        printf(" ",ESC);
+        /*printf("%c[1D",ESC);
+        printf(" ");*/
         gotoxy(asteroid.position.x,asteroid.position.y);
-        printf("l");//Insert asteroid graphic
-    }
-
+        bgcolor(3);
+        printf(" ");
+        bgcolor(0);
+    //}
 }
 
 void boss (uint8_t x){
@@ -182,50 +224,77 @@ void boss (uint8_t x){
     }
 }
 
-void moveBullet (struct bullet_t *bullet, uint8_t y){
-    //uint8_t k = 1;
-    if (y==4){
-        (*bullet).position.x++;// = (*bullet).position.x++// (*bullet).velocity.x*k;
-        (*bullet).position.y = y;
+uint8_t startBullet (struct ship_t ship, uint8_t p){
+    uint8_t k = 0;
+    if (p==4){
+        k=ship.position.y;//(*bullet).position.x++;// = (*bullet).position.x++// (*bullet).velocity.x*k;
+        //(*bullet).position.y = (*bullet).position.y;
     }
+    return k;
 }
 
-void printBullet (struct bullet_t bullet) {
-    printf("%c[1D",ESC);
-    printf(" ");
-    gotoxy(bullet.position.x,bullet.position.y);
-    printf("Q");
+void moveBullet (uint8_t y, struct bullet_t *bullet, struct bullet_t *oldBullet) {
+//Moves asteroid 1 downwards (along y-axis).
+//Input: x-axis position, point    (*dodge).position.y=y;er to asteroid structure.
+    if ((*bullet).position.x>=139){
+        (*bullet).position.x=3;
+    }
+    (*oldBullet).position.x=(*bullet).position.x;
+    (*oldBullet).position.y=(*bullet).position.y;
+    uint8_t k=1;
+    (*bullet).position.x=(*bullet).position.x + (*bullet).velocity.x*k;
+    (*bullet).position.y=y;
+}
+
+void printBullet (struct bullet_t bullet, struct bullet_t oldBullet) {
+    if(bullet.position.x>3){
+        gotoxy(oldBullet.position.x,oldBullet.position.y);
+        printf(" ");
+        if (bullet.position.x<139){
+            gotoxy(bullet.position.x,bullet.position.y);
+            fgcolor(6);
+            printf("%c[1m",ESC);
+            printf("=");
+            fgcolor(15);
+            printf("%c[22m",ESC);
+        }
+    }
 }
 
 void TIM2_IRQHandler() {
 //Counts 100ths of a second, seconds and minutes.
-    time.milliSec++;
-    timeFlag2++;
-    timeFlag3++;
-    if (time.milliSec>=10) {
-        time.centiSec++;
-        time.milliSec=0;
-        timeFlag=1;
-        if (time.centiSec>=100){
-            time.second++;
-            time.centiSec=0;
-            if (time.second>=60){
-                time.minute++;
-                time.second=0;
+    timeFlagPrint=1;
+    timeFlagDrawT++;
+    time.mikroSec++;
+    if (time.mikroSec>=1000){
+        timeFlagBullet++;
+        time.milliSec++;
+        time.mikroSec=0;
+        if (time.milliSec>=10) {
+            timeFlagA1++;
+            timeFlagA2++;
+            timeFlagTra++;
+            time.centiSec++;
+            time.milliSec=0;
+            if (time.centiSec>=50){
+                time.second++;
+                time.centiSec=0;
+                if (time.second%10==0){
+                    timeFlagScore++;
+                }
+                if (time.second>=60){
+                    time.minute++;
+                    time.second=0;
+                }
             }
+
         }
     }
     TIM2->SR &= ~0x0001; // Clear interrupt bit
  }
 
-void countFlag(uint8_t *v){
-    if (timeFlag==1){
-        (*v)++;
-    }
-}
 
-
-/*void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)[512]){
+void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)[512]){
 //Writes string on LCD display on location specified by slice and row.
 //Input: string, slice (0-127), row (1-4), pointer to buffer array.
     uint8_t h;
@@ -244,7 +313,7 @@ void countFlag(uint8_t *v){
             (*buff)[slice+g+6*h]=character_data[text[h]-0x20][g];
         }
    }
-}*/
+}
 
 void fixtrangPos(struct trang (*t)) {
 //Converts Trangs position and velocity to 18.14 (from 32.0)
@@ -258,9 +327,20 @@ void fixtrangPos(struct trang (*t)) {
 //Cosine DOOM, TRANG!!!
 void trangNextPos(struct trang (*t)) {
 //Calculate new position for Trang. Input is a pointer.
-    uint32_t k = 2;
+    uint32_t k = 1;
+    if ((*t).position.x<5){
+        (*t).position.x=135;
+    }
     (*t).position.x = (*t).position.x + (*t).velocity.x*k;
     (*t).position.y = (*t).position.y + (*t).velocity.y*k;
+}
+
+uint8_t enemyBreach(struct enemy e){
+    uint8_t breach=0;
+    if (e.position.x<6){
+        breach=1;
+    }
+    return breach;
 }
 
 void drawTrang (struct trang t) {
@@ -286,10 +366,11 @@ void drawTrang (struct trang t) {
     printf("/");
     gotoxy(t.position.x,t.position.y + 2);
     printf("\\");
+    color(15,0);
 }
 
 void eraseTrang (struct trang t) { //erases Trang with the same
-    color(0,0);                    //method as Trang is drawn
+    //color(0,0);                    //method as Trang is drawn
     //erase the Trang alien ship
     gotoxy(t.position.x,t.position.y);
     color(0,0);
@@ -311,10 +392,11 @@ void eraseTrang (struct trang t) { //erases Trang with the same
     printf(" ");
     gotoxy(t.position.x,t.position.y + 2);
     printf(" ");
+    color(15,0);
 }
 
 void trangZag (struct trang (*t)) { //Moves Trang in a zig zag
-    uint8_t firsty = (*t).position.y;// motion
+    uint8_t firsty = (*t).firsty;   // motion
     if ((*t).position.y - firsty > 4 || (*t).position.y - firsty < -4) {
         (*t).velocity.y *= -1; //If the current y position is
     }                          //farther from starting position
@@ -322,7 +404,8 @@ void trangZag (struct trang (*t)) { //Moves Trang in a zig zag
 
 // generate random numbers in range [lower, upper].
 uint8_t randoms(uint8_t lower, uint8_t upper) {
-    uint8_t num = (rand() % (upper - lower + 1)) + lower;
+    uint8_t num=0;
+    num = (rand() % (upper - lower + 1)) + lower;
 }
 
 void awakenTrang(uint8_t spawn) {    //Bring Trang, the bringer
@@ -343,12 +426,11 @@ void awakenTrang(uint8_t spawn) {    //Bring Trang, the bringer
     }
 }
 
-
-//The following functions are dedicated to the warriors of the
-//Alik'r homeworlds; the one the call SQWOG
+//The following functions are dedicated to the dishonoured warrior
+//of the Alik'r homeworlds; the one the call  GENERAL SQWOG
 void sqwogNextPos(struct sqwog (*t)) {
 //Calculate new position for Trang. Input is a pointer.
-    uint32_t k = 2;
+    uint8_t k = 1;
     (*t).position.x = (*t).position.x + (*t).velocity.x*k;
     (*t).position.y = (*t).position.y + (*t).velocity.y*k;
 }
@@ -420,26 +502,22 @@ void eraseSqwog (struct sqwog t) { //erases Sqwog with the same
     printf(" ");
     gotoxy(t.position.x + 2,t.position.y);
     printf(" ");
+    color(15,0);
 }
 
 void sqwogBox (struct sqwog (*t)) { //Moves Sqwog in a square
-    for (uint8_t i = 0; i < 5; i++) {    // motion
-        for (uint8_t j = 0; j < 3; j++) {
-            (*t).velocity.x = -1;
-        }
+    if (((*t).position.x - (*t).firstx == -5) && ((*t).position.y - (*t).firsty == 0)) {
+        (*t).velocity.y = -1;
         (*t).velocity.x = 0;
-        for (uint8_t j = 0; j < 3; j++) {
-            (*t).velocity.y = -1;
-        }
+    }  else if ((*t).position.y - (*t).firsty == -5 && (*t).position.x - (*t).firstx == -5) {
         (*t).velocity.y = 0;
-        for (uint8_t j = 0; j < 3; j++) {
-            (*t).velocity.x = -1;
-        }
+        (*t).velocity.x = -1;
+    } else if ((*t).position.x - (*t).firstx == -10 && (*t).position.y - (*t).firsty == -5) {
+        (*t).velocity.y = 1;
         (*t).velocity.x = 0;
-        for (uint8_t j = 0; j < 3; j++) {
-            (*t).velocity.y = 1;
-        }
-        (*t).velocity.x = 0;
+    } else if ((*t).position.y - (*t).firsty == 0 && (*t).position.x - (*t).firstx == -10) {
+        (*t).velocity.y = 0;
+        (*t).velocity.x = -1;
     }
 }
 
@@ -460,4 +538,238 @@ void awakenSqwog(uint8_t spawn) {    //Bring Sqwog, the bringer
     }
 }
 
+uint8_t compBuAs(struct bullet_t bullet, struct asteroid_t asteroid){
+    uint8_t g=0;
+    if (bullet.position.x==asteroid.position.x-1 && bullet.position.y==asteroid.position.y){
+        g=1;
+    }
 
+    return g;
+}
+
+uint8_t compBuEn(struct bullet_t bullet, struct enemy e){
+    uint8_t g=0;
+    if (bullet.position.x==e.position.x && (bullet.position.y==e.position.y ||
+                                              bullet.position.y==e.position.y+1 ||
+                                              bullet.position.y==e.position.y+2 ||
+                                              bullet.position.y==e.position.y-1 ||
+                                              bullet.position.y==e.position.y-2)){
+        g=1;
+    }
+    return g;
+}
+
+// The following functions are a generalised form of the
+//aforementioned enemy generation functions
+
+void enemyNextPos (struct enemy *e) {
+    //Calculate new position for Trang. Input is a pointer.
+    uint32_t k = 1;
+    (*e).position.x = (*e).position.x + (*e).velocity.x*k;
+    (*e).position.y = (*e).position.y + (*e).velocity.y*k;
+}
+
+void drawEnemy (struct enemy e) {
+    if (e.enemyType == 1) {
+        color(0,0);
+        //print the Trang alien ship
+        gotoxy(e.position.x,e.position.y);
+        color(6,5);
+        gotoxy(e.position.x,e.position.y);
+        printf("<");
+        gotoxy(e.position.x + 1,e.position.y - 1);
+        printf("-");
+        gotoxy(e.position.x + 1,e.position.y + 1);
+        printf("-");
+        //print the Trang alien ships (ineffective) shields
+        color(2,0);
+        printf("%c[1m", ESC);
+        gotoxy(e.position.x - 2,e.position.y);
+        printf("<");
+        gotoxy(e.position.x - 1,e.position.y - 1);
+        printf("/");
+        gotoxy(e.position.x - 1,e.position.y + 1);
+        printf("\\");
+        gotoxy(e.position.x,e.position.y - 2);
+        printf("/");
+        gotoxy(e.position.x,e.position.y + 2);
+        printf("\\");
+        printf("%c[22m", ESC);
+        color(15,0);
+    } else if (e.enemyType == 2) {
+        color(0,0);
+        //print the Sqwog alien ship
+        gotoxy(e.position.x,e.position.y);
+        color(11,2);
+        gotoxy(e.position.x,e.position.y);
+        printf("O");
+        gotoxy(e.position.x,e.position.y - 1);
+        printf("|");
+        gotoxy(e.position.x,e.position.y + 1);
+        printf("|");
+        gotoxy(e.position.x - 1,e.position.y);
+        printf("-");
+        gotoxy(e.position.x + 1,e.position.y);
+        printf("-");
+        //print the Sqwog alien ships (also ineffective) shields
+        color(9,0);
+        printf("%c[1m", ESC);
+        gotoxy(e.position.x - 2,e.position.y);
+        printf("<");
+        gotoxy(e.position.x - 1,e.position.y - 1);
+        printf("/");
+        gotoxy(e.position.x - 1,e.position.y + 1);
+        printf("\\");
+        gotoxy(e.position.x,e.position.y - 2);
+        printf("^");
+        gotoxy(e.position.x,e.position.y + 2);
+        printf("v");
+        gotoxy(e.position.x + 1,e.position.y - 1);
+        printf("\\");
+        gotoxy(e.position.x + 1,e.position.y + 1);
+        printf("/");
+        gotoxy(e.position.x + 2,e.position.y);
+        printf(">");
+        printf("%c[22m", ESC);
+        color(15,0);
+    }
+    color(15,0);
+}
+
+void eraseEnemy (struct enemy e) {
+    if (e.enemyType == 1) {
+        //color(0,0);
+        //erase the Trang alien ship
+        gotoxy(e.position.x,e.position.y);
+        color(0,0);
+        gotoxy(e.position.x,e.position.y);
+        printf(" ");
+        gotoxy(e.position.x + 1,e.position.y - 1);
+        printf(" ");
+        gotoxy(e.position.x + 1,e.position.y + 1);
+        printf(" ");
+        //erase the shields of the Trang alien ship
+        color(0,0);
+        gotoxy(e.position.x - 2,e.position.y);
+        printf(" ");
+        gotoxy(e.position.x - 1,e.position.y - 1);
+        printf(" ");
+        gotoxy(e.position.x - 1,e.position.y + 1);
+        printf(" ");
+        gotoxy(e.position.x,e.position.y - 2);
+        printf(" ");
+        gotoxy(e.position.x,e.position.y + 2);
+        printf(" ");
+        color(15,0);
+    } else if (e.enemyType == 2) {
+        color(0,0);                    //method as Sqwog is drawn
+        //erase the Sqwog alien ship
+        gotoxy(e.position.x,e.position.y);
+        gotoxy(e.position.x,e.position.y);
+        printf(" ");
+        gotoxy(e.position.x,e.position.y - 1);
+        printf(" ");
+        gotoxy(e.position.x,e.position.y + 1);
+        printf(" ");
+        gotoxy(e.position.x - 1,e.position.y);
+        printf(" ");
+        gotoxy(e.position.x + 1,e.position.y);
+        printf(" ");
+        //erase the shields of the Sqwog alien ship
+        color(0,0);
+        gotoxy(e.position.x - 2,e.position.y);
+        printf(" ");
+        gotoxy(e.position.x - 1,e.position.y - 1);
+        printf(" ");
+        gotoxy(e.position.x - 1,e.position.y + 1);
+        printf(" ");
+        gotoxy(e.position.x,e.position.y - 2);
+        printf(" ");
+        gotoxy(e.position.x,e.position.y + 2);
+        printf(" ");
+        gotoxy(e.position.x + 1,e.position.y - 1);
+        printf(" ");
+        gotoxy(e.position.x + 1,e.position.y + 1);
+        printf(" ");
+        gotoxy(e.position.x + 2,e.position.y);
+        printf(" ");
+        color(15,0);
+    }
+}
+
+void enemyMotion (struct enemy *e) {
+    uint8_t k=1;
+    if ((*e).position.x<5){
+        (*e).position.x=135;
+    }
+    if ((*e).enemyType == 1) {
+        uint8_t firsty = (*e).firsty;   // motion
+        if ((*e).position.y - firsty > 4 || (*e).position.y - firsty < -4) {
+            (*e).velocity.y *= -1; //If the current y position is
+        }                          //farther from starting position
+    }                             //than 3, y velocity is reversed
+    else if ((*e).enemyType == 2) {
+        if (((*e).position.x - (*e).firstx == -5) && ((*e).position.y - (*e).firsty == 0)) {
+            (*e).velocity.y = -1;
+            (*e).velocity.x = 0;
+        }
+        else if ((*e).position.y - (*e).firsty == -5 && (*e).position.x - (*e).firstx == -5) {
+            (*e).velocity.y = 0;
+            (*e).velocity.x = -1;
+        }
+        else if ((*e).position.x - (*e).firstx == -10 && (*e).position.y - (*e).firsty == -5) {
+            (*e).velocity.y = 1;
+            (*e).velocity.x = 0;
+        }
+        else if ((*e).position.y - (*e).firsty == 0 && (*e).position.x - (*e).firstx == -10) {
+            (*e).velocity.y = 0;
+            (*e).velocity.x = -1;
+        }
+    }
+}
+
+void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge) {
+//Moves asteroid 1 downwards (along y-axis).
+//Input: x-axis position, pointer to asteroid structure.
+    if ((*dodge).position.x<=2){
+        gotoxy((*dodge).position.x,(*dodge).position.y);
+        printf(" ",ESC);
+        (*dodge).position.x=139;
+    }
+    (*oldDodge).position.x=(*dodge).position.x;
+    (*oldDodge).position.y=(*dodge).position.y;
+    uint8_t k=1;
+    (*dodge).position.x=(*dodge).position.x+(*dodge).velocity.x*k;
+    (*dodge).position.y=y;
+}
+
+void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge){
+//Delete asteroid at old position and prints asteroid at position (x,y).
+//Input: pointer to asteroid structure.
+    //if (asteroid.position.y<40){
+        gotoxy(oldDodge.position.x,oldDodge.position.y);
+        printf(" ",ESC);
+        /*printf("%c[1D",ESC);
+        printf(" ");*/
+        gotoxy(dodge.position.x,dodge.position.y);
+        fgcolor(13);
+        printf("%c[1m", ESC);
+        printf("#");
+        fgcolor(15);
+        printf("%c[22m", ESC);
+    //}
+}
+
+uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge){
+    uint8_t g=0;
+    if (ship.position.x==dodge.position.x-1 && (ship.position.y==dodge.position.y ||
+                                                ship.position.y==dodge.position.y+1 ||
+                                                ship.position.y==dodge.position.y-1 )){
+        g=1;
+    }
+    return g;
+}
+
+/*void menu () {
+    window()
+}*/
