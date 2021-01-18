@@ -173,6 +173,18 @@ int main(void)
     }
 
     while(1){
+
+        //If time runs out or you have no lives left it is GAME OVER!
+        if (goTime<=0 || lives==0){
+            while(pause==0){
+                clrscr();
+                gotoxy(70,20);
+                printf("GAME OVER");
+                //to be continued...
+            }
+        }
+
+        //Prints the spaceship, asteroids, Trangs, Sqwoqs and their nets
         if(timeFlagPrint==1){
             drawEnemy(e1);
             drawEnemy(e2);
@@ -295,15 +307,8 @@ int main(void)
         printf("time: %d",goTime);
 
 
-        if (goTime<=0 || lives==0){
-            while(pause==0){
-                clrscr();
-                gotoxy(70,20);
-                printf("GAME OVER");
-                //to be continued...
-            }
-        }
 
+        // Casting integers to strings
         char strGoTime[10];
         sprintf(strGoTime, "%d", goTime);//convert goTime to string
         char strScore[10];
@@ -323,6 +328,9 @@ int main(void)
 
         //push buffer
         lcd_push_buffer(buffer);
+
+
+
 
     }
 
