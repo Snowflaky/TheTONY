@@ -50,8 +50,10 @@ int main(void)
 
     uint8_t u=0;
     uint8_t shooting=0;
-    uint16_t breach=0;
-    int32_t goTime=10000;
+    int32_t goTime=100000;
+    uint16_t score=0;
+    uint8_t pause=0;
+    uint8_t lives=3;
 
 
     color(15,0);
@@ -95,6 +97,37 @@ int main(void)
     asteroid5.velocity.y=1;
     struct asteroid_t oldAsteroid5;
 
+    struct asteroid_t dodge1;
+    dodge1.position.x=139;
+    dodge1.position.y=7;
+    dodge1.velocity.x=-1;
+    dodge1.velocity.y=0;
+    struct asteroid_t oldDodge1;
+    struct asteroid_t dodge2;
+    dodge2.position.x=117;
+    dodge2.position.y=16;
+    dodge2.velocity.x=-1;
+    dodge2.velocity.y=0;
+    struct asteroid_t oldDodge2;
+    struct asteroid_t dodge3;
+    dodge3.position.x=130;
+    dodge3.position.y=23;
+    dodge3.velocity.x=-1;
+    dodge3.velocity.y=0;
+    struct asteroid_t oldDodge3;
+    struct asteroid_t dodge4;
+    dodge4.position.x=107;
+    dodge4.position.y=29;
+    dodge4.velocity.x=-1;
+    dodge4.velocity.y=0;
+    struct asteroid_t oldDodge4;
+    struct asteroid_t dodge5;
+    dodge5.position.x=125;
+    dodge5.position.y=34;
+    dodge5.velocity.x=-1;
+    dodge5.velocity.y=0;
+    struct asteroid_t oldDodge5;
+
     struct bullet_t bullet;
     bullet.position.x = 3;
     bullet.position.y = ship.position.y;
@@ -137,7 +170,6 @@ int main(void)
     }
 
     while(1){
-        breach=0;
         if(timeFlagPrint==1){
             drawEnemy(e1);
             drawEnemy(e2);
@@ -147,6 +179,11 @@ int main(void)
             printAsteroid(asteroid3, oldAsteroid3);
             printAsteroid(asteroid4, oldAsteroid4);
             printAsteroid(asteroid5, oldAsteroid5);
+            printDodge(dodge1, oldDodge1);
+            printDodge(dodge2, oldDodge2);
+            printDodge(dodge3, oldDodge3);
+            printDodge(dodge4, oldDodge4);
+            printDodge(dodge5, oldDodge5);
             printBullet(bullet, oldBullet);
             u=keyInput();
             moveShip(u,&ship, &oldShip);
@@ -154,10 +191,11 @@ int main(void)
                 shooting=startBullet(ship,u);
             }
             bullet.position.y=shooting;
+            gotoxy(40,6);
+            printf("score: %d",score);
 
             timeFlagPrint=0;
         }
-
 
 
         if(timeFlagBullet>=1){//change this number for change of bullet speed
@@ -174,11 +212,22 @@ int main(void)
             moveAsteroid(asteroid1.position.x,&asteroid1,&oldAsteroid1);
             moveAsteroid(asteroid2.position.x,&asteroid2,&oldAsteroid2);
             moveAsteroid(asteroid4.position.x,&asteroid4,&oldAsteroid4);
+            moveDodge(dodge1.position.y,&dodge1,&oldDodge1);
+            moveDodge(dodge3.position.y,&dodge3,&oldDodge3);
+            moveDodge(dodge5.position.y,&dodge5,&oldDodge5);
+            if (compDoSh(ship,dodge1)==1 || compDoSh(ship,dodge2)==1 || compDoSh(ship,dodge3)==1 ||
+            compDoSh(ship,dodge4)==1 || compDoSh(ship,dodge5)==1){
+            lives-=1;
+            }
+            gotoxy(100,12);
+            printf("lives: %d",lives);
             timeFlagA1=0;
         }
         if(timeFlagA2>=6){//change this number for change of asteroid speed
             moveAsteroid(asteroid3.position.x,&asteroid3,&oldAsteroid3);
             moveAsteroid(asteroid5.position.x,&asteroid5,&oldAsteroid5);
+            moveDodge(dodge2.position.y,&dodge2,&oldDodge2);
+            moveDodge(dodge4.position.y,&dodge4,&oldDodge4);
             timeFlagA2=0;
         }
 
@@ -202,12 +251,17 @@ int main(void)
             eraseEnemy(e1);
             e1.position.x = 135;
             e1.position.y = e1.randomNo;
+            score+=500;
         }
         if(compBuEn(bullet,e2)==1){
             eraseEnemy(e2);
             e2.position.x = 135;
             e2.position.y = e2.randomNo;
+            score+=500;
         }
+
+
+
 
         if (bullet.position.x==3 && bullet.velocity.x==-1){
             shooting=0;
@@ -218,7 +272,7 @@ int main(void)
             enemyNextPos(&e1);
             enemyMotion(&e1);
             if (enemyBreach(e1)==1){
-                breach=1000;
+                goTime-=1000;
                 gotoxy(100,12);
             }
             eraseEnemy(e2);
@@ -226,22 +280,28 @@ int main(void)
             enemyMotion(&e2);
             timeFlagTra=0;
             if (enemyBreach(e2)==1){
-                breach=1000;
+                goTime-=1000;
                 gotoxy(100,13);
             }
         }
 
-
-
-
-        gotoxy(100,8);
-        printf("%d",breach);
-
         gotoxy(100,10);
-        printf("          ");
+        printf("                     ");
         gotoxy(100,10);
-        goTime=goTime-timeFlagScore-breach;
-        printf("%d",goTime);
+        goTime=goTime-timeFlagScore;
+        printf("time: %d",goTime);
+
+
+        if (goTime<=0 || lives==0){
+            while(pause==0){
+                clrscr();
+                gotoxy(70,20);
+                printf("GAME OVER");
+                //to be continued...
+            }
+        }
+
+
     }
 
 

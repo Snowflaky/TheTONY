@@ -235,7 +235,7 @@ uint8_t startBullet (struct ship_t ship, uint8_t p){
 
 void moveBullet (uint8_t y, struct bullet_t *bullet, struct bullet_t *oldBullet) {
 //Moves asteroid 1 downwards (along y-axis).
-//Input: x-axis position, pointer to asteroid structure.
+//Input: x-axis position, point    (*dodge).position.y=y;er to asteroid structure.
     if ((*bullet).position.x>=139){
         (*bullet).position.x=3;
     }
@@ -729,6 +729,47 @@ void enemyMotion (struct enemy *e) {
     }
 }
 
+void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge) {
+//Moves asteroid 1 downwards (along y-axis).
+//Input: x-axis position, pointer to asteroid structure.
+    if ((*dodge).position.x<=2){
+        gotoxy((*dodge).position.x,(*dodge).position.y);
+        printf(" ",ESC);
+        (*dodge).position.x=139;
+    }
+    (*oldDodge).position.x=(*dodge).position.x;
+    (*oldDodge).position.y=(*dodge).position.y;
+    uint8_t k=1;
+    (*dodge).position.x=(*dodge).position.x+(*dodge).velocity.x*k;
+    (*dodge).position.y=y;
+}
+
+void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge){
+//Delete asteroid at old position and prints asteroid at position (x,y).
+//Input: pointer to asteroid structure.
+    //if (asteroid.position.y<40){
+        gotoxy(oldDodge.position.x,oldDodge.position.y);
+        printf(" ",ESC);
+        /*printf("%c[1D",ESC);
+        printf(" ");*/
+        gotoxy(dodge.position.x,dodge.position.y);
+        fgcolor(13);
+        printf("%c[1m", ESC);
+        printf("#");
+        fgcolor(15);
+        printf("%c[22m", ESC);
+    //}
+}
+
+uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge){
+    uint8_t g=0;
+    if (ship.position.x==dodge.position.x-1 && (ship.position.y==dodge.position.y ||
+                                                ship.position.y==dodge.position.y+1 ||
+                                                ship.position.y==dodge.position.y-1 )){
+        g=1;
+    }
+    return g;
+}
 
 /*void menu () {
     window()

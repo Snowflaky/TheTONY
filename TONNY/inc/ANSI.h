@@ -105,6 +105,7 @@ void printBullet (struct bullet_t bullet, struct bullet_t oldBullet);
 
 uint8_t compBuAs(struct bullet_t bullet, struct asteroid_t asteroid);
 uint8_t compBuEn(struct bullet_t bullet, struct enemy e);
+uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge);
 
 uint8_t enemyBreach(struct enemy e);
 
@@ -129,5 +130,8 @@ void enemyNextPos (struct enemy *e);
 void drawEnemy (struct enemy e);
 void eraseEnemy (struct enemy e);
 void enemyMotion (struct enemy *e);
+
+void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge);
+void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge);
 
 #endif
