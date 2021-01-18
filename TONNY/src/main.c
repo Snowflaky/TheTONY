@@ -55,6 +55,9 @@ int main(void)
     uint8_t pause=0;
     uint8_t lives=3;
 
+    lcd_init(); //initialize display
+    uint8_t buffer[512];//initialize buffer array
+    memset (buffer,0x00,512);//set buffer to all 0's (clear LCD screen)
 
     color(15,0);
     clrscr();
@@ -301,9 +304,27 @@ int main(void)
             }
         }
 
+        char strGoTime[10];
+        sprintf(strGoTime, "%d", goTime);//convert goTime to string
+        char strScore[10];
+        sprintf(strScore, "%d", score);//convert score to string
+        char strLives[5];
+        sprintf(strLives, "%d", lives);//convert lives to string
+
+        //put strings in buffer:
+        lcd_write_string("Time:",0,1,&buffer);
+        lcd_write_string(strGoTime,35,1,&buffer);
+
+        lcd_write_string("Lives:",0,2,&buffer);
+        lcd_write_string(strLives,40,2,&buffer);
+
+        lcd_write_string("Score:",0,3,&buffer);
+        lcd_write_string(strScore,40,3,&buffer);
+
+        //push buffer
+        lcd_push_buffer(buffer);
 
     }
-
 
 
     /*while(){
