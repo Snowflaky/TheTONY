@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <charset.h>
+#include <time.h>
 
 #ifndef _ANSI_H_
 #define _ANIS_H_
@@ -19,11 +20,11 @@ volatile uint32_t timeFlagA2;
 volatile uint32_t timeFlagEnemy;
 volatile uint32_t timeFlagGame;
 
-struct time_t {
+struct timing_t {
     volatile uint32_t mikroSec, milliSec, centiSec, second, minute;
 };
 
-volatile struct time_t time;
+volatile struct timing_t timetime;
 
 struct vector_t {
     int32_t x, y;
@@ -60,8 +61,8 @@ struct enemy {
     struct vector_t position;
     struct vector_t velocity;
     uint8_t hp;
-    int8_t firsty;
-    int8_t firstx;
+    uint32_t firsty;
+    uint32_t firstx;
 };
 
 struct ship_t {
@@ -129,6 +130,7 @@ void awakenSqwog(uint8_t spawn);
 void enemyNextPos (struct enemy *e);
 void drawEnemy (struct enemy e);
 void eraseEnemy (struct enemy e);
+void decideVel (struct enemy *e);
 void enemyMotion (struct enemy *e);
 
 void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge);

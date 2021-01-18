@@ -139,7 +139,7 @@ int main(void)
     e1.enemyType = 1;
     e1.position.x = 135;
     e1.position.y = e1.randomNo;
-    e1.velocity.x = -1;
+    e1.velocity.x=-1;
     e1.hp = 2;
     e1.firstx = 135;
     e1.firsty = e1.randomNo;
@@ -149,7 +149,7 @@ int main(void)
     e2.enemyType = 2;
     e2.position.x = 135;
     e2.position.y = e2.randomNo;
-    e2.velocity.x = -1;
+    decideVel(&e2);
     e2.hp = 2;
     e2.firstx = 135;
     e2.firsty = e2.randomNo;
@@ -161,12 +161,12 @@ int main(void)
     else if (e1.enemyType==2){
         e1.velocity.y=0;
     }
-    if (e2.enemyType==1){
+    /*if (e2.enemyType==1){
         e2.velocity.y=1;
     }
     else if (e2.enemyType==2){
         e2.velocity.y=0;
-    }
+    }*/
 
     while(1){
 
@@ -207,6 +207,9 @@ int main(void)
 //Prints the spaceship and bullet, and reads input from player
         if(timeFlagPrint==1){
             printShip(ship, oldShip);
+            ///////////////////////////////////////////////////
+            printf("%d %d %d %d", e1.position.x, (e1.position.y - e1.firsty),e1.firstx,e1.firsty);
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
             printBullet(bullet, oldBullet);
             u=keyInput();
             moveShip(u,&ship, &oldShip);
