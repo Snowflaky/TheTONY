@@ -308,7 +308,28 @@ int main(void)
             timeFlagTra=0;
             if (enemyBreach(e2)==1){//Detects that the enemy has breached and subtracts 1000 from time
                 goTime-=1000;
+            }
 
+            //erases enemy when hit, resets bullet, adds +500 to score
+            if(compBuEn(bullet,e1)==1){
+                eraseEnemy(e1);
+                e1.position.x = 135;
+                e1.position.y = e1.randomNo;
+                score+=500;
+                shooting = 0;
+                bullet.position.x=3;
+                gotoxy(oldBullet.position.x,oldBullet.position.y);
+                printf(" ");
+            }
+            if(compBuEn(bullet,e2)==1){
+                eraseEnemy(e2);
+                e2.position.x = 135;
+                e2.position.y = e2.randomNo;
+                score+=500;
+                shooting = 0;
+                bullet.position.x=3;
+                gotoxy(oldBullet.position.x,oldBullet.position.y);
+                printf(" ");
             }
         }
 
