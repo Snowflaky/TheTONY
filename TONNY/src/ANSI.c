@@ -267,10 +267,10 @@ void TIM2_IRQHandler() {
     timeFlagDrawT++;
     time.mikroSec++;
     if (time.mikroSec>=1000){
-        timeFlagBullet++;
         time.milliSec++;
         time.mikroSec=0;
         if (time.milliSec>=10) {
+            timeFlagBullet++;
             timeFlagA1++;
             timeFlagA2++;
             timeFlagTra++;

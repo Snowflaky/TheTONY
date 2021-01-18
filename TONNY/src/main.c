@@ -27,26 +27,6 @@ int main(void)
     NVIC_SetPriority(TIM2_IRQn, 0001); // Set interrupt priority=1 (high)
     NVIC_EnableIRQ(TIM2_IRQn); // Enable interrupt
 
-    /*clrscr();
-    while(1){
-    gotoxy(1,1);
-    printf("         ");
-    gotoxy(1,1);
-    printf("%d",time.milliSec);
-    gotoxy(1,3);
-    printf("         ");
-    gotoxy(1,3);
-    printf("%d",time.centiSec);
-    gotoxy(1,5);
-    printf("         ");
-    gotoxy(1,5);
-    printf("%d",time.second);
-    gotoxy(1,7);
-    printf("         ");
-    gotoxy(1,7);
-    printf("%d",time.minute);
-    }*/
-
 
     uint8_t u=0;
     uint8_t shooting=0;
@@ -54,6 +34,12 @@ int main(void)
     uint16_t score=0;
     uint8_t pause=0;
     uint8_t lives=3;
+
+//flags for printing enemies, asteroids and nets
+    uint8_t ADFlag1=1;
+    uint8_t ADFlag2=1;
+    uint8_t enemyFlag=1;
+
 
     lcd_init(); //initialize display
     uint8_t buffer[512];//initialize buffer array
@@ -183,22 +169,31 @@ int main(void)
                 //to be continued...
             }
         }
+        if (enemyFlag ==1) {
+                drawEnemy(e1);
+                drawEnemy(e2);
+                enemyFlag=0;
+            }
+            if (ADFlag1 == 1) {
+                printAsteroid(asteroid1, oldAsteroid1);
+                printAsteroid(asteroid2, oldAsteroid2);
+                printAsteroid(asteroid4, oldAsteroid4);
+                printDodge(dodge1, oldDodge1);
+                printDodge(dodge3, oldDodge3);
+                printDodge(dodge5, oldDodge5);
+                ADFlag1=0;
+            }
+            if (ADFlag2 == 1) {
+                printAsteroid(asteroid3, oldAsteroid3);
+                printAsteroid(asteroid5, oldAsteroid5);
+                printDodge(dodge2, oldDodge2);
+                printDodge(dodge4, oldDodge4);
+                ADFlag2=0;
+            }
 
-        //Prints the spaceship, asteroids, Trangs, Sqwoqs and their nets
+        //Prints the spaceship and bullet, and reads input from player
         if(timeFlagPrint==1){
-            drawEnemy(e1);
-            drawEnemy(e2);
             printShip(ship, oldShip);
-            printAsteroid(asteroid1, oldAsteroid1);
-            printAsteroid(asteroid2, oldAsteroid2);
-            printAsteroid(asteroid3, oldAsteroid3);
-            printAsteroid(asteroid4, oldAsteroid4);
-            printAsteroid(asteroid5, oldAsteroid5);
-            printDodge(dodge1, oldDodge1);
-            printDodge(dodge2, oldDodge2);
-            printDodge(dodge3, oldDodge3);
-            printDodge(dodge4, oldDodge4);
-            printDodge(dodge5, oldDodge5);
             printBullet(bullet, oldBullet);
             u=keyInput();
             moveShip(u,&ship, &oldShip);
@@ -206,9 +201,6 @@ int main(void)
                 shooting=startBullet(ship,u);
             }
             bullet.position.y=shooting;
-            gotoxy(40,6);
-            printf("score: %d",score);
-
             timeFlagPrint=0;
         }
 
@@ -234,9 +226,8 @@ int main(void)
             compDoSh(ship,dodge4)==1 || compDoSh(ship,dodge5)==1){
             lives-=1;
             }
-            gotoxy(100,12);
-            printf("lives: %d",lives);
             timeFlagA1=0;
+            ADFlag1=1;//Asteroid and net positions have updated
         }
         if(timeFlagA2>=6){//change this number for change of asteroid speed
             moveAsteroid(asteroid3.position.x,&asteroid3,&oldAsteroid3);
@@ -244,6 +235,7 @@ int main(void)
             moveDodge(dodge2.position.y,&dodge2,&oldDodge2);
             moveDodge(dodge4.position.y,&dodge4,&oldDodge4);
             timeFlagA2=0;
+            ADFlag2=1;//Asteroid and net positions have updated
         }
 
         if (compBuAs(bullet,asteroid1)==1){
@@ -310,6 +302,8 @@ int main(void)
                 goTime-=1000;
             }
 
+            enemyFlag=1;//enemies position has updated
+
             //erases enemy when hit, resets bullet, adds +500 to score
             if(compBuEn(bullet,e1)==1){
                 eraseEnemy(e1);
@@ -333,11 +327,8 @@ int main(void)
             }
         }
 
-        gotoxy(100,10);
-        printf("                     ");
-        gotoxy(100,10);
         goTime=goTime-timeFlagScore;
-        printf("time: %d",goTime);
+
 
 
 
