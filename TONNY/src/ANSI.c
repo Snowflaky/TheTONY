@@ -265,26 +265,26 @@ void TIM2_IRQHandler() {
 //Counts 100ths of a second, seconds and minutes.
     timeFlagPrint=1;
     timeFlagDrawT++;
-    time.mikroSec++;
-    if (time.mikroSec>=1000){
+    timetime.mikroSec++;
+    if (timetime.mikroSec>=1000){
         timeFlagBullet++;
-        time.milliSec++;
-        time.mikroSec=0;
-        if (time.milliSec>=10) {
+        timetime.milliSec++;
+        timetime.mikroSec=0;
+        if (timetime.milliSec>=10) {
             timeFlagA1++;
             timeFlagA2++;
             timeFlagTra++;
-            time.centiSec++;
-            time.milliSec=0;
-            if (time.centiSec>=50){
-                time.second++;
-                time.centiSec=0;
-                if (time.second%10==0){
+            timetime.centiSec++;
+            timetime.milliSec=0;
+            if (timetime.centiSec>=50){
+                timetime.second++;
+                timetime.centiSec=0;
+                if (timetime.second%10==0){
                     timeFlagScore++;
                 }
-                if (time.second>=60){
-                    time.minute++;
-                    time.second=0;
+                if (timetime.second>=60){
+                    timetime.minute++;
+                    timetime.second=0;
                 }
             }
 
@@ -404,8 +404,20 @@ void trangZag (struct trang (*t)) { //Moves Trang in a zig zag
 
 // generate random numbers in range [lower, upper].
 uint8_t randoms(uint8_t lower, uint8_t upper) {
-    uint8_t num=0;
-    num = (rand() % (upper - lower + 1)) + lower;
+    time_t t;
+    /* Intializes random number generator */
+    srand((unsigned) time(&t));
+    return(rand() % (upper + 1 - lower) + lower);
+    //srand(time(&somesec));
+    //int32_t num = (srand(time(0)) % (upper - lower + 1)) + lower;
+    /*
+    time_t rawtime;
+    struct tm * timeinfo;
+
+    time (&rawtime);
+    timeinfo = localtime (&rawtime);
+    printf ("Current local time and date: %s", asctime(timeinfo));
+    */
 }
 
 void awakenTrang(uint8_t spawn) {    //Bring Trang, the bringer
@@ -697,31 +709,61 @@ void eraseEnemy (struct enemy e) {
     }
 }
 
-void enemyMotion (struct enemy *e) {
+void decideVel (struct enemy (*e)) {
+    if ((*e).enemyType == 1) {
+        (*e).velocity.x = -1;
+        (*e).velocity.y = 1;
+    } else if ((*e).enemyType == 2) {
+        (*e).velocity.x = -1;
+        (*e).velocity.y = 0;
+    }
+}
+
+void enemyMotion (struct enemy (*e)) {
     uint8_t k=1;
     if ((*e).position.x<5){
         (*e).position.x=135;
     }
     if ((*e).enemyType == 1) {
-        uint8_t firsty = (*e).firsty;   // motion
+        uint32_t firsty = (*e).firsty;   // motion
         if ((*e).position.y - firsty > 4 || (*e).position.y - firsty < -4) {
             (*e).velocity.y *= -1; //If the current y position is
-        }                          //farther from starting position
-    }                             //than 3, y velocity is reversed
-    else if ((*e).enemyType == 2) {
-        if (((*e).position.x - (*e).firstx == -5) && ((*e).position.y - (*e).firsty == 0)) {
-            (*e).velocity.y = -1;
-            (*e).velocity.x = 0;
-        }
-        else if ((*e).position.y - (*e).firsty == -5 && (*e).position.x - (*e).firstx == -5) {
+        }               //farther from starting y position than 3,
+    }                   // y velocity is reversed (Trang). This motion
+    else if ((*e).enemyType == 2) { // pattern is specified by enemyType
+        if ((((*e).position.x - (*e).firstx == -10) && ((*e).position.y - (*e).firsty == 0)) ||
+            (((*e).position.x - (*e).firstx == -30) && ((*e).position.y - (*e).firsty == 0)) ||
+            (((*e).position.x - (*e).firstx == -50) && ((*e).position.y - (*e).firsty == 0)) ||
+            (((*e).position.x - (*e).firstx == -70) && ((*e).position.y - (*e).firsty == 0)) ||
+            (((*e).position.x - (*e).firstx == -90) && ((*e).position.y - (*e).firsty == 0)) ||
+            (((*e).position.x - (*e).firstx == -110) && ((*e).position.y - (*e).firsty == 0))) {
+            (*e).velocity.y = -1; //This second if (else if) statement
+            (*e).velocity.x = 0;  //specifies the motion of sqwog, and
+        }          //also uses the enemyType variable to choose function
+        else if (((*e).position.y - (*e).firsty == -5 && (*e).position.x - (*e).firstx == -10) ||
+            (((*e).position.y - (*e).firsty == -5) && ((*e).position.x - (*e).firstx == -30)) ||
+            (((*e).position.y - (*e).firsty == -5) && ((*e).position.x - (*e).firstx == -50)) ||
+            (((*e).position.y - (*e).firsty == -5) && ((*e).position.x - (*e).firstx == -70)) ||
+            (((*e).position.y - (*e).firsty == -5) && ((*e).position.x - (*e).firstx == -90)) ||
+            (((*e).position.y - (*e).firsty == -5) && ((*e).position.x - (*e).firstx == -110))) {
             (*e).velocity.y = 0;
             (*e).velocity.x = -1;
         }
-        else if ((*e).position.x - (*e).firstx == -10 && (*e).position.y - (*e).firsty == -5) {
+        else if (((*e).position.x - (*e).firstx == -20 && (*e).position.y - (*e).firsty == -5) ||
+            (((*e).position.x - (*e).firstx == -40) && ((*e).position.y - (*e).firsty == -5)) ||
+            (((*e).position.x - (*e).firstx == -60) && ((*e).position.y - (*e).firsty == -5)) ||
+            (((*e).position.x - (*e).firstx == -80) && ((*e).position.y - (*e).firsty == -5)) ||
+            (((*e).position.x - (*e).firstx == -100) && ((*e).position.y - (*e).firsty == -5)) ||
+            (((*e).position.x - (*e).firstx == -120) && ((*e).position.y - (*e).firsty == -5))) {
             (*e).velocity.y = 1;
             (*e).velocity.x = 0;
         }
-        else if ((*e).position.y - (*e).firsty == 0 && (*e).position.x - (*e).firstx == -10) {
+        else if (((*e).position.y - (*e).firsty == 0 && (*e).position.x - (*e).firstx == -20) ||
+            (((*e).position.y - (*e).firsty == 0) && ((*e).position.x - (*e).firstx == -40)) ||
+            (((*e).position.y - (*e).firsty == 0) && ((*e).position.x - (*e).firstx == -60)) ||
+            (((*e).position.y - (*e).firsty == 0) && ((*e).position.x - (*e).firstx == -80)) ||
+            (((*e).position.y - (*e).firsty == 0) && ((*e).position.x - (*e).firstx == -100)) ||
+            (((*e).position.y - (*e).firsty == 0) && ((*e).position.x - (*e).firstx == -120))) {
             (*e).velocity.y = 0;
             (*e).velocity.x = -1;
         }
@@ -733,7 +775,7 @@ void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge
 //Input: x-axis position, pointer to asteroid structure.
     if ((*dodge).position.x<=2){
         gotoxy((*dodge).position.x,(*dodge).position.y);
-        printf(" ",ESC);
+        printf(" ");
         (*dodge).position.x=139;
     }
     (*oldDodge).position.x=(*dodge).position.x;
@@ -748,7 +790,7 @@ void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge){
 //Input: pointer to asteroid structure.
     //if (asteroid.position.y<40){
         gotoxy(oldDodge.position.x,oldDodge.position.y);
-        printf(" ",ESC);
+        printf(" ");
         /*printf("%c[1D",ESC);
         printf(" ");*/
         gotoxy(dodge.position.x,dodge.position.y);

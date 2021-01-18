@@ -144,7 +144,7 @@ int main(void)
     e1.enemyType = 1;
     e1.position.x = 135;
     e1.position.y = e1.randomNo;
-    e1.velocity.x = -1;
+    decideVel(&e1);
     e1.hp = 2;
     e1.firstx = 135;
     e1.firsty = e1.randomNo;
@@ -154,7 +154,7 @@ int main(void)
     e2.enemyType = 2;
     e2.position.x = 135;
     e2.position.y = e2.randomNo;
-    e2.velocity.x = -1;
+    decideVel(&e2);
     e2.hp = 2;
     e2.firstx = 135;
     e2.firsty = e2.randomNo;
@@ -262,9 +262,6 @@ int main(void)
             e2.position.y = e2.randomNo;
             score+=500;
         }
-
-
-
 
         if (bullet.position.x==3 && bullet.velocity.x==-1){
             shooting=0;
