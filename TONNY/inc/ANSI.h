@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <charset.h>
 
 #ifndef _ANSI_H_
 #define _ANIS_H_

@@ -294,8 +294,7 @@ void TIM2_IRQHandler() {
  }
 
 
-
-/*void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)[512]){
+void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)[512]){
 //Writes string on LCD display on location specified by slice and row.
 //Input: string, slice (0-127), row (1-4), pointer to buffer array.
     uint8_t h;
@@ -314,7 +313,7 @@ void TIM2_IRQHandler() {
             (*buff)[slice+g+6*h]=character_data[text[h]-0x20][g];
         }
    }
-}*/
+}
 
 void fixtrangPos(struct trang (*t)) {
 //Converts Trangs position and velocity to 18.14 (from 32.0)
