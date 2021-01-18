@@ -262,41 +262,53 @@ int main(void)
             bullet.velocity.x=-1;
         }
 
+
+    //erases enemy when hit, resets bullet, adds +500 to score
         if(compBuEn(bullet,e1)==1){
             eraseEnemy(e1);
             e1.position.x = 135;
             e1.position.y = e1.randomNo;
             score+=500;
+            shooting = 0;
+            bullet.position.x=3;
+            gotoxy(oldBullet.position.x,oldBullet.position.y);
+            printf(" ");
         }
         if(compBuEn(bullet,e2)==1){
             eraseEnemy(e2);
             e2.position.x = 135;
             e2.position.y = e2.randomNo;
             score+=500;
+            shooting = 0;
+            bullet.position.x=3;
+            gotoxy(oldBullet.position.x,oldBullet.position.y);
+            printf(" ");
         }
 
 
 
-
+    //Restarts reflected bullets
         if (bullet.position.x==3 && bullet.velocity.x==-1){
             shooting=0;
             bullet.velocity.x=1;
         }
+
+    //enemy positions is updated every 1/25 second
+    //If enemies get TONNY he loses time
         if (timeFlagTra>=4){
             eraseEnemy(e1);
             enemyNextPos(&e1);
             enemyMotion(&e1);
-            if (enemyBreach(e1)==1){
+            if (enemyBreach(e1)==1){//Detects that the enemy has breached and subtracts 1000 from time
                 goTime-=1000;
-                gotoxy(100,12);
             }
             eraseEnemy(e2);
             enemyNextPos(&e2);
             enemyMotion(&e2);
             timeFlagTra=0;
-            if (enemyBreach(e2)==1){
+            if (enemyBreach(e2)==1){//Detects that the enemy has breached and subtracts 1000 from time
                 goTime-=1000;
-                gotoxy(100,13);
+
             }
         }
 
@@ -315,6 +327,9 @@ int main(void)
         sprintf(strScore, "%d", score);//convert score to string
         char strLives[5];
         sprintf(strLives, "%d", lives);//convert lives to string
+
+        memset (buffer,0x00,512);
+        lcd_push_buffer(buffer);
 
         //put strings in buffer:
         lcd_write_string("Time:",0,1,&buffer);
