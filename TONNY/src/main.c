@@ -6,13 +6,15 @@
 **********************************************************************/
 /*
    Last committed:     $Revision: 00 $
-   Last changed by:    $Author: $
-   Last changed date:  $Date:  $
+   Last changed by:    $Authors: Sara Nielsen Jensen, Erik Helmuth Rame & Josefine Dano
+   Last changed date:  $Date:  24.01.2021
    ID:                 $Id:  $
 
 **********************************************************************/
 #include "stm32f30x_conf.h"
 #include "ANSI.h"
+#include "string.h"
+
 
 int main(void)
 {
@@ -30,7 +32,7 @@ int main(void)
 
     uint8_t u=0;
     uint8_t shooting=0;
-    int32_t goTime=100000;
+    int32_t gameTime=100000;
     uint16_t score=0;
     uint8_t pause=0;
     uint8_t lives=3;
@@ -40,21 +42,26 @@ int main(void)
     uint8_t ADFlag2=1;
     uint8_t enemyFlag=1;
 
-
+//LCD Display
     lcd_init(); //initialize display
     uint8_t buffer[512];//initialize buffer array
     memset (buffer,0x00,512);//set buffer to all 0's (clear LCD screen)
 
+//resets colors, clears screen and builds game field
     color(15,0);
     clrscr();
     window(0,140,0,40,7);
 
+//TONNY's Spaceship is built
     struct ship_t ship;
     ship.position.x = 2;
     ship.position.y=19;
     ship.hp=0;
     struct ship_t oldShip;
 
+//Asteroid belt initiated
+    //old... structs are initiated, but no values are declared.
+    //these filled when game is initiated
     struct asteroid_t asteroid1;
     asteroid1.position.x=20;
     asteroid1.position.y=2;
@@ -86,6 +93,7 @@ int main(void)
     asteroid5.velocity.y=1;
     struct asteroid_t oldAsteroid5;
 
+//Enemy nets initiated
     struct asteroid_t dodge1;
     dodge1.position.x=139;
     dodge1.position.y=7;
@@ -117,6 +125,7 @@ int main(void)
     dodge5.velocity.y=0;
     struct asteroid_t oldDodge5;
 
+//Bullet initiated
     struct bullet_t bullet;
     bullet.position.x = 3;
     bullet.position.y = ship.position.y;
@@ -124,7 +133,7 @@ int main(void)
     bullet.velocity.y = 0;
     struct bullet_t oldBullet;
 
-    //randomTra1=randoms(5,35);
+//Enemies are initiated
     struct enemy e1;
     e1.randomNo = randoms(9,32);
     e1.enemyType = 1;
@@ -145,6 +154,7 @@ int main(void)
     e2.firstx = 135;
     e2.firsty = e2.randomNo;
 
+//Determines velocity based on enemy type
     if (e1.enemyType==1){
         e1.velocity.y=1;
     }
@@ -160,8 +170,8 @@ int main(void)
 
     while(1){
 
-        //If time runs out or you have no lives left it is GAME OVER!
-        if (goTime<=0 || lives==0){
+//If time runs out or you have no lives left it is GAME OVER!
+        if (gameTime<=0 || lives==0){
             while(pause==0){
                 clrscr();
                 gotoxy(70,20);
@@ -169,52 +179,57 @@ int main(void)
                 //to be continued...
             }
         }
+//Prints enemies when their position has updated
         if (enemyFlag ==1) {
-                drawEnemy(e1);
-                drawEnemy(e2);
-                enemyFlag=0;
-            }
-            if (ADFlag1 == 1) {
-                printAsteroid(asteroid1, oldAsteroid1);
-                printAsteroid(asteroid2, oldAsteroid2);
-                printAsteroid(asteroid4, oldAsteroid4);
-                printDodge(dodge1, oldDodge1);
-                printDodge(dodge3, oldDodge3);
-                printDodge(dodge5, oldDodge5);
-                ADFlag1=0;
-            }
-            if (ADFlag2 == 1) {
-                printAsteroid(asteroid3, oldAsteroid3);
-                printAsteroid(asteroid5, oldAsteroid5);
-                printDodge(dodge2, oldDodge2);
-                printDodge(dodge4, oldDodge4);
-                ADFlag2=0;
-            }
+            drawEnemy(e1);
+            drawEnemy(e2);
+            enemyFlag=0;
+        }
 
-        //Prints the spaceship and bullet, and reads input from player
+//Prints asteroids and enemy nets when their position has updated
+        if (ADFlag1 == 1) {
+            printAsteroid(asteroid1, oldAsteroid1);
+            printAsteroid(asteroid2, oldAsteroid2);
+            printAsteroid(asteroid4, oldAsteroid4);
+            printDodge(dodge1, oldDodge1);
+            printDodge(dodge3, oldDodge3);
+            printDodge(dodge5, oldDodge5);
+            ADFlag1=0;
+        }
+        if (ADFlag2 == 1) {
+            printAsteroid(asteroid3, oldAsteroid3);
+            printAsteroid(asteroid5, oldAsteroid5);
+            printDodge(dodge2, oldDodge2);
+            printDodge(dodge4, oldDodge4);
+            ADFlag2=0;
+        }
+
+//Prints the spaceship and bullet, and reads input from player
         if(timeFlagPrint==1){
             printShip(ship, oldShip);
             printBullet(bullet, oldBullet);
             u=keyInput();
             moveShip(u,&ship, &oldShip);
-            if (shooting==0){
-                shooting=startBullet(ship,u);
+
+            if (shooting==0){//Starts bullet when trigger is pulled
+                shooting=startBullet(ship,u);//shooting gets ships y-axis position as it's value
             }
-            bullet.position.y=shooting;
+            bullet.position.y=shooting; // bullet gets ships y-axis position at bullet initiation
             timeFlagPrint=0;
         }
 
-
+//Updates bullet position
         if(timeFlagBullet>=1){//change this number for change of bullet speed
-            if (shooting>0){
+            if (shooting>0){//only updates position if bullet has been started
                 moveBullet(shooting, &bullet, &oldBullet);
             }
-            if (bullet.position.x==139){
+            if (bullet.position.x==139){//bullet position and initialization is reset when the bullet reaches the end of the game field
                 shooting=0;
             }
             timeFlagBullet=0;
         }
 
+//Moves asteroids and enemy nets
         if(timeFlagA1>=10){//change this number for change of asteroid speed
             moveAsteroid(asteroid1.position.x,&asteroid1,&oldAsteroid1);
             moveAsteroid(asteroid2.position.x,&asteroid2,&oldAsteroid2);
@@ -222,9 +237,10 @@ int main(void)
             moveDodge(dodge1.position.y,&dodge1,&oldDodge1);
             moveDodge(dodge3.position.y,&dodge3,&oldDodge3);
             moveDodge(dodge5.position.y,&dodge5,&oldDodge5);
+        //checks if net hits ship
             if (compDoSh(ship,dodge1)==1 || compDoSh(ship,dodge2)==1 || compDoSh(ship,dodge3)==1 ||
             compDoSh(ship,dodge4)==1 || compDoSh(ship,dodge5)==1){
-            lives-=1;
+            lives-=1;//when nets hits, one life is lost
             }
             timeFlagA1=0;
             ADFlag1=1;//Asteroid and net positions have updated
@@ -238,6 +254,8 @@ int main(void)
             ADFlag2=1;//Asteroid and net positions have updated
         }
 
+// Detects asteroid hit, by comparing bullet and asteroid positions
+        //if hit detected, bullet bounces back
         if (compBuAs(bullet,asteroid1)==1){
             bullet.velocity.x=-1;
         }
@@ -253,9 +271,14 @@ int main(void)
         if (compBuAs(bullet,asteroid5)==1){
             bullet.velocity.x=-1;
         }
+//Restarts reflected bullets
+        if (bullet.position.x==3 && bullet.velocity.x==-1){
+            shooting=0;
+            bullet.velocity.x=1;
+        }
 
 
-    //erases enemy when hit, resets bullet, adds +500 to score
+//Erases enemy when hit, resets bullet, adds +500 to score
         if(compBuEn(bullet,e1)==1){
             eraseEnemy(e1);
             e1.position.x = 135;
@@ -271,40 +294,32 @@ int main(void)
             e2.position.x = 135;
             e2.position.y = e2.randomNo;
             score+=500;
-            shooting = 0;
+            shooting = 0;//resets bullet
             bullet.position.x=3;
             gotoxy(oldBullet.position.x,oldBullet.position.y);
             printf(" ");
         }
 
-
-
-    //Restarts reflected bullets
-        if (bullet.position.x==3 && bullet.velocity.x==-1){
-            shooting=0;
-            bullet.velocity.x=1;
-        }
-
-    //enemy positions is updated every 1/25 second
-    //If enemies get TONNY he loses time
-        if (timeFlagTra>=4){
+//Enemy positions is updated every 1/25 second
+//If enemies get TONNY he loses time
+        if (timeFlagEnemy>=4){
             eraseEnemy(e1);
             enemyNextPos(&e1);
             enemyMotion(&e1);
             if (enemyBreach(e1)==1){//Detects that the enemy has breached and subtracts 1000 from time
-                goTime-=1000;
+                gameTime-=1000;
             }
             eraseEnemy(e2);
             enemyNextPos(&e2);
             enemyMotion(&e2);
-            timeFlagTra=0;
+            timeFlagEnemy=0;
             if (enemyBreach(e2)==1){//Detects that the enemy has breached and subtracts 1000 from time
-                goTime-=1000;
+                gameTime-=1000;
             }
 
             enemyFlag=1;//enemies position has updated
 
-            //erases enemy when hit, resets bullet, adds +500 to score
+//Erases enemy when hit, resets bullet, adds +500 to score
             if(compBuEn(bullet,e1)==1){
                 eraseEnemy(e1);
                 e1.position.x = 135;
@@ -327,14 +342,13 @@ int main(void)
             }
         }
 
-        goTime=goTime-timeFlagScore;
+//gameTime is the remaining time the game
+//counts down every 10th of a second
+        gameTime=gameTime-timeFlagGame;
 
-
-
-
-        // Casting integers to strings
-        char strGoTime[10];
-        sprintf(strGoTime, "%d", goTime);//convert goTime to string
+// Casting integers to strings
+        char strGameTime[10];
+        sprintf(strGameTime, "%ld", gameTime);//convert goTime to string
         char strScore[10];
         sprintf(strScore, "%d", score);//convert score to string
         char strLives[5];
@@ -343,9 +357,9 @@ int main(void)
         memset (buffer,0x00,512);
         lcd_push_buffer(buffer);
 
-        //put strings in buffer:
+//Puts strings in buffer:
         lcd_write_string("Time:",0,1,&buffer);
-        lcd_write_string(strGoTime,35,1,&buffer);
+        lcd_write_string(strGameTime,35,1,&buffer);
 
         lcd_write_string("Lives:",0,2,&buffer);
         lcd_write_string(strLives,40,2,&buffer);
@@ -353,13 +367,17 @@ int main(void)
         lcd_write_string("Score:",0,3,&buffer);
         lcd_write_string(strScore,40,3,&buffer);
 
-        //push buffer
+//Push buffer
         lcd_push_buffer(buffer);
 
 
 
 
-    }
+    }//   END OF WHILE LOOP
+ while(1){}
+
+
+} //END OF MAIN!!!!!
 
 
     /*while(){
@@ -443,24 +461,24 @@ int main(void)
                 }
             }
 
-            /*if (w==1){
+            if (w==1){
 
                 eraseSqwog(skr);
                 sqwogBox(&skr);
                 sqwogNextPos(&skr);
 
-            }*/
-            /*if (asteroidFlag==1){
+            }
+            if (asteroidFlag==1){
                 struct asteroid_t asteroid
             }
         timeFlag=0;
         }
         // dette skal være timemr afhængig
-    }*/
+    }
 
 
 
-   /* uint8_t y=0;
+    uint8_t y=0;
     while(1){
         while (y<1){
             y=keyInput();
@@ -470,5 +488,4 @@ int main(void)
         //printBullet(bullet);
     }*/
 
-    while(1){}
-}
+

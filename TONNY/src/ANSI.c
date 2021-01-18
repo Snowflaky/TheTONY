@@ -2,11 +2,7 @@
 
 #define ESC 0x1B
 
-
-void hello (){
-    printf("Hello World!\n");
-}
-
+//function for setting foreground color (letters and symbols)
 void fgcolor(uint8_t foreground) {
 /*  Value      foreground     Value     foreground
     ------------------------------------------------
@@ -27,6 +23,7 @@ void fgcolor(uint8_t foreground) {
   printf("%c[%d;%dm", ESC, type, foreground+30);
 }
 
+//function for setting background color (can draw colored spaces)
 void bgcolor(uint8_t background) {
 /* IMPORTANT:   When you first use this function you cannot get back to true white background in HyperTerminal.
    Why is that? Because ANSI does not support true white background (ANSI white is gray to most human eyes).
@@ -49,6 +46,7 @@ void bgcolor(uint8_t background) {
     printf("%c[%dm", ESC, background+40);
 }
 
+//foreground and background set in one function
 void color(uint8_t foreground, uint8_t background) {
 // combination of fgcolor() and bgcolor() - uses less bandwidth
     uint8_t type = 22;             // normal text
@@ -64,17 +62,18 @@ void resetbgcolor() {
     printf("%c[m", ESC);
 }
 
+//Clears screen
 void clrscr () {
     printf("%c[2J", ESC);
 }
 
-void gotoxy (uint32_t c, uint32_t r) {
 //Moves cursor to position (c,r).
+void gotoxy (uint32_t c, uint32_t r) {
     printf("%c[%lu;%luH", ESC, r, c);
 }
 
-void window(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2, uint8_t lineColor) {
 //Outline game borders. Border is drawn by printing colored background spaces.
+void window(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2, uint8_t lineColor) {
 //Input: x start point, x end point, y start point, y end point, color of border (number between 0 and 7 (see bgcolor))
     //Game borders
     /*
@@ -111,8 +110,8 @@ void window(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2, uint8_t lineColor) {
     printf(" ");
 }
 
-uint8_t keyInput(){
 //Detect if keyboard input is w (up), s (down), b (boss) or p (shoot, phew!)
+uint8_t keyInput(){
 //Any other key --> return 0.
     uint8_t x=0;
     uint8_t input=uart_get_char();
@@ -131,6 +130,7 @@ uint8_t keyInput(){
     return x;
 }
 
+//Moves spaceship
 void moveShip (uint8_t x, struct ship_t *ship, struct ship_t *oldShip){
 //If up/down keyInput (x) detected, function updates spaceship position.
 //Input: keyInput (up/down/null), pointer to ship structure.
@@ -144,6 +144,7 @@ void moveShip (uint8_t x, struct ship_t *ship, struct ship_t *oldShip){
     }
 }
 
+//Prints spaceship
 void printShip (struct ship_t ship, struct ship_t oldShip) {
 //Delete ship at old position and prints spaceship at position (x,y).
 //Input: pointer to ship structure.
@@ -182,6 +183,7 @@ void printShip (struct ship_t ship, struct ship_t oldShip) {
     color(15,0);
 }
 
+//movement pattern of asteroids
 void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *oldAsteroid) {
 //Moves asteroid 1 downwards (along y-axis).
 //Input: x-axis position, pointer to asteroid structure.
@@ -197,6 +199,7 @@ void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *ol
     (*asteroid).position.y=(*asteroid).position.y+(*asteroid).velocity.y*k;
 }
 
+//Prints asteroids
 void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid){
 //Delete asteroid at old position and prints asteroid at position (x,y).
 //Input: pointer to asteroid structure.
@@ -212,6 +215,7 @@ void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid){
     //}
 }
 
+//Button to press when the boss walks by (function for ending game)
 void boss (uint8_t x){
 //Clears screen and shows a window stating "WORKING HARD!!!" (The boss will never know you were playing a computer game)
 //Function is only initiated if boss key 'b' is pressed.
@@ -224,33 +228,37 @@ void boss (uint8_t x){
     }
 }
 
+//Initiates bullet
 uint8_t startBullet (struct ship_t ship, uint8_t p){
+//returns ship y-axis position
+//input: ship, key-input
     uint8_t k = 0;
-    if (p==4){
-        k=ship.position.y;//(*bullet).position.x++;// = (*bullet).position.x++// (*bullet).velocity.x*k;
-        //(*bullet).position.y = (*bullet).position.y;
+    if (p==4){//shoot key(p) is pressed, bullet starts at ship position
+        k=ship.position.y;
     }
     return k;
 }
 
+//Moves bullet
 void moveBullet (uint8_t y, struct bullet_t *bullet, struct bullet_t *oldBullet) {
 //Moves asteroid 1 downwards (along y-axis).
 //Input: x-axis position, point    (*dodge).position.y=y;er to asteroid structure.
-    if ((*bullet).position.x>=139){
+    if ((*bullet).position.x>=139){//when bullet reaches the end of the field its position is reset
         (*bullet).position.x=3;
     }
-    (*oldBullet).position.x=(*bullet).position.x;
-    (*oldBullet).position.y=(*bullet).position.y;
+    (*oldBullet).position.x=(*bullet).position.x;//updates old x-coordinate
+    (*oldBullet).position.y=(*bullet).position.y;//updates old y-coordinate
     uint8_t k=1;
-    (*bullet).position.x=(*bullet).position.x + (*bullet).velocity.x*k;
-    (*bullet).position.y=y;
+    (*bullet).position.x=(*bullet).position.x + (*bullet).velocity.x*k;//movement of bullet in x-direction
+    (*bullet).position.y=y;//has the same constant height as the spaceship when bullet was fired(
 }
 
+//Prints bullet
 void printBullet (struct bullet_t bullet, struct bullet_t oldBullet) {
-    if(bullet.position.x>3){
-        gotoxy(oldBullet.position.x,oldBullet.position.y);
+    if(bullet.position.x>3){//if bullets has been initiated..
+        gotoxy(oldBullet.position.x,oldBullet.position.y);//deletes old bullet print
         printf(" ");
-        if (bullet.position.x<139){
+        if (bullet.position.x<139){//only prints bullet as long as it is within the game field
             gotoxy(bullet.position.x,bullet.position.y);
             fgcolor(6);
             printf("%c[1m",ESC);
@@ -264,7 +272,6 @@ void printBullet (struct bullet_t bullet, struct bullet_t oldBullet) {
 void TIM2_IRQHandler() {
 //Counts 100ths of a second, seconds and minutes.
     timeFlagPrint=1;
-    timeFlagDrawT++;
     time.mikroSec++;
     if (time.mikroSec>=1000){
         time.milliSec++;
@@ -273,14 +280,14 @@ void TIM2_IRQHandler() {
             timeFlagBullet++;
             timeFlagA1++;
             timeFlagA2++;
-            timeFlagTra++;
+            timeFlagEnemy++;
             time.centiSec++;
             time.milliSec=0;
             if (time.centiSec>=50){
                 time.second++;
                 time.centiSec=0;
                 if (time.second%10==0){
-                    timeFlagScore++;
+                    timeFlagGame++;
                 }
                 if (time.second>=60){
                     time.minute++;
@@ -293,9 +300,10 @@ void TIM2_IRQHandler() {
     TIM2->SR &= ~0x0001; // Clear interrupt bit
  }
 
-
+//Puts a string into buffer array, for writing on LCD display
 void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)[512]){
-//Writes string on LCD display on location specified by slice and row.
+//Specifies writing location on LCD display by slice and row. (4 rows, 128 slices)
+//each character needs 5 slices
 //Input: string, slice (0-127), row (1-4), pointer to buffer array.
     uint8_t h;
     uint8_t g;
@@ -315,8 +323,8 @@ void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)
    }
 }
 
-void fixtrangPos(struct trang (*t)) {
 //Converts Trangs position and velocity to 18.14 (from 32.0)
+void fixtrangPos(struct trang (*t)) {
     (*t).position.x=(*t).position.x<<14;
     (*t).position.y=(*t).position.y<<14;
     (*t).velocity.x=(*t).velocity.x<<14;
@@ -326,7 +334,7 @@ void fixtrangPos(struct trang (*t)) {
 //The next few functions are dedicated to the harbringer of
 //Cosine DOOM, TRANG!!!
 void trangNextPos(struct trang (*t)) {
-//Calculate new position for Trang. Input is a pointer.
+//Calculates new position for Trang. Input is a pointer.
     uint32_t k = 1;
     if ((*t).position.x<5){
         (*t).position.x=135;
@@ -335,7 +343,10 @@ void trangNextPos(struct trang (*t)) {
     (*t).position.y = (*t).position.y + (*t).velocity.y*k;
 }
 
+//Detects if enemy has passed spaceship
 uint8_t enemyBreach(struct enemy e){
+//returns TRUE, if enemy passes TONNY
+//input: enemy structure
     uint8_t breach=0;
     if (e.position.x<6){
         breach=1;
@@ -343,6 +354,7 @@ uint8_t enemyBreach(struct enemy e){
     return breach;
 }
 
+//The Trang enemy ships
 void drawTrang (struct trang t) {
     color(0,0);
     //print the Trang alien ship
@@ -369,6 +381,7 @@ void drawTrang (struct trang t) {
     color(15,0);
 }
 
+//Erases Trang
 void eraseTrang (struct trang t) { //erases Trang with the same
     //color(0,0);                    //method as Trang is drawn
     //erase the Trang alien ship
@@ -395,18 +408,20 @@ void eraseTrang (struct trang t) { //erases Trang with the same
     color(15,0);
 }
 
-void trangZag (struct trang (*t)) { //Moves Trang in a zig zag
-    uint8_t firsty = (*t).firsty;   // motion
+//Moves Trang in a zig zag motion
+void trangZag (struct trang (*t)) {
+    uint8_t firsty = (*t).firsty;
     if ((*t).position.y - firsty > 4 || (*t).position.y - firsty < -4) {
         (*t).velocity.y *= -1; //If the current y position is
     }                          //farther from starting position
 }                              //than 3, y velocity is reversed
 
-// generate random numbers in range [lower, upper].
+// generates random numbers in range [lower, upper].
 uint8_t randoms(uint8_t lower, uint8_t upper) {
     uint8_t num=0;
     num = (rand() % (upper - lower + 1)) + lower;
 }
+
 
 void awakenTrang(uint8_t spawn) {    //Bring Trang, the bringer
     if (spawn == 1) {                //of doom, to LIFE
@@ -435,6 +450,7 @@ void sqwogNextPos(struct sqwog (*t)) {
     (*t).position.y = (*t).position.y + (*t).velocity.y*k;
 }
 
+//The Sqwog enemy ships
 void drawSqwog (struct sqwog t) {
     color(0,0);
     //print the Sqwog alien ship
@@ -470,6 +486,7 @@ void drawSqwog (struct sqwog t) {
     printf(">");
 }
 
+//Erases Sqwog
 void eraseSqwog (struct sqwog t) { //erases Sqwog with the same
     color(0,0);                    //method as Sqwog is drawn
     //erase the Sqwog alien ship
@@ -505,6 +522,7 @@ void eraseSqwog (struct sqwog t) { //erases Sqwog with the same
     color(15,0);
 }
 
+//Moves Sqwog in a square motion
 void sqwogBox (struct sqwog (*t)) { //Moves Sqwog in a square
     if (((*t).position.x - (*t).firstx == -5) && ((*t).position.y - (*t).firsty == 0)) {
         (*t).velocity.y = -1;
@@ -538,7 +556,9 @@ void awakenSqwog(uint8_t spawn) {    //Bring Sqwog, the bringer
     }
 }
 
+//Compares asteroid and bullet positions
 uint8_t compBuAs(struct bullet_t bullet, struct asteroid_t asteroid){
+//if collision is detected, 1 is returned
     uint8_t g=0;
     if (bullet.position.x==asteroid.position.x-1 && bullet.position.y==asteroid.position.y){
         g=1;
@@ -547,7 +567,9 @@ uint8_t compBuAs(struct bullet_t bullet, struct asteroid_t asteroid){
     return g;
 }
 
+//Compares enemy and bullet positions
 uint8_t compBuEn(struct bullet_t bullet, struct enemy e){
+    //if collision is detected, 1 is returned
     uint8_t g=0;
     if (bullet.position.x==e.position.x && (bullet.position.y==e.position.y ||
                                               bullet.position.y==e.position.y+1 ||
@@ -728,9 +750,10 @@ void enemyMotion (struct enemy *e) {
     }
 }
 
+//Moves enemies nets
 void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge) {
-//Moves asteroid 1 downwards (along y-axis).
-//Input: x-axis position, pointer to asteroid structure.
+//Moves nets -1 along x-axis
+//Input: y-axis position, pointer to dodge structure.
     if ((*dodge).position.x<=2){
         gotoxy((*dodge).position.x,(*dodge).position.y);
         printf(" ",ESC);
@@ -743,24 +766,23 @@ void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge
     (*dodge).position.y=y;
 }
 
+//Prints enemies nets
 void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge){
-//Delete asteroid at old position and prints asteroid at position (x,y).
-//Input: pointer to asteroid structure.
-    //if (asteroid.position.y<40){
+//Delete nets at old position and prints nets at position (x,y).
+//Input: pointer to dodge structure.
+    //if (dodge.position.y<40)
         gotoxy(oldDodge.position.x,oldDodge.position.y);
-        printf(" ",ESC);
-        /*printf("%c[1D",ESC);
-        printf(" ");*/
+        printf(" ");
         gotoxy(dodge.position.x,dodge.position.y);
         fgcolor(13);
         printf("%c[1m", ESC);
         printf("#");
         fgcolor(15);
         printf("%c[22m", ESC);
-    //}
 }
-
+////Compares nets and ship positions
 uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge){
+    //if collision is detected, 1 is returned
     uint8_t g=0;
     if (ship.position.x==dodge.position.x-1 && (ship.position.y==dodge.position.y ||
                                                 ship.position.y==dodge.position.y+1 ||
@@ -770,6 +792,3 @@ uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge){
     return g;
 }
 
-/*void menu () {
-    window()
-}*/

@@ -16,9 +16,8 @@ volatile uint32_t timeFlagPrint;
 volatile uint32_t timeFlagA1;
 volatile uint32_t timeFlagBullet;
 volatile uint32_t timeFlagA2;
-volatile uint32_t timeFlagTra;
-volatile uint32_t timeFlagDrawT;
-volatile uint32_t timeFlagScore;
+volatile uint32_t timeFlagEnemy;
+volatile uint32_t timeFlagGame;
 
 struct time_t {
     volatile uint32_t mikroSec, milliSec, centiSec, second, minute;
