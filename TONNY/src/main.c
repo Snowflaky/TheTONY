@@ -399,6 +399,7 @@ int main(void)
                 printShip(ship, oldShip);
                 printBullet(bullet, oldBullet);
                 u=keyInput();
+//If boss-key is initiated
                 if(u==3){
                     boss();
                     pause=1;
