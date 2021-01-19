@@ -100,9 +100,9 @@ void window(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2, uint8_t lineColor) {
         color(0,lineColor);
         printf(" ");
     }
-    for (i = 0; i < (x2-x1); i++) {
+    for (i = 0; i <= (x2-x1); i++) {
     //Lower border
-        gotoxy((x1+i)+1,y2);
+        gotoxy((x1+i),y2);
         color(0,lineColor);
         printf(" ");
     }
@@ -126,6 +126,18 @@ uint8_t keyInput(){
     }
     else if (input=='p'){  //phew! gun trigger
         x=4;
+    }
+    else if (input=='1'){
+        x=5;
+    }
+    else if (input=='2'){
+        x=6;
+    }
+    else if (input=='3'){
+        x=7;
+    }
+    else if (input=='0'){
+        x=8;
     }
     return x;
 }

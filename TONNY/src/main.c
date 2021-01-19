@@ -29,7 +29,11 @@ int main(void)
     NVIC_SetPriority(TIM2_IRQn, 0001); // Set interrupt priority=1 (high)
     NVIC_EnableIRQ(TIM2_IRQn); // Enable interrupt
 
-
+    uint8_t startGame=0;
+    uint8_t v=0;
+    uint8_t levelMenu=0;
+    uint8_t useMenu=0;
+    uint8_t creditMenu=0;
     uint8_t u=0;
     uint8_t shooting=0;
     int32_t gameTime=100000;
@@ -50,7 +54,6 @@ int main(void)
 //resets colors, clears screen and builds game field
     color(15,0);
     clrscr();
-    window(0,140,0,40,7);
 
 //TONNY's Spaceship is built
     struct ship_t ship;
@@ -169,160 +172,204 @@ int main(void)
     }*/
 
     while(1){
-
-//If time runs out or you have no lives left it is GAME OVER!
-        if (gameTime<=0 || lives==0){
-            while(pause==0){
+        //if(timeFlagPrint==1){
+            window(50,90,15,27,4);
+            gotoxy(65,17);
+            printf("MAIN MENU");
+            gotoxy(62,19);
+            printf("1. Game levels");
+            gotoxy(62,21);
+            printf("2. How to play");
+            gotoxy(62,23);
+            printf("3. Credits");
+            v = keyInput();
+//Level menu
+            if (v==5){
+                levelMenu=1;
                 clrscr();
-                gotoxy(70,20);
-                printf("GAME OVER");
-                //to be continued...
+                while(levelMenu==1){
+                    v = keyInput();
+
+                    window(50,90,15,27,4);
+                    gotoxy(64,17);
+                    printf("CHOOSE LEVEL");
+                    gotoxy(62,19);
+                    printf("1. Level 1");
+                    gotoxy(62,21);
+                    printf("2. Level 2");
+                    gotoxy(62,23);
+                    printf("3. Level 3");
+                    gotoxy(57,25);
+                    printf("Press 0 to go back to main menu");
+                    if (v==5){
+                        clrscr();
+                        window(0,140,0,40,7);
+                        timeFlagGame=0;
+                        startGame=1;
+                        levelMenu=0;
+                    }
+        //insert level 2 + 3 here********************************************************'
+                    if (v==8){
+                        clrscr();
+                        levelMenu=0;
+                    }
+                }
             }
-        }
-//Prints enemies when their position has updated
-        if (enemyFlag ==1) {
-            drawEnemy(e1);
-            drawEnemy(e2);
-            enemyFlag=0;
-        }
+//How to play
+            if (v==6){
+                useMenu=1;
+                clrscr();
+                while(useMenu==1){
+                    v = keyInput();
+                    gotoxy(0,10);
+                    printf("The spaceship moves up when you press 'w' and down when you press 's'.\nTo shoot at your enemy, press 'p'.\n");
+                    printf("The enemies have different paths of movements, so observe them closely!\nThey also throw quantum nets.");
+                    printf("They damage your spaceship so be careful to avoid them. It can only withstand 2 hits.\n");
+                    printf("Space is also filled with asteroid which may help you or hinder you in your quest to shoot enemies.\n");
+                    printf("You only have so much fuel in your tank and your spaceship burns through it as you travel through space.\n");
+                    printf("Every time an enemy get past you they suck a little bit of it.\nWhen your tank is empty the game ends.\n");
+                    printf("Your fuel level, lives and score is displayed on the LCD screen\n");
+                    printf("\nPress 0 to go back to main menu");
+                    if (v==8){
+                        clrscr();
+                        useMenu=0;
+                    }
+                }
 
-//Prints asteroids and enemy nets when their position has updated
-        if (ADFlag1 == 1) {
-            printAsteroid(asteroid1, oldAsteroid1);
-            printAsteroid(asteroid2, oldAsteroid2);
-            printAsteroid(asteroid4, oldAsteroid4);
-            printDodge(dodge1, oldDodge1);
-            printDodge(dodge3, oldDodge3);
-            printDodge(dodge5, oldDodge5);
-            ADFlag1=0;
-        }
-        if (ADFlag2 == 1) {
-            printAsteroid(asteroid3, oldAsteroid3);
-            printAsteroid(asteroid5, oldAsteroid5);
-            printDodge(dodge2, oldDodge2);
-            printDodge(dodge4, oldDodge4);
-            ADFlag2=0;
-        }
-
-//Prints the spaceship and bullet, and reads input from player
-        if(timeFlagPrint==1){
-            printShip(ship, oldShip);
-            ///////////////////////////////////////////////////
-            printf("%d %d %d %d", e1.position.x, (e1.position.y - e1.firsty),e1.firstx,e1.firsty);
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            printBullet(bullet, oldBullet);
-            u=keyInput();
-            moveShip(u,&ship, &oldShip);
-
-            if (shooting==0){//Starts bullet when trigger is pulled
-                shooting=startBullet(ship,u);//shooting gets ships y-axis position as it's value
             }
-            bullet.position.y=shooting; // bullet gets ships y-axis position at bullet initiation
+//Credits
+            if (v==7){
+                creditMenu=1;
+                clrscr();
+                while(creditMenu==1){
+                    v = keyInput();
+                    gotoxy(0,10);
+                    printf("This game is made by:\nSara\nJosefine\n& Erik\n");
+                    printf("\nPress 0 to go back to main menu");
+                    if (v==8){
+                        clrscr();
+                        creditMenu=0;
+                    }
+                }
+
+            }
+
+
             timeFlagPrint=0;
-        }
 
-//Updates bullet position
-        if(timeFlagBullet>=1){//change this number for change of bullet speed
-            if (shooting>0){//only updates position if bullet has been started
-                moveBullet(shooting, &bullet, &oldBullet);
+
+        while(startGame==1){
+
+    //If time runs out or you have no lives left it is GAME OVER!
+            if (gameTime<=0 || lives==0){
+                while(pause==0){
+                    clrscr();
+                    gotoxy(70,20);
+                    printf("GAME OVER");
+                    //to be continued...
+                }
             }
-            if (bullet.position.x==139){//bullet position and initialization is reset when the bullet reaches the end of the game field
+    //Prints enemies when their position has updated
+            if (enemyFlag ==1) {
+                drawEnemy(e1);
+                drawEnemy(e2);
+                enemyFlag=0;
+            }
+
+    //Prints asteroids and enemy nets when their position has updated
+            if (ADFlag1 == 1) {
+                printAsteroid(asteroid1, oldAsteroid1);
+                printAsteroid(asteroid2, oldAsteroid2);
+                printAsteroid(asteroid4, oldAsteroid4);
+                printDodge(dodge1, oldDodge1);
+                printDodge(dodge3, oldDodge3);
+                printDodge(dodge5, oldDodge5);
+                ADFlag1=0;
+            }
+            if (ADFlag2 == 1) {
+                printAsteroid(asteroid3, oldAsteroid3);
+                printAsteroid(asteroid5, oldAsteroid5);
+                printDodge(dodge2, oldDodge2);
+                printDodge(dodge4, oldDodge4);
+                ADFlag2=0;
+            }
+
+    //Prints the spaceship and bullet, and reads input from player
+            if(timeFlagPrint==1){
+                printShip(ship, oldShip);
+                printBullet(bullet, oldBullet);
+                u=keyInput();
+                moveShip(u,&ship, &oldShip);
+                if (shooting==0){//Starts bullet when trigger is pulled
+                    shooting=startBullet(ship,u);//shooting gets ships y-axis position as it's value
+                }
+                bullet.position.y=shooting; // bullet gets ships y-axis position at bullet initiation
+                timeFlagPrint=0;
+            }
+
+    //Updates bullet position
+            if(timeFlagBullet>=1){//change this number for change of bullet speed
+                if (shooting>0){//only updates position if bullet has been started
+                    moveBullet(shooting, &bullet, &oldBullet);
+                }
+                if (bullet.position.x==139){//bullet position and initialization is reset when the bullet reaches the end of the game field
+                    shooting=0;
+                }
+                timeFlagBullet=0;
+            }
+
+    //Moves asteroids and enemy nets
+            if(timeFlagA1>=10){//change this number for change of asteroid speed
+                moveAsteroid(asteroid1.position.x,&asteroid1,&oldAsteroid1);
+                moveAsteroid(asteroid2.position.x,&asteroid2,&oldAsteroid2);
+                moveAsteroid(asteroid4.position.x,&asteroid4,&oldAsteroid4);
+                moveDodge(dodge1.position.y,&dodge1,&oldDodge1);
+                moveDodge(dodge3.position.y,&dodge3,&oldDodge3);
+                moveDodge(dodge5.position.y,&dodge5,&oldDodge5);
+            //checks if net hits ship
+                if (compDoSh(ship,dodge1)==1 || compDoSh(ship,dodge2)==1 || compDoSh(ship,dodge3)==1 ||
+                compDoSh(ship,dodge4)==1 || compDoSh(ship,dodge5)==1){
+                    lives-=1;//when nets hits, one life is lost
+                    gotoxy(ship.position.x+2,ship.position.y+2);
+                    printf("OW!");
+                }
+                timeFlagA1=0;
+                ADFlag1=1;//Asteroid and net positions have updated
+            }
+            if(timeFlagA2>=6){//change this number for change of asteroid speed
+                moveAsteroid(asteroid3.position.x,&asteroid3,&oldAsteroid3);
+                moveAsteroid(asteroid5.position.x,&asteroid5,&oldAsteroid5);
+                moveDodge(dodge2.position.y,&dodge2,&oldDodge2);
+                moveDodge(dodge4.position.y,&dodge4,&oldDodge4);
+                timeFlagA2=0;
+                ADFlag2=1;//Asteroid and net positions have updated
+            }
+
+    // Detects asteroid hit, by comparing bullet and asteroid positions
+            //if hit detected, bullet bounces back
+            if (compBuAs(bullet,asteroid1)==1){
+                bullet.velocity.x=-1;
+            }
+            if (compBuAs(bullet,asteroid2)==1){
+                bullet.velocity.x=-1;
+            }
+            if (compBuAs(bullet,asteroid3)==1){
+                bullet.velocity.x=-1;
+            }
+            if (compBuAs(bullet,asteroid4)==1){
+                bullet.velocity.x=-1;
+            }
+            if (compBuAs(bullet,asteroid5)==1){
+                bullet.velocity.x=-1;
+            }
+    //Restarts reflected bullets
+            if (bullet.position.x==3 && bullet.velocity.x==-1){
                 shooting=0;
-            }
-            timeFlagBullet=0;
-        }
-
-//Moves asteroids and enemy nets
-        if(timeFlagA1>=10){//change this number for change of asteroid speed
-            moveAsteroid(asteroid1.position.x,&asteroid1,&oldAsteroid1);
-            moveAsteroid(asteroid2.position.x,&asteroid2,&oldAsteroid2);
-            moveAsteroid(asteroid4.position.x,&asteroid4,&oldAsteroid4);
-            moveDodge(dodge1.position.y,&dodge1,&oldDodge1);
-            moveDodge(dodge3.position.y,&dodge3,&oldDodge3);
-            moveDodge(dodge5.position.y,&dodge5,&oldDodge5);
-        //checks if net hits ship
-            if (compDoSh(ship,dodge1)==1 || compDoSh(ship,dodge2)==1 || compDoSh(ship,dodge3)==1 ||
-            compDoSh(ship,dodge4)==1 || compDoSh(ship,dodge5)==1){
-            lives-=1;//when nets hits, one life is lost
-            }
-            timeFlagA1=0;
-            ADFlag1=1;//Asteroid and net positions have updated
-        }
-        if(timeFlagA2>=6){//change this number for change of asteroid speed
-            moveAsteroid(asteroid3.position.x,&asteroid3,&oldAsteroid3);
-            moveAsteroid(asteroid5.position.x,&asteroid5,&oldAsteroid5);
-            moveDodge(dodge2.position.y,&dodge2,&oldDodge2);
-            moveDodge(dodge4.position.y,&dodge4,&oldDodge4);
-            timeFlagA2=0;
-            ADFlag2=1;//Asteroid and net positions have updated
-        }
-
-// Detects asteroid hit, by comparing bullet and asteroid positions
-        //if hit detected, bullet bounces back
-        if (compBuAs(bullet,asteroid1)==1){
-            bullet.velocity.x=-1;
-        }
-        if (compBuAs(bullet,asteroid2)==1){
-            bullet.velocity.x=-1;
-        }
-        if (compBuAs(bullet,asteroid3)==1){
-            bullet.velocity.x=-1;
-        }
-        if (compBuAs(bullet,asteroid4)==1){
-            bullet.velocity.x=-1;
-        }
-        if (compBuAs(bullet,asteroid5)==1){
-            bullet.velocity.x=-1;
-        }
-//Restarts reflected bullets
-        if (bullet.position.x==3 && bullet.velocity.x==-1){
-            shooting=0;
-            bullet.velocity.x=1;
-        }
-
-
-//Erases enemy when hit, resets bullet, adds +500 to score
-        if(compBuEn(bullet,e1)==1){
-            eraseEnemy(e1);
-            e1.position.x = 135;
-            e1.position.y = e1.randomNo;
-            score+=500;
-            shooting = 0;
-            bullet.position.x=3;
-            gotoxy(oldBullet.position.x,oldBullet.position.y);
-            printf(" ");
-        }
-        if(compBuEn(bullet,e2)==1){
-            eraseEnemy(e2);
-            e2.position.x = 135;
-            e2.position.y = e2.randomNo;
-            score+=500;
-            shooting = 0;//resets bullet
-            bullet.position.x=3;
-            gotoxy(oldBullet.position.x,oldBullet.position.y);
-            printf(" ");
-        }
-
-//Enemy positions is updated every 1/25 second
-//If enemies get TONNY he loses time
-        if (timeFlagEnemy>=4){
-            eraseEnemy(e1);
-            enemyNextPos(&e1);
-            enemyMotion(&e1);
-            if (enemyBreach(e1)==1){//Detects that the enemy has breached and subtracts 1000 from time
-                gameTime-=1000;
-            }
-            eraseEnemy(e2);
-            enemyNextPos(&e2);
-            enemyMotion(&e2);
-            timeFlagEnemy=0;
-            if (enemyBreach(e2)==1){//Detects that the enemy has breached and subtracts 1000 from time
-                gameTime-=1000;
+                bullet.velocity.x=1;
             }
 
-            enemyFlag=1;//enemies position has updated
 
-//Erases enemy when hit, resets bullet, adds +500 to score
+    //Erases enemy when hit, resets bullet, adds +500 to score
             if(compBuEn(bullet,e1)==1){
                 eraseEnemy(e1);
                 e1.position.x = 135;
@@ -338,45 +385,88 @@ int main(void)
                 e2.position.x = 135;
                 e2.position.y = e2.randomNo;
                 score+=500;
-                shooting = 0;
+                shooting = 0;//resets bullet
                 bullet.position.x=3;
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
                 printf(" ");
             }
-        }
 
-//gameTime is the remaining time the game
-//counts down every 10th of a second
-        gameTime=gameTime-timeFlagGame;
+    //Enemy positions is updated every 1/25 second
+    //If enemies get TONNY he loses time
+            if (timeFlagEnemy>=4){
+                eraseEnemy(e1);
+                enemyNextPos(&e1);
+                enemyMotion(&e1);
+                if (enemyBreach(e1)==1){//Detects that the enemy has breached and subtracts 1000 from time
+                    gameTime-=1000;
+                }
+                eraseEnemy(e2);
+                enemyNextPos(&e2);
+                enemyMotion(&e2);
+                timeFlagEnemy=0;
+                if (enemyBreach(e2)==1){//Detects that the enemy has breached and subtracts 1000 from time
+                    gameTime-=1000;
+                }
 
-// Casting integers to strings
-        char strGameTime[10];
-        sprintf(strGameTime, "%ld", gameTime);//convert goTime to string
-        char strScore[10];
-        sprintf(strScore, "%d", score);//convert score to string
-        char strLives[5];
-        sprintf(strLives, "%d", lives);//convert lives to string
+                enemyFlag=1;//enemies position has updated
 
-        memset (buffer,0x00,512);
-        lcd_push_buffer(buffer);
+    //Erases enemy when hit, resets bullet, adds +500 to score
+                if(compBuEn(bullet,e1)==1){
+                    eraseEnemy(e1);
+                    e1.position.x = 135;
+                    e1.position.y = e1.randomNo;
+                    score+=500;
+                    shooting = 0;
+                    bullet.position.x=3;
+                    gotoxy(oldBullet.position.x,oldBullet.position.y);
+                    printf(" ");
+                }
+                if(compBuEn(bullet,e2)==1){
+                    eraseEnemy(e2);
+                    e2.position.x = 135;
+                    e2.position.y = e2.randomNo;
+                    score+=500;
+                    shooting = 0;
+                    bullet.position.x=3;
+                    gotoxy(oldBullet.position.x,oldBullet.position.y);
+                    printf(" ");
+                }
+            }
 
-//Puts strings in buffer:
-        lcd_write_string("Time:",0,1,&buffer);
-        lcd_write_string(strGameTime,35,1,&buffer);
+    //gameTime is the remaining time the game
+    //counts down every 10th of a second
+            gameTime=gameTime-timeFlagGame;//genstart timeFlagGame!!!!!!!!!!
 
-        lcd_write_string("Lives:",0,2,&buffer);
-        lcd_write_string(strLives,40,2,&buffer);
+    // Casting integers to strings
+            char strGameTime[10];
+            sprintf(strGameTime, "%ld", gameTime);//convert goTime to string
+            char strScore[10];
+            sprintf(strScore, "%d", score);//convert score to string
+            char strLives[5];
+            sprintf(strLives, "%d", lives);//convert lives to string
 
-        lcd_write_string("Score:",0,3,&buffer);
-        lcd_write_string(strScore,40,3,&buffer);
+            memset (buffer,0x00,512);
+            lcd_push_buffer(buffer);
 
-//Push buffer
-        lcd_push_buffer(buffer);
+    //Puts strings in buffer:
+            lcd_write_string("Fuel:",0,1,&buffer);
+            lcd_write_string(strGameTime,35,1,&buffer);
+
+            lcd_write_string("Lives:",0,2,&buffer);
+            lcd_write_string(strLives,40,2,&buffer);
+
+            lcd_write_string("Score:",0,3,&buffer);
+            lcd_write_string(strScore,40,3,&buffer);
+
+    //Push buffer
+            lcd_push_buffer(buffer);
 
 
 
 
-    }//   END OF WHILE LOOP
+        }//   END OF WHILE LOOP
+
+    }
  while(1){}
 
 
