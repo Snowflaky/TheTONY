@@ -725,8 +725,8 @@ void enemyMotion (struct enemy (*e)) {
         (*e).position.x=135;
     }
     if ((*e).enemyType == 1) {
-        uint32_t firsty = (*e).firsty;   // motion
-        if ((*e).position.y - firsty > 4 || (*e).position.y - firsty < -4) {
+        //uint32_t firsty = (*e).firsty;   // motion
+        if (((*e).position.y - (*e).firsty) >= 4 || ((*e).position.y - (*e).firsty) <= -4) {
             (*e).velocity.y *= -1; //If the current y position is
         }               //farther from starting y position than 3,
     }                   // y velocity is reversed (Trang). This motion

@@ -62,8 +62,8 @@ struct enemy {
     struct vector_t position;
     struct vector_t velocity;
     uint8_t hp;
-    uint32_t firsty;
-    uint32_t firstx;
+    int32_t firsty;
+    int32_t firstx;
 };
 
 struct ship_t {

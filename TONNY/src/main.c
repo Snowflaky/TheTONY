@@ -177,6 +177,9 @@ int main(void)
             drawEnemy(e1);
             drawEnemy(e2);
             printShip(ship, oldShip);
+            //////////////////////////////////////////////////////////////////////////////////////////
+            //printf("%d %d %d %d",e1.firstx, e1.firsty,e1.position.x,e1.position.y);
+            //////////////////////////////////////////////////////////////////////////////////////////
             printAsteroid(asteroid1, oldAsteroid1);
             printAsteroid(asteroid2, oldAsteroid2);
             printAsteroid(asteroid3, oldAsteroid3);
