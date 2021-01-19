@@ -812,6 +812,3 @@ uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge){
     return g;
 }
 
-/*void menu () {
-    window()
-}*/
