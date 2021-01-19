@@ -29,7 +29,7 @@ int main(void)
     NVIC_SetPriority(TIM2_IRQn, 0001); // Set interrupt priority=1 (high)
     NVIC_EnableIRQ(TIM2_IRQn); // Enable interrupt
 
-    uint8_t startGame=0;
+    uint8_t startLevel=0;
     uint8_t v=0;
     uint8_t levelMenu=0;
     uint8_t useMenu=0;
@@ -39,7 +39,7 @@ int main(void)
     int32_t gameTime=100000;
     uint16_t score=0;
     uint8_t pause=0;
-    uint8_t lives=3;
+    int8_t lives=3;
 
 //flags for printing enemies, asteroids and nets
     uint8_t ADFlag1=1;
@@ -95,6 +95,18 @@ int main(void)
     asteroid5.velocity.x=0;
     asteroid5.velocity.y=1;
     struct asteroid_t oldAsteroid5;
+    struct asteroid_t asteroid6;
+    asteroid6.position.x=41;
+    asteroid6.position.y=33;
+    asteroid6.velocity.x=0;
+    asteroid6.velocity.y=1;
+    struct asteroid_t oldAsteroid6;
+    struct asteroid_t asteroid7;
+    asteroid7.position.x=83;
+    asteroid7.position.y=18;
+    asteroid7.velocity.x=0;
+    asteroid7.velocity.y=1;
+    struct asteroid_t oldAsteroid7;
 
 //Enemy nets initiated
     struct asteroid_t dodge1;
@@ -127,7 +139,18 @@ int main(void)
     dodge5.velocity.x=-1;
     dodge5.velocity.y=0;
     struct asteroid_t oldDodge5;
-
+    struct asteroid_t dodge6;
+    dodge6.position.x=126;
+    dodge6.position.y=11;
+    dodge6.velocity.x=-1;
+    dodge6.velocity.y=0;
+    struct asteroid_t oldDodge6;
+    struct asteroid_t dodge7;
+    dodge7.position.x=98;
+    dodge7.position.y=20;
+    dodge7.velocity.x=-1;
+    dodge7.velocity.y=0;
+    struct asteroid_t oldDodge7;
 //Bullet initiated
     struct bullet_t bullet;
     bullet.position.x = 3;
@@ -157,6 +180,16 @@ int main(void)
     e2.firstx = 135;
     e2.firsty = e2.randomNo;
 
+    struct enemy e3;
+    e3.randomNo = randoms(15,30);
+    e3.enemyType = 1;
+    e3.position.x = 135;
+    e3.position.y = e3.randomNo;
+    e3.velocity.x=-1;
+    e3.firstx = 135;
+    e3.firsty = e3.randomNo;
+
+
 //Determines velocity based on enemy type
     if (e1.enemyType==1){
         e1.velocity.y=1;
@@ -164,12 +197,18 @@ int main(void)
     else if (e1.enemyType==2){
         e1.velocity.y=0;
     }
-    /*if (e2.enemyType==1){
+    if (e2.enemyType==1){
         e2.velocity.y=1;
     }
     else if (e2.enemyType==2){
         e2.velocity.y=0;
-    }*/
+    }
+    if (e3.enemyType==1){
+        e3.velocity.y=1;
+    }
+    else if (e3.enemyType==2){
+        e3.velocity.y=0;
+    }
 
     while(1){
         //if(timeFlagPrint==1){
@@ -184,37 +223,7 @@ int main(void)
             printf("3. Credits");
             v = keyInput();
 //Level menu
-            if (v==5){
-                levelMenu=1;
-                clrscr();
-                while(levelMenu==1){
-                    v = keyInput();
 
-                    window(50,90,15,27,4);
-                    gotoxy(64,17);
-                    printf("CHOOSE LEVEL");
-                    gotoxy(62,19);
-                    printf("1. Level 1");
-                    gotoxy(62,21);
-                    printf("2. Level 2");
-                    gotoxy(62,23);
-                    printf("3. Level 3");
-                    gotoxy(57,25);
-                    printf("Press 0 to go back to main menu");
-                    if (v==5){
-                        clrscr();
-                        window(0,140,0,40,7);
-                        timeFlagGame=0;
-                        startGame=1;
-                        levelMenu=0;
-                    }
-        //insert level 2 + 3 here********************************************************'
-                    if (v==8){
-                        clrscr();
-                        levelMenu=0;
-                    }
-                }
-            }
 //How to play
             if (v==6){
                 useMenu=1;
@@ -253,26 +262,81 @@ int main(void)
                 }
 
             }
+            if (v==5){
+                levelMenu=1;
+                clrscr();
+                ADFlag1=0;
+                ADFlag2=0;
+                timeFlagPrint=1;
+                timeFlagA1=0;
+                timeFlagBullet=0;
+                timeFlagA2=0;
+                timeFlagEnemy=0;
+                timeFlagGame=0;
+                enemyFlag=0;
+                gameTime=100000;
+                score=0;
+                lives=3;
+                shooting=0;
+
+                while(levelMenu==1){
+                    v = keyInput();
 
 
-            timeFlagPrint=0;
-
-
-        while(startGame==1){
-
-    //If time runs out or you have no lives left it is GAME OVER!
-            if (gameTime<=0 || lives==0){
-                while(pause==0){
-                    clrscr();
-                    gotoxy(70,20);
-                    printf("GAME OVER");
-                    //to be continued...
+                    window(50,90,15,27,4);
+                    gotoxy(64,17);
+                    printf("CHOOSE LEVEL");
+                    gotoxy(62,19);
+                    printf("1. Level 1");
+                    gotoxy(62,21);
+                    printf("2. Level 2");
+                    gotoxy(62,23);
+                    printf("3. Level 3");
+                    gotoxy(57,25);
+                    printf("Press 0 to go back to main menu");
+                    if (v==5){
+                        clrscr();
+                        window(0,140,0,40,7);
+                        timeFlagGame=0;
+                        startLevel=1;
+                        levelMenu=0;
+                    }
+                    if (v==6){
+                        clrscr();
+                        window(0,140,0,40,7);
+                        timeFlagGame=0;
+                        startLevel=2;
+                        levelMenu=0;
+                    }
+                    if (v==7){
+                        clrscr();
+                        window(0,140,0,40,7);
+                        timeFlagGame=0;
+                        startLevel=3;
+                        levelMenu=0;
+                    }
+                    if (v==8){
+                        clrscr();
+                        levelMenu=0;
+                    }
                 }
             }
+
+
+           // timeFlagPrint=0;
+
+
+        while(startLevel>0){
+
+
+
     //Prints enemies when their position has updated
             if (enemyFlag ==1) {
                 drawEnemy(e1);
                 drawEnemy(e2);
+                if (startLevel>=2){
+                    drawEnemy(e3);
+                }
                 enemyFlag=0;
             }
 
@@ -284,13 +348,21 @@ int main(void)
                 printDodge(dodge1, oldDodge1);
                 printDodge(dodge3, oldDodge3);
                 printDodge(dodge5, oldDodge5);
+
                 ADFlag1=0;
             }
+
             if (ADFlag2 == 1) {
                 printAsteroid(asteroid3, oldAsteroid3);
                 printAsteroid(asteroid5, oldAsteroid5);
                 printDodge(dodge2, oldDodge2);
                 printDodge(dodge4, oldDodge4);
+                if(startLevel>=2){
+                    printAsteroid(asteroid6, oldAsteroid6);
+                    printAsteroid(asteroid7, oldAsteroid7);
+                    printDodge(dodge6, oldDodge6);
+                    printDodge(dodge7, oldDodge7);
+                }
                 ADFlag2=0;
             }
 
@@ -304,6 +376,22 @@ int main(void)
                     shooting=startBullet(ship,u);//shooting gets ships y-axis position as it's value
                 }
                 bullet.position.y=shooting; // bullet gets ships y-axis position at bullet initiation
+//If time runs out or you have no lives left it is GAME OVER!
+                if (gameTime<=0 || lives<=0){
+                    clrscr();
+                    while(pause==0){
+                        u=keyInput();
+                        gotoxy(70,20);
+                        printf("GAME OVER");
+                        gotoxy(70,22);
+                        printf("Press 0 to return to main menu");
+                        if (u==8){
+                            startLevel=0;
+                            pause=1;
+                        }
+                        //to be continued...
+                    }
+                }
                 timeFlagPrint=0;
             }
 
@@ -341,6 +429,12 @@ int main(void)
                 moveAsteroid(asteroid5.position.x,&asteroid5,&oldAsteroid5);
                 moveDodge(dodge2.position.y,&dodge2,&oldDodge2);
                 moveDodge(dodge4.position.y,&dodge4,&oldDodge4);
+                if (startLevel>=2){
+                    moveAsteroid(asteroid6.position.x,&asteroid6,&oldAsteroid6);
+                    moveAsteroid(asteroid7.position.x,&asteroid7,&oldAsteroid7);
+                    moveDodge(dodge6.position.y,&dodge6,&oldDodge6);
+                    moveDodge(dodge7.position.y,&dodge7,&oldDodge7);
+                }
                 timeFlagA2=0;
                 ADFlag2=1;//Asteroid and net positions have updated
             }
@@ -391,6 +485,17 @@ int main(void)
                 printf(" ");
             }
 
+            if(startLevel>=2 && compBuEn(bullet,e3)==1){
+                eraseEnemy(e3);
+                e3.position.x = 135;
+                e3.position.y = e3.randomNo;
+                score+=500;
+                shooting = 0;//resets bullet
+                bullet.position.x=3;
+                gotoxy(oldBullet.position.x,oldBullet.position.y);
+                printf(" ");
+            }
+
     //Enemy positions is updated every 1/25 second
     //If enemies get TONNY he loses time
             if (timeFlagEnemy>=4){
@@ -407,7 +512,15 @@ int main(void)
                 if (enemyBreach(e2)==1){//Detects that the enemy has breached and subtracts 1000 from time
                     gameTime-=1000;
                 }
-
+                if (startLevel >= 2){
+                    eraseEnemy(e3);
+                    enemyNextPos(&e3);
+                    enemyMotion(&e3);
+                    timeFlagEnemy=0;
+                    if (enemyBreach(e3)==1){//Detects that the enemy has breached and subtracts 1000 from time
+                        gameTime-=1000;
+                    }
+                }
                 enemyFlag=1;//enemies position has updated
 
     //Erases enemy when hit, resets bullet, adds +500 to score
@@ -425,6 +538,16 @@ int main(void)
                     eraseEnemy(e2);
                     e2.position.x = 135;
                     e2.position.y = e2.randomNo;
+                    score+=500;
+                    shooting = 0;
+                    bullet.position.x=3;
+                    gotoxy(oldBullet.position.x,oldBullet.position.y);
+                    printf(" ");
+                }
+                if(startLevel >= 2 && compBuEn(bullet,e2)==1){
+                    eraseEnemy(e3);
+                    e3.position.x = 135;
+                    e3.position.y = e3.randomNo;
                     score+=500;
                     shooting = 0;
                     bullet.position.x=3;
@@ -463,12 +586,12 @@ int main(void)
 
 
 
+            if (startLevel == 0){
+                clrscr();
+            }
+        }//   END OF GAME WHILE LOOP
 
-        }//   END OF WHILE LOOP
-
-    }
- while(1){}
-
+    }//END OF PRIORITY WHILE LOOP!!!
 
 } //END OF MAIN!!!!!
 
