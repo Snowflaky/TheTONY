@@ -151,6 +151,25 @@ int main(void)
     dodge7.velocity.x=-1;
     dodge7.velocity.y=0;
     struct asteroid_t oldDodge7;
+    struct asteroid_t dodge8;
+    dodge8.position.x=50;
+    dodge8.position.y=35;
+    dodge8.velocity.x=-1;
+    dodge8.velocity.y=0;
+    struct asteroid_t oldDodge8;
+    struct asteroid_t dodge9;
+    dodge9.position.x=70;
+    dodge9.position.y=28;
+    dodge9.velocity.x=-1;
+    dodge9.velocity.y=0;
+    struct asteroid_t oldDodge9;
+    struct asteroid_t dodge10;
+    dodge10.position.x=82;
+    dodge10.position.y=31;
+    dodge10.velocity.x=-1;
+    dodge10.velocity.y=0;
+    struct asteroid_t oldDodge10;
+
 //Bullet initiated
     struct bullet_t bullet;
     bullet.position.x = 3;
@@ -161,17 +180,17 @@ int main(void)
 
 //Enemies are initiated
     struct enemy e1;
-    e1.randomNo = randoms(9,32);
+    e1.randomNo = 22;//randoms(9,32);
     e1.enemyType = 1;
     e1.position.x = 135;
-    e1.position.y = e1.randomNo;
+    e1.position.y =e1.randomNo;
     e1.velocity.x=-1;
     e1.hp = 2;
     e1.firstx = 135;
     e1.firsty = e1.randomNo;
 
     struct enemy e2;
-    e2.randomNo = randoms(9,32);
+    e2.randomNo = 30;//randoms(9,32);
     e2.enemyType = 2;
     e2.position.x = 135;
     e2.position.y = e2.randomNo;
@@ -181,7 +200,7 @@ int main(void)
     e2.firsty = e2.randomNo;
 
     struct enemy e3;
-    e3.randomNo = randoms(15,30);
+    e3.randomNo = 13;//randoms(15,30);
     e3.enemyType = 1;
     e3.position.x = 135;
     e3.position.y = e3.randomNo;
@@ -197,12 +216,12 @@ int main(void)
     else if (e1.enemyType==2){
         e1.velocity.y=0;
     }
-    if (e2.enemyType==1){
+    /*if (e2.enemyType==1){
         e2.velocity.y=1;
     }
     else if (e2.enemyType==2){
         e2.velocity.y=0;
-    }
+    }*/
     if (e3.enemyType==1){
         e3.velocity.y=1;
     }
@@ -211,135 +230,136 @@ int main(void)
     }
 
     while(1){
-            //if(timeFlagPrint==1){
-            window(50,90,15,27,4);
-            gotoxy(65,17);
-            printf("MAIN MENU");
-            gotoxy(62,19);
-            printf("1. Game levels");
-            gotoxy(62,21);
-            printf("2. How to play");
-            gotoxy(62,23);
-            printf("3. Credits");
-            v = keyInput();
+        //if(timeFlagPrint==1){
+        window(50,90,15,27,4);
+        gotoxy(65,17);
+        printf("MAIN MENU");
+        gotoxy(62,19);
+        printf("1. Game levels");
+        gotoxy(62,21);
+        printf("2. How to play");
+        gotoxy(62,23);
+        printf("3. Credits");
+        v = keyInput();
 //Level menu
 
 //How to play
-            if (v==6){
-                useMenu=1;
-                clrscr();
-                while(useMenu==1){
-                    v = keyInput();
-                    gotoxy(0,10);
-                    printf("The spaceship moves up when you press 'w' and down when you press 's'.\nTo shoot at your enemy, press 'p'.\n");
-                    printf("The enemies have different paths of movements, so observe them closely!\nThey also throw quantum nets.");
-                    printf("They damage your spaceship so be careful to avoid them. It can only withstand 2 hits.\n");
-                    printf("Space is also filled with asteroid which may help you or hinder you in your quest to shoot enemies.\n");
-                    printf("You only have so much fuel in your tank and your spaceship burns through it as you travel through space.\n");
-                    printf("Every time an enemy get past you they suck a little bit of it.\nWhen your tank is empty the game ends.\n");
-                    printf("Your fuel level, lives and score is displayed on the LCD screen\n");
-                    printf("\nPress 0 to go back to main menu");
-                    if (v==8){
-                        clrscr();
-                        useMenu=0;
-                    }
+        if (v==6){
+            useMenu=1;
+            clrscr();
+            while(useMenu==1){
+                v = keyInput();
+                gotoxy(0,10);
+                printf("The spaceship moves up when you press 'w' and down when you press 's'.\nTo shoot at your enemy, press 'p'.\n");
+                printf("The enemies have different paths of movements, so observe them closely!\nThey also throw quantum nets.");
+                printf("They damage your spaceship so be careful to avoid them. It can only withstand 2 hits.\n");
+                printf("Space is also filled with asteroid which may help you or hinder you in your quest to shoot enemies.\n");
+                printf("You only have so much fuel in your tank and your spaceship burns through it as you travel through space.\n");
+                printf("Every time an enemy get past you they suck a little bit of it.\nWhen your tank is empty the game ends.\n");
+                printf("Your fuel level, lives and score is displayed on the LCD screen\n");
+                printf("\nPress 0 to go back to main menu");
+                if (v==8){
+                    clrscr();
+                    useMenu=0;
                 }
             }
+        }
 //Credits
-            if (v==7){
-                creditMenu=1;
-                clrscr();
-                while(creditMenu==1){
-                    v = keyInput();
-                    gotoxy(0,10);
-                    printf("This game is made by:\nSara\nJosefine\n& Erik\n");
-                    printf("\nPress 0 to go back to main menu");
-                    if (v==8){
-                        clrscr();
-                        creditMenu=0;
-                    }
-                }
-
-            }
-            if (v==5){
-                levelMenu=1;
-                clrscr();
-                ADFlag1=0;
-                ADFlag2=0;
-                timeFlagPrint=1;
-                timeFlagA1=0;
-                timeFlagBullet=0;
-                timeFlagA2=0;
-                timeFlagEnemy=0;
-                timeFlagGame=0;
-                enemyFlag=0;
-                gameTime=100000;
-                score=0;
-                lives=3;
-                shooting=0;
-
-                while(levelMenu==1){
-                    v = keyInput();
-
-
-                    window(50,90,15,27,4);
-                    gotoxy(64,17);
-                    printf("CHOOSE LEVEL");
-                    gotoxy(62,19);
-                    printf("1. Level 1");
-                    gotoxy(62,21);
-                    printf("2. Level 2");
-                    gotoxy(62,23);
-                    printf("3. Level 3");
-                    gotoxy(57,25);
-                    printf("Press 0 to go back to main menu");
-                    if (v==5){
-                        clrscr();
-                        window(0,140,0,40,7);
-                        timeFlagGame=0;
-                        startLevel=1;
-                        levelMenu=0;
-                    }
-                    if (v==6){
-                        clrscr();
-                        window(0,140,0,40,7);
-                        timeFlagGame=0;
-                        startLevel=2;
-                        levelMenu=0;
-                    }
-                    if (v==7){
-                        clrscr();
-                        window(0,140,0,40,7);
-                        timeFlagGame=0;
-                        startLevel=3;
-                        levelMenu=0;
-                    }
-                    if (v==8){
-                        clrscr();
-                        levelMenu=0;
-                    }
+        if (v==7){
+            creditMenu=1;
+            clrscr();
+            while(creditMenu==1){
+                v = keyInput();
+                gotoxy(0,10);
+                printf("This game is made by:\nSara\nJosefine\n& Erik\n");
+                printf("\nPress 0 to go back to main menu");
+                if (v==8){
+                    clrscr();
+                    creditMenu=0;
                 }
             }
+
+        }
+        if (v==5){
+            levelMenu=1;
+            clrscr();
+            ADFlag1=0;
+            ADFlag2=0;
+            timeFlagPrint=1;
+            timeFlagA1=0;
+            timeFlagBullet=0;
+            timeFlagA2=0;
+            timeFlagEnemy=0;
+            timeFlagGame=0;
+            enemyFlag=0;
+            gameTime=100000;
+            score=0;
+            lives=3;
+            shooting=0;
+            pause=0;
+
+            while(levelMenu==1){
+                v = keyInput();
+
+
+                window(50,90,15,27,4);
+                gotoxy(64,17);
+                printf("CHOOSE LEVEL");
+                gotoxy(62,19);
+                printf("1. Level 1");
+                gotoxy(62,21);
+                printf("2. Level 2");
+                gotoxy(62,23);
+                printf("3. Level 3");
+                gotoxy(57,25);
+                printf("Press 0 to go back to main menu");
+                if (v==5){
+                    clrscr();
+                    window(0,140,0,40,7);
+                    timeFlagGame=0;
+                    startLevel=1;
+                    levelMenu=0;
+                }
+                if (v==6){
+                    clrscr();
+                    window(0,140,0,40,7);
+                    timeFlagGame=0;
+                    startLevel=2;
+                    levelMenu=0;
+                }
+                if (v==7){
+                    clrscr();
+                    window(0,140,0,40,7);
+                    timeFlagGame=0;
+                    startLevel=3;
+                    levelMenu=0;
+                }
+                if (v==8){
+                    clrscr();
+                    levelMenu=0;
+                }
+            }
+        }
 
 
            // timeFlagPrint=0;
 
-
+//GAME WHILE LOOP BEGINS
         while(startLevel>0){
 
-
-
-    //Prints enemies when their position has updated
+//Prints enemies when their position has updated
             if (enemyFlag ==1) {
                 drawEnemy(e1);
-                drawEnemy(e2);
-                if (startLevel>=2){
+                if (startLevel<3){
+                    drawEnemy(e2);
+                }
+                if (startLevel==2){
                     drawEnemy(e3);
                 }
                 enemyFlag=0;
             }
 
-    //Prints asteroids and enemy nets when their position has updated
+//Prints asteroids and enemy nets when their position has updated
             if (ADFlag1 == 1) {
                 printAsteroid(asteroid1, oldAsteroid1);
                 printAsteroid(asteroid2, oldAsteroid2);
@@ -347,6 +367,11 @@ int main(void)
                 printDodge(dodge1, oldDodge1);
                 printDodge(dodge3, oldDodge3);
                 printDodge(dodge5, oldDodge5);
+                if (startLevel == 3){
+                    printDodge(dodge8,oldDodge8);
+                    printDodge(dodge9,oldDodge9);
+                    printDodge(dodge10,oldDodge10);
+                }
 
                 ADFlag1=0;
             }
@@ -365,7 +390,7 @@ int main(void)
                 ADFlag2=0;
             }
 
-    //Prints the spaceship and bullet, and reads input from player
+//Prints the spaceship and bullet, and reads input from player
             if(timeFlagPrint==1){
                 printShip(ship, oldShip);
                 printBullet(bullet, oldBullet);
@@ -382,9 +407,13 @@ int main(void)
                         u=keyInput();
                         gotoxy(70,20);
                         printf("GAME OVER");
-                        gotoxy(70,22);
+                        gotoxy(59,22);
                         printf("Press 0 to return to main menu");
                         if (u==8){
+                            shooting = 0;
+                            bullet.position.x=3;
+                            gotoxy(oldBullet.position.x,oldBullet.position.y);
+                            printf(" ");
                             startLevel=0;
                             pause=1;
                         }
@@ -413,9 +442,16 @@ int main(void)
                 moveDodge(dodge1.position.y,&dodge1,&oldDodge1);
                 moveDodge(dodge3.position.y,&dodge3,&oldDodge3);
                 moveDodge(dodge5.position.y,&dodge5,&oldDodge5);
+                if (startLevel == 3){
+                    moveDodge(dodge8.position.y, &dodge8, &oldDodge8);
+                    moveDodge(dodge9.position.y, &dodge9, &oldDodge9);
+                    moveDodge(dodge10.position.y, &dodge10, &oldDodge10);
+                }
+
             //checks if net hits ship
                 if (compDoSh(ship,dodge1)==1 || compDoSh(ship,dodge2)==1 || compDoSh(ship,dodge3)==1 ||
-                compDoSh(ship,dodge4)==1 || compDoSh(ship,dodge5)==1){
+                    compDoSh(ship,dodge4)==1 || compDoSh(ship,dodge5)==1 || compDoSh(ship,dodge6)==1 ||
+                    compDoSh(ship,dodge7)==1 || compDoSh(ship,dodge8)==1 || compDoSh(ship,dodge9)==1 || compDoSh(ship,dodge10)==1){
                     lives-=1;//when nets hits, one life is lost
                     gotoxy(ship.position.x+2,ship.position.y+2);
                     printf("OW!");
@@ -455,6 +491,14 @@ int main(void)
             if (compBuAs(bullet,asteroid5)==1){
                 bullet.velocity.x=-1;
             }
+            if (startLevel>=2){
+                if (compBuAs(bullet,asteroid6)==1){
+                    bullet.velocity.x=-1;
+                }
+                if (compBuAs(bullet,asteroid7)==1){
+                    bullet.velocity.x=-1;
+                }
+            }
     //Restarts reflected bullets
             if (bullet.position.x==3 && bullet.velocity.x==-1){
                 shooting=0;
@@ -463,20 +507,20 @@ int main(void)
 
 
     //Erases enemy when hit, resets bullet, adds +500 to score
-            if(compBuEn(bullet,e1)==1){
+           /* if(compBuEn(bullet,e1)==1){
                 eraseEnemy(e1);
                 e1.position.x = 135;
-                e1.position.y = e1.randomNo;
+                e1.position.y = 22;//e1.randomNo;
                 score+=500;
                 shooting = 0;
                 bullet.position.x=3;
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
                 printf(" ");
             }
-            if(compBuEn(bullet,e2)==1){
+            if(startLevel<3 && compBuEn(bullet,e2)==1){
                 eraseEnemy(e2);
                 e2.position.x = 135;
-                e2.position.y = e2.randomNo;
+                e2.position.y = 30;//e2.randomNo;
                 score+=500;
                 shooting = 0;//resets bullet
                 bullet.position.x=3;
@@ -484,16 +528,16 @@ int main(void)
                 printf(" ");
             }
 
-            if(startLevel>=2 && compBuEn(bullet,e3)==1){
+            if(startLevel==2 && compBuEn(bullet,e3)==1){
                 eraseEnemy(e3);
                 e3.position.x = 135;
-                e3.position.y = e3.randomNo;
+                e3.position.y = 13;//e3.randomNo;
                 score+=500;
                 shooting = 0;//resets bullet
                 bullet.position.x=3;
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
                 printf(" ");
-            }
+            }*/
 
     //Enemy positions is updated every 1/25 second
     //If enemies get TONNY he loses time
@@ -504,14 +548,16 @@ int main(void)
                 if (enemyBreach(e1)==1){//Detects that the enemy has breached and subtracts 1000 from time
                     gameTime-=1000;
                 }
-                eraseEnemy(e2);
-                enemyNextPos(&e2);
-                enemyMotion(&e2);
-                timeFlagEnemy=0;
-                if (enemyBreach(e2)==1){//Detects that the enemy has breached and subtracts 1000 from time
-                    gameTime-=1000;
+                if (startLevel<3){
+                    eraseEnemy(e2);
+                    enemyNextPos(&e2);
+                    enemyMotion(&e2);
+                    timeFlagEnemy=0;
+                    if (enemyBreach(e2)==1){//Detects that the enemy has breached and subtracts 1000 from time
+                        gameTime-=1000;
+                    }
                 }
-                if (startLevel >= 2){
+                if (startLevel == 2){
                     eraseEnemy(e3);
                     enemyNextPos(&e3);
                     enemyMotion(&e3);
@@ -533,7 +579,7 @@ int main(void)
                     gotoxy(oldBullet.position.x,oldBullet.position.y);
                     printf(" ");
                 }
-                if(compBuEn(bullet,e2)==1){
+                if(startLevel <3 && compBuEn(bullet,e2)==1){
                     eraseEnemy(e2);
                     e2.position.x = 135;
                     e2.position.y = e2.randomNo;
@@ -543,7 +589,7 @@ int main(void)
                     gotoxy(oldBullet.position.x,oldBullet.position.y);
                     printf(" ");
                 }
-                if(startLevel >= 2 && compBuEn(bullet,e2)==1){
+                if(startLevel == 2 && compBuEn(bullet,e3)==1){
                     eraseEnemy(e3);
                     e3.position.x = 135;
                     e3.position.y = e3.randomNo;
