@@ -40,6 +40,7 @@ int main(void)
     uint16_t score=0;
     uint8_t pause=0;
     int8_t lives=3;
+    uint16_t highscore=0;
 
 //flags for printing enemies, asteroids and nets
     uint8_t ADFlag1=1;
@@ -247,17 +248,22 @@ int main(void)
         if (v==6){
             useMenu=1;
             clrscr();
+            gotoxy(0,10);
+            printf("The spaceship moves up when you press 'w' and down when you press 's'.\nTo shoot at your enemy, press 'p'.\n");
+            printf("The enemies have different paths of movements, so observe them closely!\nThey also throw quantum nets.");
+            printf("They damage your spaceship so be careful to avoid them. It can only withstand 2 hits.\n");
+            printf("Space is also filled with asteroid which may help you or hinder you in your quest to shoot enemies.\n");
+            printf("You only have so much fuel in your tank and your spaceship burns through it as you travel through space.\n");
+            printf("Every time an enemy get past you they suck a little bit of it.\nWhen your tank is empty the game ends.\n");
+            printf("Your fuel level, lives and score is displayed on the LCD screen\n");
+            printf("\nPress 0 to go back to main menu\n\n");
+            printf("*********************************************************************\n");
+            printf("      PSSSTTT!!!\n");
+            printf("If your Boss suddenly walks by while you are playing, just press 'B',\n");
+            printf("he won't suspect a thing ;)\n");
+            printf("*********************************************************************\n");
             while(useMenu==1){
                 v = keyInput();
-                gotoxy(0,10);
-                printf("The spaceship moves up when you press 'w' and down when you press 's'.\nTo shoot at your enemy, press 'p'.\n");
-                printf("The enemies have different paths of movements, so observe them closely!\nThey also throw quantum nets.");
-                printf("They damage your spaceship so be careful to avoid them. It can only withstand 2 hits.\n");
-                printf("Space is also filled with asteroid which may help you or hinder you in your quest to shoot enemies.\n");
-                printf("You only have so much fuel in your tank and your spaceship burns through it as you travel through space.\n");
-                printf("Every time an enemy get past you they suck a little bit of it.\nWhen your tank is empty the game ends.\n");
-                printf("Your fuel level, lives and score is displayed on the LCD screen\n");
-                printf("\nPress 0 to go back to main menu");
                 if (v==8){
                     clrscr();
                     useMenu=0;
@@ -268,11 +274,11 @@ int main(void)
         if (v==7){
             creditMenu=1;
             clrscr();
+            gotoxy(0,10);
+            printf("This game is made by:\nSara\nJosefine\n& Erik\n");
+            printf("\nPress 0 to go back to main menu");
             while(creditMenu==1){
                 v = keyInput();
-                gotoxy(0,10);
-                printf("This game is made by:\nSara\nJosefine\n& Erik\n");
-                printf("\nPress 0 to go back to main menu");
                 if (v==8){
                     clrscr();
                     creditMenu=0;
@@ -298,38 +304,36 @@ int main(void)
             shooting=0;
             pause=0;
 
+            window(50,90,15,27,4);
+            gotoxy(64,17);
+            printf("CHOOSE LEVEL");
+            gotoxy(62,19);
+            printf("1. Level 1");
+            gotoxy(62,21);
+            printf("2. Level 2");
+            gotoxy(62,23);
+            printf("3. Level 3");
+            gotoxy(57,25);
+            printf("Press 0 to go back to main menu");
             while(levelMenu==1){
                 v = keyInput();
-
-
-                window(50,90,15,27,4);
-                gotoxy(64,17);
-                printf("CHOOSE LEVEL");
-                gotoxy(62,19);
-                printf("1. Level 1");
-                gotoxy(62,21);
-                printf("2. Level 2");
-                gotoxy(62,23);
-                printf("3. Level 3");
-                gotoxy(57,25);
-                printf("Press 0 to go back to main menu");
                 if (v==5){
                     clrscr();
-                    window(0,140,0,40,7);
+                    window(0,140,0,40,4);
                     timeFlagGame=0;
                     startLevel=1;
                     levelMenu=0;
                 }
                 if (v==6){
                     clrscr();
-                    window(0,140,0,40,7);
+                    window(0,140,0,40,4);
                     timeFlagGame=0;
                     startLevel=2;
                     levelMenu=0;
                 }
                 if (v==7){
                     clrscr();
-                    window(0,140,0,40,7);
+                    window(0,140,0,40,4);
                     timeFlagGame=0;
                     startLevel=3;
                     levelMenu=0;
@@ -395,6 +399,18 @@ int main(void)
                 printShip(ship, oldShip);
                 printBullet(bullet, oldBullet);
                 u=keyInput();
+                if(u==3){
+                    boss();
+                    pause=1;
+                    while (pause==1){
+                        u=keyInput();
+                        if(u==8){
+                            pause=0;
+                            clrscr();
+                            window(0,140,0,40,4);
+                        }
+                    }
+                }
                 moveShip(u,&ship, &oldShip);
                 if (shooting==0){//Starts bullet when trigger is pulled
                     shooting=startBullet(ship,u);//shooting gets ships y-axis position as it's value
@@ -507,10 +523,10 @@ int main(void)
 
 
     //Erases enemy when hit, resets bullet, adds +500 to score
-           /* if(compBuEn(bullet,e1)==1){
+           if(compBuEn(bullet,e1)==1){
                 eraseEnemy(e1);
                 e1.position.x = 135;
-                e1.position.y = 22;//e1.randomNo;
+                e1.position.y = e1.randomNo;
                 score+=500;
                 shooting = 0;
                 bullet.position.x=3;
@@ -520,7 +536,7 @@ int main(void)
             if(startLevel<3 && compBuEn(bullet,e2)==1){
                 eraseEnemy(e2);
                 e2.position.x = 135;
-                e2.position.y = 30;//e2.randomNo;
+                e2.position.y = e2.randomNo;
                 score+=500;
                 shooting = 0;//resets bullet
                 bullet.position.x=3;
@@ -531,13 +547,13 @@ int main(void)
             if(startLevel==2 && compBuEn(bullet,e3)==1){
                 eraseEnemy(e3);
                 e3.position.x = 135;
-                e3.position.y = 13;//e3.randomNo;
+                e3.position.y = e3.randomNo;
                 score+=500;
                 shooting = 0;//resets bullet
                 bullet.position.x=3;
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
                 printf(" ");
-            }*/
+            }
 
     //Enemy positions is updated every 1/25 second
     //If enemies get TONNY he loses time
@@ -569,7 +585,7 @@ int main(void)
                 enemyFlag=1;//enemies position has updated
 
     //Erases enemy when hit, resets bullet, adds +500 to score
-                if(compBuEn(bullet,e1)==1){
+                /*if(compBuEn(bullet,e1)==1){
                     eraseEnemy(e1);
                     e1.position.x = 135;
                     e1.position.y = e1.randomNo;
@@ -598,13 +614,13 @@ int main(void)
                     bullet.position.x=3;
                     gotoxy(oldBullet.position.x,oldBullet.position.y);
                     printf(" ");
-                }
+                }*/
             }
 
     //gameTime is the remaining time the game
     //counts down every 10th of a second
             gameTime=gameTime-timeFlagGame;//genstart timeFlagGame!!!!!!!!!!
-
+            highscore = updateHighscore(highscore,score);
     // Casting integers to strings
             char strGameTime[10];
             sprintf(strGameTime, "%ld", gameTime);//convert goTime to string
@@ -612,6 +628,9 @@ int main(void)
             sprintf(strScore, "%d", score);//convert score to string
             char strLives[5];
             sprintf(strLives, "%d", lives);//convert lives to string
+            char strHighscore[10];
+            sprintf(strHighscore, "%d", highscore);
+
 
             memset (buffer,0x00,512);
             lcd_push_buffer(buffer);
@@ -626,13 +645,16 @@ int main(void)
             lcd_write_string("Score:",0,3,&buffer);
             lcd_write_string(strScore,40,3,&buffer);
 
+            lcd_write_string("Highscore:",0,4,&buffer);
+            lcd_write_string(strHighscore,60,4,&buffer);
+
     //Push buffer
             lcd_push_buffer(buffer);
 
 
-
             if (startLevel == 0){
                 clrscr();
+
             }
         }//   END OF GAME WHILE LOOP
 

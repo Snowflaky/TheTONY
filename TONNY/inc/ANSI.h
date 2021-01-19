@@ -97,7 +97,7 @@ void printShip (struct ship_t ship, struct ship_t oldShip);
 void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *oldAsteroid);
 void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid);
 
-void boss (uint8_t x);
+void boss ();
 void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)[512]);
 
 uint8_t startBullet(struct ship_t ship, uint8_t p);
@@ -135,5 +135,7 @@ void enemyMotion (struct enemy *e);
 
 void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge);
 void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge);
+
+uint16_t updateHighscore (uint16_t highscore, uint16_t score);
 
 #endif

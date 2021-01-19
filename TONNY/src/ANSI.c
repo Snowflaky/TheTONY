@@ -1,4 +1,5 @@
 #include "ansi.h"
+#include "string.h"
 
 #define ESC 0x1B
 
@@ -201,7 +202,7 @@ void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *ol
 //Input: x-axis position, pointer to asteroid structure.
     if ((*asteroid).position.y>=39){
         gotoxy((*asteroid).position.x,(*asteroid).position.y);
-        printf(" ",ESC);
+        printf(" ");
         (*asteroid).position.y=2;
     }
     (*oldAsteroid).position.x=(*asteroid).position.x;
@@ -217,7 +218,7 @@ void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid){
 //Input: pointer to asteroid structure.
     //if (asteroid.position.y<40){
         gotoxy(oldAsteroid.position.x,oldAsteroid.position.y);
-        printf(" ",ESC);
+        printf(" ");
         /*printf("%c[1D",ESC);
         printf(" ");*/
         gotoxy(asteroid.position.x,asteroid.position.y);
@@ -228,16 +229,16 @@ void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid){
 }
 
 //Button to press when the boss walks by (function for ending game)
-void boss (uint8_t x){
+void boss (){
 //Clears screen and shows a window stating "WORKING HARD!!!" (The boss will never know you were playing a computer game)
 //Function is only initiated if boss key 'b' is pressed.
 //Input: return from keyInput function.
-    if (x==3){
         clrscr();
         window(60,90,20,30,1);
-        gotoxy(63,25);
-        printf("WORKING HARD!!!\n");
-    }
+        gotoxy(67,25);
+        printf("WORKING HARD!!!");
+        gotoxy(67,27);
+        printf("Press '0'");
 }
 
 //Initiates bullet
@@ -844,5 +845,14 @@ uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge){
         g=1;
     }
     return g;
+}
+
+//Checks if new score is higher than previous highscore and updates it
+uint16_t updateHighscore (uint16_t highscore, uint16_t score){
+//input:current highscore, current score
+    if(score > highscore){
+       highscore = score;
+       }
+    return highscore;
 }
 
