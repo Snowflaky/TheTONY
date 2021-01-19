@@ -244,29 +244,6 @@ int main(void)
                         useMenu=0;
                     }
                 }
-
-        if(timeFlagPrint==1){
-            drawEnemy(e1);
-            drawEnemy(e2);
-            printShip(ship, oldShip);
-            //////////////////////////////////////////////////////////////////////////////////////////
-            //printf("%d %d %d %d",e1.firstx, e1.firsty,e1.position.x,e1.position.y);
-            //////////////////////////////////////////////////////////////////////////////////////////
-            printAsteroid(asteroid1, oldAsteroid1);
-            printAsteroid(asteroid2, oldAsteroid2);
-            printAsteroid(asteroid3, oldAsteroid3);
-            printAsteroid(asteroid4, oldAsteroid4);
-            printAsteroid(asteroid5, oldAsteroid5);
-            printDodge(dodge1, oldDodge1);
-            printDodge(dodge2, oldDodge2);
-            printDodge(dodge3, oldDodge3);
-            printDodge(dodge4, oldDodge4);
-            printDodge(dodge5, oldDodge5);
-            printBullet(bullet, oldBullet);
-            u=keyInput();
-            moveShip(u,&ship, &oldShip);
-            if (shooting==0){
-                shooting=startBullet(ship,u);
             }
 //Credits
             if (v==7){
@@ -615,7 +592,7 @@ int main(void)
 
     }//END OF PRIORITY WHILE LOOP!!!
 
-} //END OF MAIN!!!!!
+}//END OF MAIN!!!!!
 
 
     /*while(){
