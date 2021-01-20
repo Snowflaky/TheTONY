@@ -17,9 +17,8 @@ volatile uint32_t timeFlagPrint;
 volatile uint32_t timeFlagA1;
 volatile uint32_t timeFlagBullet;
 volatile uint32_t timeFlagA2;
-volatile uint32_t timeFlagTra;
-volatile uint32_t timeFlagDrawT;
-volatile uint32_t timeFlagScore;
+volatile uint32_t timeFlagEnemy;
+volatile uint32_t timeFlagGame;
 
 struct timing_t {
     volatile uint32_t mikroSec, milliSec, centiSec, second, minute;
@@ -98,7 +97,7 @@ void printShip (struct ship_t ship, struct ship_t oldShip);
 void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *oldAsteroid);
 void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid);
 
-void boss (uint8_t x);
+void boss ();
 void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)[512]);
 
 uint8_t startBullet(struct ship_t ship, uint8_t p);
@@ -136,5 +135,7 @@ void enemyMotion (struct enemy *e);
 
 void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge);
 void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge);
+
+uint16_t updateHighscore (uint16_t highscore, uint16_t score);
 
 #endif
