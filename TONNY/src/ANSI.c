@@ -282,7 +282,7 @@ void printBullet (struct bullet_t bullet, struct bullet_t oldBullet) {
     }
 }
 
-void TIM2_IRQHandler() {
+void TIM1_BRK_TIM15_IRQHandler() {
 //Counts 100ths of a second, seconds and minutes.
     timeFlagPrint=1;
     timetime.mikroSec++;
@@ -310,7 +310,7 @@ void TIM2_IRQHandler() {
 
         }
     }
-    TIM2->SR &= ~0x0001; // Clear interrupt bit
+    TIM15->SR &= ~0x0001; // Clear interrupt bit
  }
 
 //Puts a string into buffer array, for writing on LCD display
@@ -936,3 +936,12 @@ void setLed(uint8_t color) {
         GPIOC->ODR |= (0x0000 << 7);
     }
 }
+
+void setFreq(uint16_t freq){
+    uint32_t reload = 64e6 / freq / (0x003F + 1) - 1;
+    TIM2->ARR = reload; // Set auto reload value
+    TIM2->CCR3 = reload/2; // Set compare register
+    TIM2->EGR |= 0x01;
+}
+
+
