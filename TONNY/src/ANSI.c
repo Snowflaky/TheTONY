@@ -456,7 +456,6 @@ void awakenTrang(uint8_t spawn) {    //Bring Trang, the bringer
         tra.position.y = randoms(4,36);
         tra.velocity.x = -2;
         tra.velocity.y = -2;
-        tra.hp = 5;
 
         for(int i = 0; i < 20; i++) {
             trangNextPos(&tra);
@@ -571,8 +570,6 @@ void awakenSqwog(uint8_t spawn) {    //Bring Sqwog, the bringer
         skr.position.x = 110;
         skr.position.y = randoms(4,35);
         skr.velocity.x = -2;
-        skr.hp = 5;
-
         for(int i = 0; i < 20; i++) {
             sqwogNextPos(&skr);
             sqwogBox(&skr);

@@ -101,7 +101,6 @@ int main(void)
     struct ship_t ship;
     ship.position.x = 2;
     ship.position.y=19;
-    ship.hp=0;
     struct ship_t oldShip;
 
 //Asteroid belt initiated
