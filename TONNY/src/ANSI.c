@@ -600,7 +600,7 @@ uint8_t compBuEn(struct bullet_t bullet, struct enemy e){
          bullet.position.x==e.position.x + 1 ||
          bullet.position.x==e.position.x + 2 ||
          bullet.position.x==e.position.x - 1 ||
-         bullet.position.x==e.position.x - 1||)
+         bullet.position.x==e.position.x - 1)
         &&
         (bullet.position.y==e.position.y ||
         bullet.position.y==e.position.y+1 ||
@@ -845,9 +845,9 @@ void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge){
 uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge){
     //if collision is detected, 1 is returned
     uint8_t g=0;
-    if (ship.position.x==dodge.position.x-1 && (ship.position.y==dodge.position.y ||
-                                                ship.position.y==dodge.position.y+1 ||
-                                                ship.position.y==dodge.position.y-1 )){
+    if (ship.position.x==dodge.position.x - 1 && (ship.position.y==dodge.position.y ||
+                                                  ship.position.y==dodge.position.y + 1 ||
+                                                  ship.position.y==dodge.position.y - 1 )){
         g=1;
     }
     return g;

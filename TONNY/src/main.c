@@ -251,7 +251,7 @@ int main(void)
             gotoxy(0,10);
             printf("The spaceship moves up when you press 'w' and down when you press 's'.\nTo shoot at your enemy, press 'p'.\n");
             printf("The enemies have different paths of movements, so observe them closely!\nThey also throw quantum nets.");
-            printf("They damage your spaceship so be careful to avoid them. It can only withstand 2 hits.\n");
+            printf("They damage your spaceship so be careful to avoid them. It can only withstand 2 hits. A third is fatal.\n");
             printf("Space is also filled with asteroid which may help you or hinder you in your quest to shoot enemies.\n");
             printf("You only have so much fuel in your tank and your spaceship burns through it as you travel through space.\n");
             printf("Every time an enemy get past you they suck a little bit of it.\nWhen your tank is empty the game ends.\n");
