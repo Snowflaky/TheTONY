@@ -19,6 +19,7 @@ volatile uint32_t timeFlagBullet;
 volatile uint32_t timeFlagA2;
 volatile uint32_t timeFlagEnemy;
 volatile uint32_t timeFlagGame;
+volatile uint32_t toneFlag;
 
 struct timing_t {
     volatile uint32_t mikroSec, milliSec, centiSec, second, minute;
@@ -139,5 +140,8 @@ void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge);
 uint16_t updateHighscore (uint16_t highscore, uint16_t score);
 
 void setLed(uint8_t color);
+
+void setFreq(uint16_t freq);
+//void tone(uint16_t freq, uint16_t duration);
 
 #endif
