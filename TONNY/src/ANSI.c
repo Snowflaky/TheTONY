@@ -58,6 +58,7 @@ void color(uint8_t foreground, uint8_t background) {
     printf("%c[%d;%d;%dm", ESC, type, foreground+30, background+40);
 }
 
+//Resets background colour
 void resetbgcolor() {
 // gray on black text, no underline, no blink, no reverse
     printf("%c[m", ESC);

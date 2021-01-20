@@ -42,7 +42,6 @@ struct trang { //One of the baddest bois around!, he's got two things inside him
     uint8_t random;
     struct vector_t position;
     struct vector_t velocity;
-    uint8_t hp;
     int8_t firsty;
     int8_t firstx;
 };
@@ -50,7 +49,6 @@ struct trang { //One of the baddest bois around!, he's got two things inside him
 struct sqwog { //Originally a general in the Alik'r army who was dishonoured by a great military defeat, he wanders the stars looking for players to kill such that he may regain his honour.
     struct vector_t position;
     struct vector_t velocity;
-    uint8_t hp;
     int8_t firsty;
     int8_t firstx;
 };
@@ -60,14 +58,12 @@ struct enemy {
     uint8_t enemyType;
     struct vector_t position;
     struct vector_t velocity;
-    uint8_t hp;
     int32_t firsty;
     int32_t firstx;
 };
 
 struct ship_t {
     struct vector_t position;
-    uint32_t hp;
 };
 
 struct asteroid_t {
