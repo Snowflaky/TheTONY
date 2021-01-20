@@ -43,9 +43,10 @@ int main(void)
     RCC->APB1ENR |= 0x00000001; // Enable clock line to timer 2;
     TIM2->CR1 = 0x0000; // Disable timer
     TIM2->ARR = 1000; // Set auto reload value
-    TIM2->PSC = 0x18FF;//PRESCALER_VALUE; // Set pre-scaler value****************************
-        //0x003F = microseconds
+    TIM2->PSC = 0x0C7F;//PRESCALER_VALUE; // Set pre-scaler value****************************
+        //0x003F = millieconds
         //0x18FF = centiseconds
+        //0x0C7F
     TIM2->CR1 |= 0x0001; // Enable timer
         //configure counter compare register:
     TIM2->CCER &= ~TIM_CCER_CC3P; // Clear CCER register
@@ -62,6 +63,7 @@ int main(void)
     GPIOB->MODER |= (0x00000002 << (10 * 2)); // Set mode register
     GPIO_PinAFConfig(GPIOB, GPIO_PinSource10, GPIO_AF_1);
 
+    setFreq(0);
 
 
     RCC->AHBENR |= RCC_AHBPeriph_GPIOA;
@@ -81,6 +83,8 @@ int main(void)
     int8_t lives=3;
     uint16_t highscore=0;
 
+    uint8_t flag1=1;
+
 //flags for printing enemies, asteroids and nets
     uint8_t ADFlag1=1;
     uint8_t ADFlag2=1;
@@ -91,9 +95,7 @@ int main(void)
     uint8_t buffer[512];//initialize buffer array
     memset (buffer,0x00,512);//set buffer to all 0's (clear LCD screen)
 
-
-
-//resets colors, clears screen and builds game field
+//resets colors and clears screen
     color(15,0);
     clrscr();
 
@@ -101,7 +103,6 @@ int main(void)
     struct ship_t ship;
     ship.position.x = 2;
     ship.position.y=19;
-    ship.hp=0;
     struct ship_t oldShip;
 
 //Asteroid belt initiated
@@ -273,8 +274,10 @@ int main(void)
 
     setLed(3);
 
+//Main menu
     while(1){
         //if(timeFlagPrint==1){
+        setFreq(0);
         window(50,90,15,27,4);
         gotoxy(65,17);
         printf("MAIN MENU");
@@ -285,12 +288,10 @@ int main(void)
         gotoxy(62,23);
         printf("3. Credits");
         v = keyInput();
-//Level menu
 
 //How to play
         if (v==6){
             useMenu=1;
-            tone(1500,1000);
             clrscr();
             gotoxy(0,10);
             printf("The spaceship moves up when you press 'w' and down when you press 's'.\nTo shoot at your enemy, press 'p'.\n");
@@ -331,9 +332,9 @@ int main(void)
             }
 
         }
+//Level menu
         if (v==5){
             levelMenu=1;
-            setFreq(0);
             clrscr();
             ADFlag1=0;
             ADFlag2=0;
@@ -467,7 +468,7 @@ int main(void)
                 if (gameTime<=0 || lives<=0){
                     clrscr();
                     setLed(0);
-                    setLed(3);
+                    setLed(3);//blue LED
                     while(pause==0){
                         u=keyInput();
                         gotoxy(70,20);
@@ -666,21 +667,55 @@ int main(void)
                     printf(" ");
                 }*/
             }
+
+//LED showing how much time is left
             if( gameTime>5000){
                 setLed(0);
-                setLed(2);
+                setLed(2);//red
             }
             else if (gameTime<5000 && gameTime > 2500){
                 setLed(0);
-                setLed(4);
+                setLed(4);//yellow
             }
             else if (gameTime < 2500){
                 setLed(0);
-                setLed(1);
+                setLed(1);//green
             }
             else {
                     setLed(2);
                     setLed(3);
+            }
+
+
+            if (gameTime>7540){
+                setFreq(80);
+            }
+            else if (gameTime<7540 && gameTime>5690){
+                setFreq(140);
+            }
+            else if (gameTime<5690 && gameTime>4200){
+                setFreq(280);
+            }
+            else if (gameTime<4200 && gameTime>3020){
+                setFreq(560);
+            }
+            else if (gameTime<3020 && gameTime>2090){
+                setFreq(1120);
+            }
+            else if (gameTime<2090 && gameTime>1380){
+                setFreq(2240);
+            }
+            else if (gameTime<1380 && gameTime>850){
+                setFreq(4480);
+            }
+            else if (gameTime<850 && gameTime>460){
+                setFreq(8960);
+            }
+            else if (gameTime<460 && gameTime>180){
+                setFreq(17920);
+            }
+            else if (gameTime<180 ){
+                setFreq(20000);
             }
 
     //gameTime is the remaining time the game

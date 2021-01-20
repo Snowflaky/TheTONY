@@ -863,8 +863,9 @@ uint16_t updateHighscore (uint16_t highscore, uint16_t score){
     return highscore;
 }
 
+//Sets LED diode to a specific color
 void setLed(uint8_t color) {
-//1=red(PB4), 2=green(PC7), 3=blue(PA9)
+//0=reset, 1=red(PB4), 2=green(PC7), 3=blue(PA9), 4=yellow(PB4+PC7)
     if (color==0){
             //resets red LED
         GPIOB->OSPEEDR |= (0x00000003 << (4 * 2));
@@ -891,7 +892,7 @@ void setLed(uint8_t color) {
         GPIOA->MODER &= ~(0x00000001 << (9 * 2));
         GPIOA->ODR &= ~(0x0000 << 9);
     }
-    if (color==1) {
+    if (color==1) {//red
         GPIOB->OSPEEDR &= ~(0x00000003 << (4 * 2));
         GPIOB->OSPEEDR |= (0x00000002 << (4 * 2));
         GPIOB->OTYPER &= ~(0x0001 << (4));
@@ -900,7 +901,7 @@ void setLed(uint8_t color) {
         GPIOB->MODER |= (0x00000001 << (4 * 2));
         GPIOB->ODR |= (0x0000 << 4); //set pin to low
     }
-    if (color==2) {
+    if (color==2) {//green
         GPIOC->OSPEEDR &= ~(0x00000003 << (7 * 2));
         GPIOC->OSPEEDR |= (0x00000002 << (7 * 2));
         GPIOC->OTYPER &= ~(0x0001 << (7));
@@ -909,7 +910,7 @@ void setLed(uint8_t color) {
         GPIOC->MODER |= (0x00000001 << (7 * 2));
         GPIOC->ODR |= (0x0000 << 7); //set pin to low
     }
-    if (color==3) {
+    if (color==3) {//blue
         GPIOA->OSPEEDR &= ~(0x00000003 << (9 * 2));
         GPIOA->OSPEEDR |= (0x00000002 << (9 * 2));
         GPIOA->OTYPER &= ~(0x0001 << (9));
@@ -919,7 +920,7 @@ void setLed(uint8_t color) {
         GPIOA->ODR |= (0x0000 << 9); //set pin to low
 
     }
-    if (color==4){
+    if (color==4){//yellow
         GPIOB->OSPEEDR &= ~(0x00000003 << (4 * 2));
         GPIOB->OSPEEDR |= (0x00000002 << (4 * 2));
         GPIOB->OTYPER &= ~(0x0001 << (4));
@@ -938,18 +939,19 @@ void setLed(uint8_t color) {
     }
 }
 
+//Changes frequency of buzzer sound
 void setFreq(uint16_t freq){
-    uint32_t reload = 64e6 / freq / (0x003F + 1) - 1;
+    uint32_t reload = 64e6 / freq / (0x01FF + 1) - 1;
     TIM2->ARR = reload; // Set auto reload value
     TIM2->CCR3 = reload/2; // Set compare register
     TIM2->EGR |= 0x01;
 }
 
-void tone(uint16_t freq, uint16_t duration){
+/*void tone(uint16_t freq, uint16_t duration){
     toneFlag=0;
     while(toneFlag>=duration){
         setFreq(freq);
     }
     setFreq(0);
-}
+}*/
 

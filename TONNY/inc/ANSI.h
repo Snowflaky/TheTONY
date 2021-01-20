@@ -142,6 +142,6 @@ uint16_t updateHighscore (uint16_t highscore, uint16_t score);
 void setLed(uint8_t color);
 
 void setFreq(uint16_t freq);
-void tone(uint16_t freq, uint16_t duration);
+//void tone(uint16_t freq, uint16_t duration);
 
 #endif
