@@ -612,8 +612,8 @@ uint8_t compBuEn(struct bullet_t bullet, struct enemy e){
     return g;
 }
 
-// The following functions are a generalised form of the
-//aforementioned enemy generation functions
+// The following functions are a generalized form of the
+//aforementioned Trang and Sqwog related functions
 
 void enemyNextPos (struct enemy *e) {
     //Calculate new position for Trang. Input is a pointer.
