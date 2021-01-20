@@ -83,7 +83,6 @@ int main(void)
     int8_t lives=3;
     uint16_t highscore=0;
 
-    uint8_t flag1=1;
 
 //flags for printing enemies, asteroids and nets
     uint8_t ADFlag1=1;
@@ -302,6 +301,7 @@ int main(void)
             printf("Every time an enemy get past you they suck a little bit of it.\nWhen your tank is empty the game ends.\n");
             printf("Your fuel level, lives and score is displayed on the LCD screen\n");
             printf("An LED in your control-room indicates your fuel levels.\nIt changes at a half-tank and a quarter-tank.\n");
+            printf("And if you are wondering what that sound is, don't worry.\nThat's just the sound of your fuel tank emptying!\n");
             printf("\nPress 0 to go back to main menu\n\n");
             printf("*********************************************************************\n");
             printf("      PSSSTTT!!!\n");
@@ -440,6 +440,23 @@ int main(void)
                 }
                 ADFlag2=0;
             }
+//LED showing how much time is left
+            if( gameTime>5000){
+                setLed(0);
+                setLed(2);//red
+            }
+            else if (gameTime<5000 && gameTime > 2500){
+                setLed(0);
+                setLed(4);//yellow
+            }
+            else if (gameTime < 2500){
+                setLed(0);
+                setLed(1);//green
+            }
+            else {
+                    setLed(2);
+                    setLed(3);
+            }
 
 //Prints the spaceship and bullet, and reads input from player
             if(timeFlagPrint==1){
@@ -450,6 +467,7 @@ int main(void)
                 if(u==3){
                     boss();
                     pause=1;
+                    setFreq(0);
                     while (pause==1){
                         u=keyInput();
                         if(u==8){
@@ -464,6 +482,7 @@ int main(void)
                     shooting=startBullet(ship,u);//shooting gets ships y-axis position as it's value
                 }
                 bullet.position.y=shooting; // bullet gets ships y-axis position at bullet initiation
+
 //If time runs out or you have no lives left it is GAME OVER!
                 if (gameTime<=0 || lives<=0){
                     clrscr();
@@ -578,6 +597,7 @@ int main(void)
                 e1.position.x = 135;
                 e1.position.y = e1.randomNo;
                 score+=500;
+                setFreq(15000);
                 shooting = 0;
                 bullet.position.x=3;
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
@@ -588,6 +608,7 @@ int main(void)
                 e2.position.x = 135;
                 e2.position.y = e2.randomNo;
                 score+=500;
+                setFreq(15000);
                 shooting = 0;//resets bullet
                 bullet.position.x=3;
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
@@ -599,6 +620,7 @@ int main(void)
                 e3.position.x = 135;
                 e3.position.y = e3.randomNo;
                 score+=500;
+                setFreq(15000);
                 shooting = 0;//resets bullet
                 bullet.position.x=3;
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
@@ -635,55 +657,6 @@ int main(void)
                 enemyFlag=1;//enemies position has updated
                 //setLed(3);
 
-    //Erases enemy when hit, resets bullet, adds +500 to score
-                /*if(compBuEn(bullet,e1)==1){
-                    eraseEnemy(e1);
-                    e1.position.x = 135;
-                    e1.position.y = e1.randomNo;
-                    score+=500;
-                    shooting = 0;
-                    bullet.position.x=3;
-                    gotoxy(oldBullet.position.x,oldBullet.position.y);
-                    printf(" ");
-                }
-                if(startLevel <3 && compBuEn(bullet,e2)==1){
-                    eraseEnemy(e2);
-                    e2.position.x = 135;
-                    e2.position.y = e2.randomNo;
-                    score+=500;
-                    shooting = 0;
-                    bullet.position.x=3;
-                    gotoxy(oldBullet.position.x,oldBullet.position.y);
-                    printf(" ");
-                }
-                if(startLevel == 2 && compBuEn(bullet,e3)==1){
-                    eraseEnemy(e3);
-                    e3.position.x = 135;
-                    e3.position.y = e3.randomNo;
-                    score+=500;
-                    shooting = 0;
-                    bullet.position.x=3;
-                    gotoxy(oldBullet.position.x,oldBullet.position.y);
-                    printf(" ");
-                }*/
-            }
-
-//LED showing how much time is left
-            if( gameTime>5000){
-                setLed(0);
-                setLed(2);//red
-            }
-            else if (gameTime<5000 && gameTime > 2500){
-                setLed(0);
-                setLed(4);//yellow
-            }
-            else if (gameTime < 2500){
-                setLed(0);
-                setLed(1);//green
-            }
-            else {
-                    setLed(2);
-                    setLed(3);
             }
 
 
@@ -722,6 +695,7 @@ int main(void)
     //counts down every 10th of a second
             gameTime=gameTime-timeFlagGame;//genstart timeFlagGame!!!!!!!!!!
             highscore = updateHighscore(highscore,score);
+
     // Casting integers to strings
             char strGameTime[10];
             sprintf(strGameTime, "%ld", gameTime);//convert goTime to string
