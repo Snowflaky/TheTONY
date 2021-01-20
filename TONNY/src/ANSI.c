@@ -58,6 +58,7 @@ void color(uint8_t foreground, uint8_t background) {
     printf("%c[%d;%d;%dm", ESC, type, foreground+30, background+40);
 }
 
+//Resets background colour
 void resetbgcolor() {
 // gray on black text, no underline, no blink, no reverse
     printf("%c[m", ESC);
@@ -456,7 +457,6 @@ void awakenTrang(uint8_t spawn) {    //Bring Trang, the bringer
         tra.position.y = randoms(4,36);
         tra.velocity.x = -2;
         tra.velocity.y = -2;
-        tra.hp = 5;
 
         for(int i = 0; i < 20; i++) {
             trangNextPos(&tra);
@@ -571,8 +571,6 @@ void awakenSqwog(uint8_t spawn) {    //Bring Sqwog, the bringer
         skr.position.x = 110;
         skr.position.y = randoms(4,35);
         skr.velocity.x = -2;
-        skr.hp = 5;
-
         for(int i = 0; i < 20; i++) {
             sqwogNextPos(&skr);
             sqwogBox(&skr);
@@ -613,8 +611,8 @@ uint8_t compBuEn(struct bullet_t bullet, struct enemy e){
     return g;
 }
 
-// The following functions are a generalised form of the
-//aforementioned enemy generation functions
+// The following functions are a generalized form of the
+//aforementioned Trang and Sqwog related functions
 
 void enemyNextPos (struct enemy *e) {
     //Calculate new position for Trang. Input is a pointer.
@@ -846,9 +844,9 @@ void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge){
 uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge){
     //if collision is detected, 1 is returned
     uint8_t g=0;
-    if (ship.position.x==dodge.position.x-1 && (ship.position.y==dodge.position.y ||
-                                                ship.position.y==dodge.position.y+1 ||
-                                                ship.position.y==dodge.position.y-1 )){
+    if (ship.position.x==dodge.position.x - 1 && (ship.position.y==dodge.position.y ||
+                                                  ship.position.y==dodge.position.y + 1 ||
+                                                  ship.position.y==dodge.position.y - 1 )){
         g=1;
     }
     return g;
