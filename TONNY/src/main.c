@@ -43,7 +43,7 @@ int main(void)
     RCC->APB1ENR |= 0x00000001; // Enable clock line to timer 2;
     TIM2->CR1 = 0x0000; // Disable timer
     TIM2->ARR = 1000; // Set auto reload value
-    TIM2->PSC = 0x003F;//PRESCALER_VALUE; // Set pre-scaler value****************************
+    TIM2->PSC = 0x18FF;//PRESCALER_VALUE; // Set pre-scaler value****************************
         //0x003F = microseconds
         //0x18FF = centiseconds
     TIM2->CR1 |= 0x0001; // Enable timer
@@ -290,6 +290,7 @@ int main(void)
 //How to play
         if (v==6){
             useMenu=1;
+            tone(1500,1000);
             clrscr();
             gotoxy(0,10);
             printf("The spaceship moves up when you press 'w' and down when you press 's'.\nTo shoot at your enemy, press 'p'.\n");
@@ -332,7 +333,7 @@ int main(void)
         }
         if (v==5){
             levelMenu=1;
-            setFreq(10);
+            setFreq(0);
             clrscr();
             ADFlag1=0;
             ADFlag2=0;

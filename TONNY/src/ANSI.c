@@ -294,6 +294,7 @@ void TIM1_BRK_TIM15_IRQHandler() {
             timeFlagA1++;
             timeFlagA2++;
             timeFlagEnemy++;
+            toneFlag++;
             timetime.centiSec++;
             timetime.milliSec=0;
             if (timetime.centiSec>=50){
@@ -944,4 +945,11 @@ void setFreq(uint16_t freq){
     TIM2->EGR |= 0x01;
 }
 
+void tone(uint16_t freq, uint16_t duration){
+    toneFlag=0;
+    while(toneFlag>=duration){
+        setFreq(freq);
+    }
+    setFreq(0);
+}
 
