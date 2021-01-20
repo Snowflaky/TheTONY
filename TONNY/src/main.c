@@ -52,6 +52,10 @@ int main(void)
     uint8_t buffer[512];//initialize buffer array
     memset (buffer,0x00,512);//set buffer to all 0's (clear LCD screen)
 
+
+    //setLed(1);
+    //setLed(3);
+    setLed(2);
 //resets colors, clears screen and builds game field
     color(15,0);
     clrscr();
@@ -288,6 +292,7 @@ int main(void)
         }
         if (v==5){
             levelMenu=1;
+            setLed(0);
             clrscr();
             ADFlag1=0;
             ADFlag2=0;

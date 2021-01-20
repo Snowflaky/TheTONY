@@ -856,3 +856,57 @@ uint16_t updateHighscore (uint16_t highscore, uint16_t score){
     return highscore;
 }
 
+void setLed(uint8_t color) {
+//0=red(PB4), 1=green(PC7), 2=blue(PA9)
+    if (color==0){
+        GPIOB->OSPEEDR |= ~0;
+        GPIOB->OSPEEDR &= 0;
+        GPIOB->OTYPER |= ~0;
+        GPIOB->OTYPER &= 0;
+        GPIOB->MODER |= ~0;
+        GPIOB->MODER &= 0;
+        GPIOB->ODR &= 0;
+        GPIOC->OSPEEDR |= ~0;
+        GPIOC->OSPEEDR &= 0;
+        GPIOC->OTYPER |= ~0;
+        GPIOC->OTYPER &= 0;
+        GPIOC->MODER |= ~0;
+        GPIOC->MODER &= 0;
+        GPIOC->ODR &= 0;
+        GPIOA->OSPEEDR |= ~0;
+        GPIOA->OSPEEDR &= 0;
+        GPIOA->OTYPER |= ~0;
+        GPIOA->OTYPER &= 0;
+        GPIOA->MODER |= ~0;
+        GPIOA->MODER &= 0;
+        GPIOA->ODR &= 0;
+    }
+    if (color==1) {
+        GPIOB->OSPEEDR &= ~(0x00000003 << (4 * 2));
+        GPIOB->OSPEEDR |= (0x00000002 << (4 * 2));
+        GPIOB->OTYPER &= ~(0x0001 << (4));
+        GPIOB->OTYPER |= (0x0000 << (4));
+        GPIOB->MODER &= ~(0x00000003 << (4 * 2));
+        GPIOB->MODER |= (0x00000001 << (4 * 2));
+        GPIOB->ODR |= (0x0000 << 4); //set pin to low
+    }
+    if (color==2) {
+        GPIOC->OSPEEDR &= ~(0x00000003 << (7 * 2));
+        GPIOC->OSPEEDR |= (0x00000002 << (7 * 2));
+        GPIOC->OTYPER &= ~(0x0001 << (7));
+        GPIOC->OTYPER |= (0x0000 << (7));
+        GPIOC->MODER &= ~(0x00000003 << (7 * 2));
+        GPIOC->MODER |= (0x00000001 << (7 * 2));
+        GPIOC->ODR |= (0x0000 << 7); //set pin to low
+    }
+    if (color==3) {
+        GPIOA->OSPEEDR &= ~(0x00000003 << (9 * 2));
+        GPIOA->OSPEEDR |= (0x00000002 << (9 * 2));
+        GPIOA->OTYPER &= ~(0x0001 << (9));
+        GPIOA->OTYPER |= (0x0000 << (9));
+        GPIOA->MODER &= ~(0x00000003 << (9 * 2));
+        GPIOA->MODER |= (0x00000001 << (9 * 2));
+        GPIOA->ODR |= (0x0000 << 9); //set pin to low
+
+    }
+}

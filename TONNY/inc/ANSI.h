@@ -138,4 +138,6 @@ void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge);
 
 uint16_t updateHighscore (uint16_t highscore, uint16_t score);
 
+void setLed(uint8_t color);
+
 #endif
