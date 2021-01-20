@@ -264,7 +264,7 @@ int main(void)
             printf("You only have so much fuel in your tank and your spaceship burns through it as you travel through space.\n");
             printf("Every time an enemy get past you they suck a little bit of it.\nWhen your tank is empty the game ends.\n");
             printf("Your fuel level, lives and score is displayed on the LCD screen\n");
-            printf("An LED in your control-room indicates your fuel levels.\n It changes at a half-tank and a quarter-tank.\n");
+            printf("An LED in your control-room indicates your fuel levels.\nIt changes at a half-tank and a quarter-tank.\n");
             printf("\nPress 0 to go back to main menu\n\n");
             printf("*********************************************************************\n");
             printf("      PSSSTTT!!!\n");
