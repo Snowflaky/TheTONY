@@ -29,6 +29,10 @@ int main(void)
     NVIC_SetPriority(TIM2_IRQn, 0001); // Set interrupt priority=1 (high)
     NVIC_EnableIRQ(TIM2_IRQn); // Enable interrupt
 
+    RCC->AHBENR |= RCC_AHBPeriph_GPIOA;
+    RCC->AHBENR |= RCC_AHBPeriph_GPIOB;
+    RCC->AHBENR |= RCC_AHBPeriph_GPIOC;
+
     uint8_t startLevel=0;
     uint8_t v=0;
     uint8_t levelMenu=0;
@@ -53,8 +57,8 @@ int main(void)
     memset (buffer,0x00,512);//set buffer to all 0's (clear LCD screen)
 
 
-    //setLed(1);
-    //setLed(3);
+    setLed(1);
+    setLed(3);
     setLed(2);
 //resets colors, clears screen and builds game field
     color(15,0);
@@ -292,7 +296,6 @@ int main(void)
         }
         if (v==5){
             levelMenu=1;
-            setLed(0);
             clrscr();
             ADFlag1=0;
             ADFlag2=0;
@@ -589,6 +592,7 @@ int main(void)
                     }
                 }
                 enemyFlag=1;//enemies position has updated
+                setLed(0);
 
     //Erases enemy when hit, resets bullet, adds +500 to score
                 /*if(compBuEn(bullet,e1)==1){
