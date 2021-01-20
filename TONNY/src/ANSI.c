@@ -58,7 +58,7 @@ void color(uint8_t foreground, uint8_t background) {
     printf("%c[%d;%d;%dm", ESC, type, foreground+30, background+40);
 }
 
-//Resets background colour
+//Resets background color
 void resetbgcolor() {
 // gray on black text, no underline, no blink, no reverse
     printf("%c[m", ESC);
@@ -664,7 +664,7 @@ void drawEnemy (struct enemy e) {
         gotoxy(e.position.x + 1,e.position.y);
         printf("-");
         //print the Sqwog alien ships (also ineffective) shields
-        color(9,0);
+        color(0,1);
         printf("%c[1m", ESC);
         gotoxy(e.position.x - 2,e.position.y);
         printf("<");
