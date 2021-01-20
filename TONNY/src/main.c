@@ -20,14 +20,53 @@ int main(void)
 {
     uart_init (115200);//1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200
     //Initiate timer (interrupt is set to one every 0.01 second)
-    RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2;
+    /*RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2;
     TIM2->CR1 = 0x0000;//0000 0000 0000 0000
-    TIM2->ARR = 0x0000003F;//set reload value to 999
-    TIM2->PSC = 0x0000;//set prescale to 639
+    TIM2->ARR = 0x0000003F;//set reload value to 63 (microseconds)
+    TIM2->PSC = 0x0000;//set prescale to 0 (microseconds)
     TIM2->CR1 |= 0x0001;//enable timer
     TIM2->DIER |= 0x0001; // Enable timer 2 interrupts
     NVIC_SetPriority(TIM2_IRQn, 0001); // Set interrupt priority=1 (high)
-    NVIC_EnableIRQ(TIM2_IRQn); // Enable interrupt
+    NVIC_EnableIRQ(TIM2_IRQn); // Enable interrupt*/
+
+//Game timer:
+    RCC->APB2ENR |= RCC_APB2Periph_TIM15; //enable clock line to timer 15?
+    TIM15->CR1 = 0x0000;
+    TIM15->ARR = 0x003F; //set reload value to 63 (microseconds)
+    TIM15->PSC = 0x0000; //set prescale to 0 (microseconds)
+    TIM15->DIER |= 0x0001; //enable timer interrupt
+    NVIC_SetPriority(TIM1_BRK_TIM15_IRQn, 0);
+    NVIC_EnableIRQ(TIM1_BRK_TIM15_IRQn);
+    TIM15->CR1 |= 0x0001; //enable timer
+
+//Sound timer:
+    RCC->APB1ENR |= 0x00000001; // Enable clock line to timer 2;
+    TIM2->CR1 = 0x0000; // Disable timer
+    TIM2->ARR = 1000; // Set auto reload value
+    TIM2->PSC = 0x003F;//PRESCALER_VALUE; // Set pre-scaler value****************************
+        //0x003F = microseconds
+        //0x18FF = centiseconds
+    TIM2->CR1 |= 0x0001; // Enable timer
+        //configure counter compare register:
+    TIM2->CCER &= ~TIM_CCER_CC3P; // Clear CCER register
+    TIM2->CCER |= 0x00000001 << 8; // Enable OC3 output
+    TIM2->CCMR2 &= ~TIM_CCMR2_OC3M; // Clear CCMR2 register
+    TIM2->CCMR2 &= ~TIM_CCMR2_CC3S;
+    TIM2->CCMR2 |= TIM_OCMode_PWM1; // Set output mode to PWM1
+    TIM2->CCMR2 &= ~TIM_CCMR2_OC3PE;
+    TIM2->CCMR2 |= TIM_OCPreload_Enable;
+    TIM2->CCR3 = 500; // Set duty cycle to 50 %
+        //connect pin PB10 to timer (for alternate function):
+    RCC->AHBENR |= RCC_AHBENR_GPIOBEN; // Enable clock line for GPIO bank B
+    GPIOB->MODER &= ~(0x00000003 << (10 * 2)); // Clear mode register
+    GPIOB->MODER |= (0x00000002 << (10 * 2)); // Set mode register
+    GPIO_PinAFConfig(GPIOB, GPIO_PinSource10, GPIO_AF_1);
+
+
+
+    RCC->AHBENR |= RCC_AHBPeriph_GPIOA;
+    RCC->AHBENR |= RCC_AHBPeriph_GPIOB;
+    RCC->AHBENR |= RCC_AHBPeriph_GPIOC;
 
     uint8_t startLevel=0;
     uint8_t v=0;
@@ -36,7 +75,7 @@ int main(void)
     uint8_t creditMenu=0;
     uint8_t u=0;
     uint8_t shooting=0;
-    int32_t gameTime=100000;
+    int32_t gameTime=10000;
     uint16_t score=0;
     uint8_t pause=0;
     int8_t lives=3;
@@ -51,6 +90,8 @@ int main(void)
     lcd_init(); //initialize display
     uint8_t buffer[512];//initialize buffer array
     memset (buffer,0x00,512);//set buffer to all 0's (clear LCD screen)
+
+
 
 //resets colors, clears screen and builds game field
     color(15,0);
@@ -228,6 +269,8 @@ int main(void)
         e3.velocity.y=0;
     }
 
+    setLed(3);
+
     while(1){
         //if(timeFlagPrint==1){
         window(50,90,15,27,4);
@@ -254,6 +297,7 @@ int main(void)
             printf("You only have so much fuel in your tank and your spaceship burns through it as you travel through space.\n");
             printf("Every time an enemy get past you they suck a little bit of it.\nWhen your tank is empty the game ends.\n");
             printf("Your fuel level, lives and score is displayed on the LCD screen\n");
+            printf("An LED in your control-room indicates your fuel levels.\n It changes at a half-tank and a quarter-tank.\n");
             printf("\nPress 0 to go back to main menu\n\n");
             printf("*********************************************************************\n");
             printf("      PSSSTTT!!!\n");
@@ -286,6 +330,7 @@ int main(void)
         }
         if (v==5){
             levelMenu=1;
+            setFreq(10);
             clrscr();
             ADFlag1=0;
             ADFlag2=0;
@@ -296,7 +341,7 @@ int main(void)
             timeFlagEnemy=0;
             timeFlagGame=0;
             enemyFlag=0;
-            gameTime=100000;
+            gameTime=10000;
             score=0;
             lives=3;
             shooting=0;
@@ -418,6 +463,8 @@ int main(void)
 //If time runs out or you have no lives left it is GAME OVER!
                 if (gameTime<=0 || lives<=0){
                     clrscr();
+                    setLed(0);
+                    setLed(3);
                     while(pause==0){
                         u=keyInput();
                         gotoxy(70,20);
@@ -582,6 +629,7 @@ int main(void)
                     }
                 }
                 enemyFlag=1;//enemies position has updated
+                //setLed(3);
 
     //Erases enemy when hit, resets bullet, adds +500 to score
                 /*if(compBuEn(bullet,e1)==1){
@@ -614,6 +662,22 @@ int main(void)
                     gotoxy(oldBullet.position.x,oldBullet.position.y);
                     printf(" ");
                 }*/
+            }
+            if( gameTime>5000){
+                setLed(0);
+                setLed(2);
+            }
+            else if (gameTime<5000 && gameTime > 2500){
+                setLed(0);
+                setLed(4);
+            }
+            else if (gameTime < 2500){
+                setLed(0);
+                setLed(1);
+            }
+            else {
+                    setLed(2);
+                    setLed(3);
             }
 
     //gameTime is the remaining time the game

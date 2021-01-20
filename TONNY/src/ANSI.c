@@ -283,7 +283,7 @@ void printBullet (struct bullet_t bullet, struct bullet_t oldBullet) {
     }
 }
 
-void TIM2_IRQHandler() {
+void TIM1_BRK_TIM15_IRQHandler() {
 //Counts 100ths of a second, seconds and minutes.
     timeFlagPrint=1;
     timetime.mikroSec++;
@@ -311,7 +311,7 @@ void TIM2_IRQHandler() {
 
         }
     }
-    TIM2->SR &= ~0x0001; // Clear interrupt bit
+    TIM15->SR &= ~0x0001; // Clear interrupt bit
  }
 
 //Puts a string into buffer array, for writing on LCD display
@@ -862,4 +862,87 @@ uint16_t updateHighscore (uint16_t highscore, uint16_t score){
        }
     return highscore;
 }
+
+void setLed(uint8_t color) {
+//1=red(PB4), 2=green(PC7), 3=blue(PA9)
+    if (color==0){
+            //resets red LED
+        GPIOB->OSPEEDR |= (0x00000003 << (4 * 2));
+        GPIOB->OSPEEDR &= ~(0x00000002 << (4 * 2));
+        GPIOB->OTYPER |= (0x0001 << (4));
+        GPIOB->OTYPER &= ~(0x0000 << (4));
+        GPIOB->MODER |= (0x00000003 << (4 * 2));
+        GPIOB->MODER &= ~(0x00000001 << (4 * 2));
+        GPIOB->ODR &= ~(0x0000 << 4);
+            //resets green LED
+        GPIOC->OSPEEDR |= (0x00000003 << (7 * 2));
+        GPIOC->OSPEEDR &= ~(0x00000002 << (7 * 2));
+        GPIOC->OTYPER |= (0x0001 << (7));
+        GPIOC->OTYPER &= ~(0x0000 << (7));
+        GPIOC->MODER |= (0x00000003 << (7 * 2));
+        GPIOC->MODER &= ~(0x00000001 << (7 * 2));
+        GPIOC->ODR &= ~(0x0000 << 7);
+            //resets blue LED
+        GPIOA->OSPEEDR |= (0x00000003 << (9 * 2));
+        GPIOA->OSPEEDR &= ~(0x00000002 << (9 * 2));
+        GPIOA->OTYPER |= (0x0001 << (9));
+        GPIOA->OTYPER &= ~(0x0000 << (9));
+        GPIOA->MODER |= (0x00000003 << (9 * 2));
+        GPIOA->MODER &= ~(0x00000001 << (9 * 2));
+        GPIOA->ODR &= ~(0x0000 << 9);
+    }
+    if (color==1) {
+        GPIOB->OSPEEDR &= ~(0x00000003 << (4 * 2));
+        GPIOB->OSPEEDR |= (0x00000002 << (4 * 2));
+        GPIOB->OTYPER &= ~(0x0001 << (4));
+        GPIOB->OTYPER |= (0x0000 << (4));
+        GPIOB->MODER &= ~(0x00000003 << (4 * 2));
+        GPIOB->MODER |= (0x00000001 << (4 * 2));
+        GPIOB->ODR |= (0x0000 << 4); //set pin to low
+    }
+    if (color==2) {
+        GPIOC->OSPEEDR &= ~(0x00000003 << (7 * 2));
+        GPIOC->OSPEEDR |= (0x00000002 << (7 * 2));
+        GPIOC->OTYPER &= ~(0x0001 << (7));
+        GPIOC->OTYPER |= (0x0000 << (7));
+        GPIOC->MODER &= ~(0x00000003 << (7 * 2));
+        GPIOC->MODER |= (0x00000001 << (7 * 2));
+        GPIOC->ODR |= (0x0000 << 7); //set pin to low
+    }
+    if (color==3) {
+        GPIOA->OSPEEDR &= ~(0x00000003 << (9 * 2));
+        GPIOA->OSPEEDR |= (0x00000002 << (9 * 2));
+        GPIOA->OTYPER &= ~(0x0001 << (9));
+        GPIOA->OTYPER |= (0x0000 << (9));
+        GPIOA->MODER &= ~(0x00000003 << (9 * 2));
+        GPIOA->MODER |= (0x00000001 << (9 * 2));
+        GPIOA->ODR |= (0x0000 << 9); //set pin to low
+
+    }
+    if (color==4){
+        GPIOB->OSPEEDR &= ~(0x00000003 << (4 * 2));
+        GPIOB->OSPEEDR |= (0x00000002 << (4 * 2));
+        GPIOB->OTYPER &= ~(0x0001 << (4));
+        GPIOB->OTYPER |= (0x0000 << (4));
+        GPIOB->MODER &= ~(0x00000003 << (4 * 2));
+        GPIOB->MODER |= (0x00000001 << (4 * 2));
+        GPIOB->ODR |= (0x0000 << 4);
+
+        GPIOC->OSPEEDR &= ~(0x00000003 << (7 * 2));
+        GPIOC->OSPEEDR |= (0x00000002 << (7 * 2));
+        GPIOC->OTYPER &= ~(0x0001 << (7));
+        GPIOC->OTYPER |= (0x0000 << (7));
+        GPIOC->MODER &= ~(0x00000003 << (7 * 2));
+        GPIOC->MODER |= (0x00000001 << (7 * 2));
+        GPIOC->ODR |= (0x0000 << 7);
+    }
+}
+
+void setFreq(uint16_t freq){
+    uint32_t reload = 64e6 / freq / (0x003F + 1) - 1;
+    TIM2->ARR = reload; // Set auto reload value
+    TIM2->CCR3 = reload/2; // Set compare register
+    TIM2->EGR |= 0x01;
+}
+
 
