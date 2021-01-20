@@ -596,13 +596,18 @@ uint8_t compBuAs(struct bullet_t bullet, struct asteroid_t asteroid){
 uint8_t compBuEn(struct bullet_t bullet, struct enemy e){
     //if collision is detected, 1 is returned
     uint8_t g=0;
-    if ((bullet.position.x==e.position.x || ) &&
+    if ((bullet.position.x==e.position.x ||
+         bullet.position.x==e.position.x + 1 ||
+         bullet.position.x==e.position.x + 2 ||
+         bullet.position.x==e.position.x - 1 ||
+         bullet.position.x==e.position.x - 1||)
+        &&
         (bullet.position.y==e.position.y ||
-                                      bullet.position.y==e.position.y+1 ||
-                                      bullet.position.y==e.position.y+2 ||
-                                      bullet.position.y==e.position.y-1 ||
-                                      bullet.position.y==e.position.y-2)){
-g=1;
+        bullet.position.y==e.position.y+1 ||
+        bullet.position.y==e.position.y+2 ||
+        bullet.position.y==e.position.y-1 ||
+        bullet.position.y==e.position.y-2)){
+    g=1;
     }
     return g;
 }
