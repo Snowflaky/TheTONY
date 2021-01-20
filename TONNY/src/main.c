@@ -40,7 +40,7 @@ int main(void)
     uint8_t creditMenu=0;
     uint8_t u=0;
     uint8_t shooting=0;
-    int32_t gameTime=100000;
+    int32_t gameTime=10000;
     uint16_t score=0;
     uint8_t pause=0;
     int8_t lives=3;
@@ -57,9 +57,7 @@ int main(void)
     memset (buffer,0x00,512);//set buffer to all 0's (clear LCD screen)
 
 
-    setLed(1);
-    setLed(3);
-    setLed(2);
+
 //resets colors, clears screen and builds game field
     color(15,0);
     clrscr();
@@ -238,6 +236,8 @@ int main(void)
         e3.velocity.y=0;
     }
 
+    setLed(3);
+
     while(1){
         //if(timeFlagPrint==1){
         window(50,90,15,27,4);
@@ -264,6 +264,7 @@ int main(void)
             printf("You only have so much fuel in your tank and your spaceship burns through it as you travel through space.\n");
             printf("Every time an enemy get past you they suck a little bit of it.\nWhen your tank is empty the game ends.\n");
             printf("Your fuel level, lives and score is displayed on the LCD screen\n");
+            printf("An LED in your control-room indicates your fuel levels.\n It changes at a half-tank and a quarter-tank.\n");
             printf("\nPress 0 to go back to main menu\n\n");
             printf("*********************************************************************\n");
             printf("      PSSSTTT!!!\n");
@@ -306,7 +307,7 @@ int main(void)
             timeFlagEnemy=0;
             timeFlagGame=0;
             enemyFlag=0;
-            gameTime=100000;
+            gameTime=10000;
             score=0;
             lives=3;
             shooting=0;
@@ -428,6 +429,8 @@ int main(void)
 //If time runs out or you have no lives left it is GAME OVER!
                 if (gameTime<=0 || lives<=0){
                     clrscr();
+                    setLed(0);
+                    setLed(3);
                     while(pause==0){
                         u=keyInput();
                         gotoxy(70,20);
@@ -592,7 +595,7 @@ int main(void)
                     }
                 }
                 enemyFlag=1;//enemies position has updated
-                setLed(0);
+                //setLed(3);
 
     //Erases enemy when hit, resets bullet, adds +500 to score
                 /*if(compBuEn(bullet,e1)==1){
@@ -625,6 +628,22 @@ int main(void)
                     gotoxy(oldBullet.position.x,oldBullet.position.y);
                     printf(" ");
                 }*/
+            }
+            if( gameTime>5000){
+                setLed(0);
+                setLed(2);
+            }
+            else if (gameTime<5000 && gameTime > 2500){
+                setLed(0);
+                setLed(4);
+            }
+            else if (gameTime < 2500){
+                setLed(0);
+                setLed(1);
+            }
+            else {
+                    setLed(2);
+                    setLed(3);
             }
 
     //gameTime is the remaining time the game
