@@ -172,7 +172,7 @@ void drawEnemy (struct enemy e) {
         gotoxy(e.position.x + 1,e.position.y);
         printf("-");
         //print the Sqwog alien ships (also ineffective) shields
-        color(9,0);
+        color(0,1);
         printf("%c[1m", ESC);
         gotoxy(e.position.x - 2,e.position.y);
         printf("<");
