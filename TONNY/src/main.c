@@ -114,43 +114,36 @@ int main(void)
     struct asteroid_t asteroid1;
     asteroid1.position.x=20;
     asteroid1.position.y=2;
-    asteroid1.velocity.x=0;
     asteroid1.velocity.y=1;
     struct asteroid_t oldAsteroid1;
     struct asteroid_t asteroid2;
     asteroid2.position.x=35;
     asteroid2.position.y=20;
-    asteroid2.velocity.x=0;
     asteroid2.velocity.y=1;
     struct asteroid_t oldAsteroid2;
     struct asteroid_t asteroid3;
     asteroid3.position.x=50;
     asteroid3.position.y=2;
-    asteroid3.velocity.x=0;
     asteroid3.velocity.y=1;
     struct asteroid_t oldAsteroid3;
     struct asteroid_t asteroid4;
     asteroid4.position.x=62;
     asteroid4.position.y=32;
-    asteroid4.velocity.x=0;
     asteroid4.velocity.y=1;
     struct asteroid_t oldAsteroid4;
     struct asteroid_t asteroid5;
     asteroid5.position.x=70;
     asteroid5.position.y=10;
-    asteroid5.velocity.x=0;
     asteroid5.velocity.y=1;
     struct asteroid_t oldAsteroid5;
     struct asteroid_t asteroid6;
     asteroid6.position.x=41;
     asteroid6.position.y=33;
-    asteroid6.velocity.x=0;
     asteroid6.velocity.y=1;
     struct asteroid_t oldAsteroid6;
     struct asteroid_t asteroid7;
     asteroid7.position.x=83;
     asteroid7.position.y=18;
-    asteroid7.velocity.x=0;
     asteroid7.velocity.y=1;
     struct asteroid_t oldAsteroid7;
 
@@ -159,61 +152,51 @@ int main(void)
     dodge1.position.x=139;
     dodge1.position.y=7;
     dodge1.velocity.x=-1;
-    dodge1.velocity.y=0;
     struct asteroid_t oldDodge1;
     struct asteroid_t dodge2;
     dodge2.position.x=117;
     dodge2.position.y=16;
     dodge2.velocity.x=-1;
-    dodge2.velocity.y=0;
     struct asteroid_t oldDodge2;
     struct asteroid_t dodge3;
     dodge3.position.x=130;
     dodge3.position.y=23;
     dodge3.velocity.x=-1;
-    dodge3.velocity.y=0;
     struct asteroid_t oldDodge3;
     struct asteroid_t dodge4;
     dodge4.position.x=107;
     dodge4.position.y=29;
     dodge4.velocity.x=-1;
-    dodge4.velocity.y=0;
     struct asteroid_t oldDodge4;
     struct asteroid_t dodge5;
     dodge5.position.x=125;
     dodge5.position.y=34;
     dodge5.velocity.x=-1;
-    dodge5.velocity.y=0;
     struct asteroid_t oldDodge5;
     struct asteroid_t dodge6;
     dodge6.position.x=126;
     dodge6.position.y=11;
     dodge6.velocity.x=-1;
-    dodge6.velocity.y=0;
     struct asteroid_t oldDodge6;
     struct asteroid_t dodge7;
     dodge7.position.x=98;
     dodge7.position.y=20;
     dodge7.velocity.x=-1;
-    dodge7.velocity.y=0;
     struct asteroid_t oldDodge7;
     struct asteroid_t dodge8;
     dodge8.position.x=50;
     dodge8.position.y=35;
     dodge8.velocity.x=-1;
-    dodge8.velocity.y=0;
     struct asteroid_t oldDodge8;
     struct asteroid_t dodge9;
     dodge9.position.x=70;
     dodge9.position.y=28;
     dodge9.velocity.x=-1;
-    dodge9.velocity.y=0;
     struct asteroid_t oldDodge9;
     struct asteroid_t dodge10;
     dodge10.position.x=82;
     dodge10.position.y=31;
     dodge10.velocity.x=-1;
-    dodge10.velocity.y=0;
     struct asteroid_t oldDodge10;
 
 //Bullet initiated
@@ -221,7 +204,6 @@ int main(void)
     bullet.position.x = 3;
     bullet.position.y = ship.position.y;
     bullet.velocity.x = 1;
-    bullet.velocity.y = 0;
     struct bullet_t oldBullet;
 
 //Enemies are initiated
@@ -230,7 +212,7 @@ int main(void)
     e1.enemyType = 1;
     e1.position.x = 135;
     e1.position.y =e1.randomNo;
-    e1.velocity.x=-1;
+    decideVel(&e1);
     e1.firstx = 135;
     e1.firsty = e1.randomNo;
 
@@ -248,30 +230,10 @@ int main(void)
     e3.enemyType = 1;
     e3.position.x = 135;
     e3.position.y = e3.randomNo;
-    e3.velocity.x=-1;
+    decideVel(&e3);
     e3.firstx = 135;
     e3.firsty = e3.randomNo;
 
-
-//Determines velocity based on enemy type
-    if (e1.enemyType==1){
-        e1.velocity.y=1;
-    }
-    else if (e1.enemyType==2){
-        e1.velocity.y=0;
-    }
-    /*if (e2.enemyType==1){
-        e2.velocity.y=1;
-    }
-    else if (e2.enemyType==2){
-        e2.velocity.y=0;
-    }*/
-    if (e3.enemyType==1){
-        e3.velocity.y=1;
-    }
-    else if (e3.enemyType==2){
-        e3.velocity.y=0;
-    }
 
     setLed(3);
 
