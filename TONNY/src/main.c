@@ -304,6 +304,7 @@ int main(void)
             printf("Your fuel level, lives and score is displayed on the LCD screen\n");
             printf("An LED in your control-room indicates your fuel levels.\nIt changes at a half-tank and a quarter-tank.\n");
             printf("And if you are wondering what that sound is, don't worry.\nThat's just the sound of your fuel tank emptying!\n");
+            printf("You can always end a game and return to the main menu by pressing '0'\n");
             printf("\nPress 0 to go back to main menu\n\n");
             printf("*********************************************************************\n");
             printf("      PSSSTTT!!!\n");
@@ -507,8 +508,22 @@ int main(void)
                         //to be continued...
                     }
                 }
+                //ends game and returns to main menu
+                if (u==8) {
+                    clrscr();
+                    setLed(0);
+                    setLed(3);//blue LED
+                    shooting = 0;
+                    bullet.position.x=3;
+                    gotoxy(oldBullet.position.x,oldBullet.position.y);
+                    printf(" ");
+                    startLevel=0;
+                    pause=1;
+                }
+
                 timeFlagPrint=0;
             }
+
 
     //Updates bullet position
             if(timeFlagBullet>=1){//change this number for change of bullet speed
