@@ -608,6 +608,36 @@ int main(void)
             if (compBuAs(bullet,asteroid5)==1){
                 bullet.velocity.x=-1;
             }
+            if (compBuAs(bullet2,asteroid1)==1){
+                bullet2.velocity.x=-1;
+            }
+            if (compBuAs(bullet2,asteroid2)==1){
+                bullet2.velocity.x=-1;
+            }
+            if (compBuAs(bullet2,asteroid3)==1){
+                bullet2.velocity.x=-1;
+            }
+            if (compBuAs(bullet2,asteroid4)==1){
+                bullet2.velocity.x=-1;
+            }
+            if (compBuAs(bullet2,asteroid5)==1){
+                bullet2.velocity.x=-1;
+            }
+            if (compBuAs(bullet3,asteroid1)==1){
+                bullet3.velocity.x=-1;
+            }
+            if (compBuAs(bullet3,asteroid2)==1){
+                bullet3.velocity.x=-1;
+            }
+            if (compBuAs(bullet3,asteroid3)==1){
+                bullet3.velocity.x=-1;
+            }
+            if (compBuAs(bullet3,asteroid4)==1){
+                bullet3.velocity.x=-1;
+            }
+            if (compBuAs(bullet3,asteroid5)==1){
+                bullet3.velocity.x=-1;
+            }
             if (startLevel>=2){
                 if (compBuAs(bullet,asteroid6)==1){
                     bullet.velocity.x=-1;
@@ -615,16 +645,36 @@ int main(void)
                 if (compBuAs(bullet,asteroid7)==1){
                     bullet.velocity.x=-1;
                 }
+                if (compBuAs(bullet2,asteroid6)==1){
+                    bullet2.velocity.x=-1;
+                }
+                if (compBuAs(bullet2,asteroid7)==1){
+                    bullet2.velocity.x=-1;
+                }
+                if (compBuAs(bullet3,asteroid6)==1){
+                    bullet3.velocity.x=-1;
+                }
+                if (compBuAs(bullet3,asteroid7)==1){
+                    bullet3.velocity.x=-1;
+                }
             }
     //Restarts reflected bullets
             if (bullet.position.x==3 && bullet.velocity.x==-1){
                 shooting=0;
                 bullet.velocity.x=1;
             }
+            if (bullet2.position.x==3 && bullet2.velocity.x==-1){
+                shooting2=0;
+                bullet2.velocity.x=1;
+            }
+            if (bullet3.position.x==3 && bullet3.velocity.x==-1){
+                shooting3=0;
+                bullet3.velocity.x=1;
+            }
 
 
     //Erases enemy when hit, resets bullet, adds +500 to score
-           if(compBuEn(bullet,e1)==1){
+            if (compBuEn(bullet,e1)==1){
                 eraseEnemy(e1);
                 e1.position.x = 135;
                 e1.position.y = e1.firsty;
@@ -633,6 +683,28 @@ int main(void)
                 shooting = 0;
                 bullet.position.x=3;
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
+                printf(" ");
+            }
+            if (compBuEn(bullet2,e1)==1){
+                eraseEnemy(e1);
+                e1.position.x = 135;
+                e1.position.y = e1.firsty;
+                score+=500;
+                setFreq(15000);
+                shooting2 = 0;
+                bullet2.position.x=3;
+                gotoxy(oldBullet2.position.x,oldBullet2.position.y);
+                printf(" ");
+            }
+            if (compBuEn(bullet3,e1)==1){
+                eraseEnemy(e1);
+                e1.position.x = 135;
+                e1.position.y = e1.firsty;
+                score+=500;
+                setFreq(15000);
+                shooting3 = 0;
+                bullet3.position.x=3;
+                gotoxy(oldBullet3.position.x,oldBullet3.position.y);
                 printf(" ");
             }
             if(startLevel<3 && compBuEn(bullet,e2)==1){
