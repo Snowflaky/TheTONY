@@ -83,6 +83,7 @@ int main(void)
     uint8_t shooting=0;
     uint8_t shooting2=0;
     uint8_t shooting3=0;
+    timeFlagGame=0;
 
     int32_t fuel=10000;
     uint16_t score=0;
@@ -465,13 +466,12 @@ int main(void)
             setFreq(73*q);
         }
         else if (toneFlag>1550 && toneFlag<1600){
+
             setFreq(500*q);
         }
         else{
             toneFlag=0;
         }
-
-
 
            // timeFlagPrint=0;
 
