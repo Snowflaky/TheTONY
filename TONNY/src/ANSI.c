@@ -191,19 +191,9 @@ void trangZag (struct trang (*t)) {
 // generates random numbers in range [lower, upper].
 uint8_t randoms(uint8_t lower, uint8_t upper) {
     time_t t;
-    /* Intializes random number generator */
+    /* Intializes pseudo - random number generator */
     srand((unsigned) time(&t));
     return(rand() % (upper + 1 - lower) + lower);
-    //srand(time(&somesec));
-    //int32_t num = (srand(time(0)) % (upper - lower + 1)) + lower;
-    /*
-    time_t rawtime;
-    struct tm * timeinfo;
-
-    time (&rawtime);
-    timeinfo = localtime (&rawtime);
-    printf ("Current local time and date: %s", asctime(timeinfo));
-    */
 }
 
 
