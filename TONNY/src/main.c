@@ -265,6 +265,7 @@ int main(void)
 
 //How to play
         if (v==6){
+            setFreq(0);
             useMenu=1;
             clrscr();
             gotoxy(0,10);
@@ -294,6 +295,7 @@ int main(void)
         }
 //Credits
         if (v==7){
+            setFreq(0);
             creditMenu=1;
             clrscr();
             gotoxy(0,10);
@@ -310,6 +312,7 @@ int main(void)
         }
 //Level menu
         if (v==5){
+            setFreq(0);
             levelMenu=1;
             clrscr();
             ADFlag1=0;
