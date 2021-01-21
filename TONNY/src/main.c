@@ -718,6 +718,28 @@ int main(void)
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
                 printf(" ");
             }
+            if(startLevel<3 && compBuEn(bullet2,e2)==1){
+                eraseEnemy(e2);
+                e2.position.x = 135;
+                e2.position.y = e2.firsty;
+                score+=500;
+                setFreq(15000);
+                shooting2 = 0;//resets bullet
+                bullet2.position.x=3;
+                gotoxy(oldBullet2.position.x,oldBullet2.position.y);
+                printf(" ");
+            }
+            if(startLevel<3 && compBuEn(bullet3,e2)==1){
+                eraseEnemy(e2);
+                e2.position.x = 135;
+                e2.position.y = e2.firsty;
+                score+=500;
+                setFreq(15000);
+                shooting3 = 0;//resets bullet
+                bullet3.position.x=3;
+                gotoxy(oldBullet3.position.x,oldBullet3.position.y);
+                printf(" ");
+            }
 
             if(startLevel==2 && compBuEn(bullet,e3)==1){
                 eraseEnemy(e3);
@@ -728,6 +750,28 @@ int main(void)
                 shooting = 0;//resets bullet
                 bullet.position.x=3;
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
+                printf(" ");
+            }
+            if(startLevel==2 && compBuEn(bullet2,e2)==1){
+                eraseEnemy(e2);
+                e2.position.x = 135;
+                e2.position.y = e2.firsty;
+                score+=500;
+                setFreq(15000);
+                shooting2 = 0;//resets bullet
+                bullet2.position.x=3;
+                gotoxy(oldBullet2.position.x,oldBullet2.position.y);
+                printf(" ");
+            }
+            if(startLevel==2 && compBuEn(bullet3,e2)==1){
+                eraseEnemy(e2);
+                e2.position.x = 135;
+                e2.position.y = e2.firsty;
+                score+=500;
+                setFreq(15000);
+                shooting3 = 0;//resets bullet
+                bullet3.position.x=3;
+                gotoxy(oldBullet3.position.x,oldBullet3.position.y);
                 printf(" ");
             }
 
