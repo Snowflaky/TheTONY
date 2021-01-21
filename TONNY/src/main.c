@@ -466,12 +466,12 @@ int main(void)
             setFreq(73*q);
         }
         else if (toneFlag>1550 && toneFlag<1600){
-            setFreq(110*q);
+
+            setFreq(500*q);
         }
         else{
             toneFlag=0;
         }
-
 
            // timeFlagPrint=0;
 
