@@ -14,6 +14,10 @@
 #include "stm32f30x_conf.h"
 #include "ANSI.h"
 #include "string.h"
+#include "inout.h"
+#include "print.h"
+#include "movement.h"
+#include "game.h"
 
 
 int main(void)
@@ -77,13 +81,12 @@ int main(void)
     uint8_t creditMenu=0;
     uint8_t u=0;
     uint8_t shooting=0;
-    int32_t gameTime=10000;
+    int32_t fuel=10000;
     uint16_t score=0;
     uint8_t pause=0;
     int8_t lives=3;
     uint16_t highscore=0;
 
-    uint8_t flag1=1;
 
 //flags for printing enemies, asteroids and nets
     uint8_t ADFlag1=1;
@@ -294,12 +297,13 @@ int main(void)
             gotoxy(0,10);
             printf("The spaceship moves up when you press 'w' and down when you press 's'.\nTo shoot at your enemy, press 'p'.\n");
             printf("The enemies have different paths of movements, so observe them closely!\nThey also throw quantum nets.");
-            printf("They damage your spaceship so be careful to avoid them. It can only withstand 2 hits. A third is fatal.\n");
+            printf("They damage your spaceship so be careful to avoid them.\nIt can only withstand 2 hits. A third is fatal.\n");
             printf("Space is also filled with asteroid which may help you or hinder you in your quest to shoot enemies.\n");
             printf("You only have so much fuel in your tank and your spaceship burns through it as you travel through space.\n");
             printf("Every time an enemy get past you they suck a little bit of it.\nWhen your tank is empty the game ends.\n");
             printf("Your fuel level, lives and score is displayed on the LCD screen\n");
-            printf("An LED in your control-room indicates your fuel levels.\n It changes at a half-tank and a quarter-tank.\n");
+            printf("An LED in your control-room indicates your fuel levels.\nIt changes at a half-tank and a quarter-tank.\n");
+            printf("And if you are wondering what that sound is, don't worry.\nThat's just the sound of your fuel tank emptying!\n");
             printf("\nPress 0 to go back to main menu\n\n");
             printf("*********************************************************************\n");
             printf("      PSSSTTT!!!\n");
@@ -343,7 +347,7 @@ int main(void)
             timeFlagEnemy=0;
             timeFlagGame=0;
             enemyFlag=0;
-            gameTime=10000;
+            fuel=10000;
             score=0;
             lives=3;
             shooting=0;
@@ -438,6 +442,23 @@ int main(void)
                 }
                 ADFlag2=0;
             }
+//LED showing how much time is left
+            if( fuel>5000){
+                setLed(0);
+                setLed(2);//red
+            }
+            else if (fuel<5000 && fuel > 2500){
+                setLed(0);
+                setLed(4);//yellow
+            }
+            else if (fuel < 2500){
+                setLed(0);
+                setLed(1);//green
+            }
+            else {
+                    setLed(2);
+                    setLed(3);
+            }
 
 //Prints the spaceship and bullet, and reads input from player
             if(timeFlagPrint==1){
@@ -448,6 +469,7 @@ int main(void)
                 if(u==3){
                     boss();
                     pause=1;
+                    setFreq(0);
                     while (pause==1){
                         u=keyInput();
                         if(u==8){
@@ -462,8 +484,9 @@ int main(void)
                     shooting=startBullet(ship,u);//shooting gets ships y-axis position as it's value
                 }
                 bullet.position.y=shooting; // bullet gets ships y-axis position at bullet initiation
+
 //If time runs out or you have no lives left it is GAME OVER!
-                if (gameTime<=0 || lives<=0){
+                if (fuel<=0 || lives<=0){
                     clrscr();
                     setLed(0);
                     setLed(3);//blue LED
@@ -576,6 +599,7 @@ int main(void)
                 e1.position.x = 135;
                 e1.position.y = e1.randomNo;
                 score+=500;
+                setFreq(15000);
                 shooting = 0;
                 bullet.position.x=3;
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
@@ -586,6 +610,7 @@ int main(void)
                 e2.position.x = 135;
                 e2.position.y = e2.randomNo;
                 score+=500;
+                setFreq(15000);
                 shooting = 0;//resets bullet
                 bullet.position.x=3;
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
@@ -597,6 +622,7 @@ int main(void)
                 e3.position.x = 135;
                 e3.position.y = e3.randomNo;
                 score+=500;
+                setFreq(15000);
                 shooting = 0;//resets bullet
                 bullet.position.x=3;
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
@@ -610,7 +636,7 @@ int main(void)
                 enemyNextPos(&e1);
                 enemyMotion(&e1);
                 if (enemyBreach(e1)==1){//Detects that the enemy has breached and subtracts 1000 from time
-                    gameTime-=1000;
+                    fuel-=1000;
                 }
                 if (startLevel<3){
                     eraseEnemy(e2);
@@ -618,7 +644,7 @@ int main(void)
                     enemyMotion(&e2);
                     timeFlagEnemy=0;
                     if (enemyBreach(e2)==1){//Detects that the enemy has breached and subtracts 1000 from time
-                        gameTime-=1000;
+                        fuel-=1000;
                     }
                 }
                 if (startLevel == 2){
@@ -627,102 +653,54 @@ int main(void)
                     enemyMotion(&e3);
                     timeFlagEnemy=0;
                     if (enemyBreach(e3)==1){//Detects that the enemy has breached and subtracts 1000 from time
-                        gameTime-=1000;
+                        fuel-=1000;
                     }
                 }
                 enemyFlag=1;//enemies position has updated
                 //setLed(3);
 
-    //Erases enemy when hit, resets bullet, adds +500 to score
-                /*if(compBuEn(bullet,e1)==1){
-                    eraseEnemy(e1);
-                    e1.position.x = 135;
-                    e1.position.y = e1.randomNo;
-                    score+=500;
-                    shooting = 0;
-                    bullet.position.x=3;
-                    gotoxy(oldBullet.position.x,oldBullet.position.y);
-                    printf(" ");
-                }
-                if(startLevel <3 && compBuEn(bullet,e2)==1){
-                    eraseEnemy(e2);
-                    e2.position.x = 135;
-                    e2.position.y = e2.randomNo;
-                    score+=500;
-                    shooting = 0;
-                    bullet.position.x=3;
-                    gotoxy(oldBullet.position.x,oldBullet.position.y);
-                    printf(" ");
-                }
-                if(startLevel == 2 && compBuEn(bullet,e3)==1){
-                    eraseEnemy(e3);
-                    e3.position.x = 135;
-                    e3.position.y = e3.randomNo;
-                    score+=500;
-                    shooting = 0;
-                    bullet.position.x=3;
-                    gotoxy(oldBullet.position.x,oldBullet.position.y);
-                    printf(" ");
-                }*/
-            }
-
-//LED showing how much time is left
-            if( gameTime>5000){
-                setLed(0);
-                setLed(2);//red
-            }
-            else if (gameTime<5000 && gameTime > 2500){
-                setLed(0);
-                setLed(4);//yellow
-            }
-            else if (gameTime < 2500){
-                setLed(0);
-                setLed(1);//green
-            }
-            else {
-                    setLed(2);
-                    setLed(3);
             }
 
 
-            if (gameTime>7540){
+            if (fuel>7540){
                 setFreq(80);
             }
-            else if (gameTime<7540 && gameTime>5690){
+            else if (fuel<7540 && fuel>5690){
                 setFreq(140);
             }
-            else if (gameTime<5690 && gameTime>4200){
+            else if (fuel<5690 && fuel>4200){
                 setFreq(280);
             }
-            else if (gameTime<4200 && gameTime>3020){
+            else if (fuel<4200 && fuel>3020){
                 setFreq(560);
             }
-            else if (gameTime<3020 && gameTime>2090){
+            else if (fuel<3020 && fuel>2090){
                 setFreq(1120);
             }
-            else if (gameTime<2090 && gameTime>1380){
+            else if (fuel<2090 && fuel>1380){
                 setFreq(2240);
             }
-            else if (gameTime<1380 && gameTime>850){
+            else if (fuel<1380 && fuel>850){
                 setFreq(4480);
             }
-            else if (gameTime<850 && gameTime>460){
+            else if (fuel<850 && fuel>460){
                 setFreq(8960);
             }
-            else if (gameTime<460 && gameTime>180){
+            else if (fuel<460 && fuel>180){
                 setFreq(17920);
             }
-            else if (gameTime<180 ){
+            else if (fuel<180 ){
                 setFreq(20000);
             }
 
     //gameTime is the remaining time the game
     //counts down every 10th of a second
-            gameTime=gameTime-timeFlagGame;//genstart timeFlagGame!!!!!!!!!!
+            fuel=fuel-timeFlagGame;//genstart timeFlagGame!!!!!!!!!!
             highscore = updateHighscore(highscore,score);
+
     // Casting integers to strings
-            char strGameTime[10];
-            sprintf(strGameTime, "%ld", gameTime);//convert goTime to string
+            char strFuel[10];
+            sprintf(strFuel, "%ld", fuel);//convert goTime to string
             char strScore[10];
             sprintf(strScore, "%d", score);//convert score to string
             char strLives[5];
@@ -736,7 +714,7 @@ int main(void)
 
     //Puts strings in buffer:
             lcd_write_string("Fuel:",0,1,&buffer);
-            lcd_write_string(strGameTime,35,1,&buffer);
+            lcd_write_string(strFuel,35,1,&buffer);
 
             lcd_write_string("Lives:",0,2,&buffer);
             lcd_write_string(strLives,40,2,&buffer);
@@ -762,112 +740,6 @@ int main(void)
 }//END OF MAIN!!!!!
 
 
-    /*while(){
-    boss(keyInput());
-    }
 
-    struct ship_t ship;
-    ship.position.x = 2;
-    ship.position.y=19;
-    ship.hp=0;
-    uint8_t u = 0;
-    uint8_t w = 0;
-    uint8_t v = 0;
-    uint8_t shooting = 0;
-
-    struct asteroid_t asteroid;
-    asteroid.position.x=10;
-    asteroid.position.y=2;
-    asteroid.velocity.x=0;
-    asteroid.velocity.y=1;
-
-    struct bullet_t bullet;
-    bullet.position.x = 3;
-    bullet.position.y = ship.position.y;
-    bullet.velocity.x = 1;
-    bullet.velocity.y = 0;
-
-   struct sqwog skr;
-   skr.position.x = 110;
-   skr.position.y = 20;
-   skr.velocity.x = -1;
-   skr.velocity.y = 0;
-   skr.hp = 5;
-   skr.firsty = 20;
-   skr.firstx = 110;
-
-    while(1){
-   //read
-        if (time.centiSec==25 || time.centiSec==50 || time.centiSec==75 || time.centiSec==99){
-            w=1;
-        }
-        else{
-            w=0;
-        }
-        w=1;
-        //countFlag
-
-        if (timeFlag3==20){
-            //printAsteroid(asteroid);
-            //drawSqwog(skr);
-            timeFlag3=0;
-        }
-        if (timeFlag2==9){
-            printShip(ship);
-            if (shooting>0){
-                printBullet(bullet);
-            }
-            timeFlag2=0;
-        }
-
-       if (timeFlag==1){
-            u=keyInput();
-            moveShip(u,&ship);
-            shooting=startBullet(ship,u);
-            gotoxy(3,47);
-            printf("%d",shooting);
-            if (timeFlag4==25){
-                //if(shooting>0){
-                    bullet.position.y=shooting;
-                    bullet.position.x++;
-                    moveBullet(shooting, &bullet);
-                    gotoxy(3,45);
-                    printf("%d",bullet.position.x);
-
-
-                //moveAsteroid(asteroid.position.x,&asteroid);
-
-                if (bullet.position.x==139){
-                    shooting=0;
-                timeFlag4=0;
-                }
-            }
-
-            if (w==1){
-
-                eraseSqwog(skr);
-                sqwogBox(&skr);
-                sqwogNextPos(&skr);
-
-            }
-            if (asteroidFlag==1){
-                struct asteroid_t asteroid
-            }
-        timeFlag=0;
-        }
-        // dette skal være timemr afhængig
-    }
-
-
-
-    uint8_t y=0;
-    while(1){
-        while (y<1){
-            y=keyInput();
-        }
-        moveBullet(y,&bullet);
-        printf("%d\n",bullet.position.x);
-        //printBullet(bullet);
-    }*/
 
 
