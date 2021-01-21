@@ -7,7 +7,7 @@
 uint8_t compBuAs(struct bullet_t bullet, struct asteroid_t asteroid){
 //if collision is detected, 1 is returned
     uint8_t g=0;
-    if (bullet.position.x==asteroid.position.x-1 && bullet.position.y==asteroid.position.y){
+    if ((bullet.position.x==asteroid.position.x-1 || bullet.position.x==asteroid.position.x) && bullet.position.y==asteroid.position.y){
         g=1;
     }
 

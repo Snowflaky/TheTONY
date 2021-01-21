@@ -81,6 +81,9 @@ int main(void)
     uint8_t creditMenu=0;
     uint8_t u=0;
     uint8_t shooting=0;
+    uint8_t shooting2=0;
+    uint8_t shooting3=0;
+
     int32_t fuel=10000;
     uint16_t score=0;
     uint8_t pause=0;
@@ -205,6 +208,16 @@ int main(void)
     bullet.position.y = ship.position.y;
     bullet.velocity.x = 1;
     struct bullet_t oldBullet;
+    struct bullet_t bullet2;
+    bullet2.position.x = 3;
+    bullet2.position.y = ship.position.y;
+    bullet2.velocity.x = 1;
+    struct bullet_t oldBullet2;
+    struct bullet_t bullet3;
+    bullet3.position.x = 3;
+    bullet3.position.y = ship.position.y;
+    bullet3.velocity.x = 1;
+    struct bullet_t oldBullet3;
 
 //Enemies are initiated
     struct enemy e1;
@@ -227,6 +240,7 @@ int main(void)
     e3.enemyType = 1;
     e3.position.x = 135;
     e3.position.y = 13;
+    decideVel(&e3);
     e3.firstx = 135;
     e3.firsty = e3.position.y;
 
@@ -310,6 +324,8 @@ int main(void)
             score=0;
             lives=3;
             shooting=0;
+            shooting2=0;
+            shooting3=0;
             pause=0;
 
             window(50,90,15,27,4);
@@ -423,6 +439,8 @@ int main(void)
             if(timeFlagPrint==1){
                 printShip(ship, oldShip);
                 printBullet(bullet, oldBullet);
+                printBullet(bullet2, oldBullet2);
+                printBullet(bullet3, oldBullet3);
                 u=keyInput();
 //If boss-key is initiated
                 if(u==3){
@@ -439,10 +457,21 @@ int main(void)
                     }
                 }
                 moveShip(u,&ship, &oldShip);
+                if (shooting3==0 && shooting>0 && shooting2>0){
+                    shooting3=startBullet(ship,u);
+                }
+                if (shooting2==0 && shooting>0){
+                    shooting2=startBullet(ship,u);
+                }
                 if (shooting==0){//Starts bullet when trigger is pulled
                     shooting=startBullet(ship,u);//shooting gets ships y-axis position as it's value
                 }
+                gotoxy(10,10);
+                printf("%d",e2.velocity.y);
+
                 bullet.position.y=shooting; // bullet gets ships y-axis position at bullet initiation
+                bullet2.position.y=shooting2;
+                bullet3.position.y=shooting3;
 
 //If time runs out or you have no lives left it is GAME OVER!
                 if (fuel<=0 || lives<=0){
@@ -460,6 +489,14 @@ int main(void)
                             bullet.position.x=3;
                             gotoxy(oldBullet.position.x,oldBullet.position.y);
                             printf(" ");
+                            shooting2=0;
+                            bullet2.position.x=3;
+                            gotoxy(oldBullet2.position.x,oldBullet2.position.y);
+                            printf(" ");
+                            shooting3=0;
+                            bullet3.position.x=3;
+                            gotoxy(oldBullet3.position.x,oldBullet3.position.y);
+                            printf(" ");
                             startLevel=0;
                             pause=1;
                         }
@@ -475,6 +512,14 @@ int main(void)
                     bullet.position.x=3;
                     gotoxy(oldBullet.position.x,oldBullet.position.y);
                     printf(" ");
+                    shooting2 = 0;
+                    bullet2.position.x=3;
+                    gotoxy(oldBullet2.position.x,oldBullet2.position.y);
+                    printf(" ");
+                    shooting3 = 0;
+                    bullet3.position.x=3;
+                    gotoxy(oldBullet3.position.x,oldBullet3.position.y);
+                    printf(" ");
                     startLevel=0;
                     pause=1;
                 }
@@ -488,8 +533,20 @@ int main(void)
                 if (shooting>0){//only updates position if bullet has been started
                     moveBullet(shooting, &bullet, &oldBullet);
                 }
+                if (shooting2>0){
+                    moveBullet(shooting2, &bullet2, &oldBullet2);
+                }
+                if (shooting3>0){
+                    moveBullet(shooting3, &bullet3, &oldBullet3);
+                }
                 if (bullet.position.x==139){//bullet position and initialization is reset when the bullet reaches the end of the game field
                     shooting=0;
+                }
+                if (bullet2.position.x==139){//bullet position and initialization is reset when the bullet reaches the end of the game field
+                    shooting2=0;
+                }
+                if (bullet3.position.x==139){//bullet position and initialization is reset when the bullet reaches the end of the game field
+                    shooting3=0;
                 }
                 timeFlagBullet=0;
             }
@@ -551,6 +608,36 @@ int main(void)
             if (compBuAs(bullet,asteroid5)==1){
                 bullet.velocity.x=-1;
             }
+            if (compBuAs(bullet2,asteroid1)==1){
+                bullet2.velocity.x=-1;
+            }
+            if (compBuAs(bullet2,asteroid2)==1){
+                bullet2.velocity.x=-1;
+            }
+            if (compBuAs(bullet2,asteroid3)==1){
+                bullet2.velocity.x=-1;
+            }
+            if (compBuAs(bullet2,asteroid4)==1){
+                bullet2.velocity.x=-1;
+            }
+            if (compBuAs(bullet2,asteroid5)==1){
+                bullet2.velocity.x=-1;
+            }
+            if (compBuAs(bullet3,asteroid1)==1){
+                bullet3.velocity.x=-1;
+            }
+            if (compBuAs(bullet3,asteroid2)==1){
+                bullet3.velocity.x=-1;
+            }
+            if (compBuAs(bullet3,asteroid3)==1){
+                bullet3.velocity.x=-1;
+            }
+            if (compBuAs(bullet3,asteroid4)==1){
+                bullet3.velocity.x=-1;
+            }
+            if (compBuAs(bullet3,asteroid5)==1){
+                bullet3.velocity.x=-1;
+            }
             if (startLevel>=2){
                 if (compBuAs(bullet,asteroid6)==1){
                     bullet.velocity.x=-1;
@@ -558,16 +645,36 @@ int main(void)
                 if (compBuAs(bullet,asteroid7)==1){
                     bullet.velocity.x=-1;
                 }
+                if (compBuAs(bullet2,asteroid6)==1){
+                    bullet2.velocity.x=-1;
+                }
+                if (compBuAs(bullet2,asteroid7)==1){
+                    bullet2.velocity.x=-1;
+                }
+                if (compBuAs(bullet3,asteroid6)==1){
+                    bullet3.velocity.x=-1;
+                }
+                if (compBuAs(bullet3,asteroid7)==1){
+                    bullet3.velocity.x=-1;
+                }
             }
     //Restarts reflected bullets
             if (bullet.position.x==3 && bullet.velocity.x==-1){
                 shooting=0;
                 bullet.velocity.x=1;
             }
+            if (bullet2.position.x==3 && bullet2.velocity.x==-1){
+                shooting2=0;
+                bullet2.velocity.x=1;
+            }
+            if (bullet3.position.x==3 && bullet3.velocity.x==-1){
+                shooting3=0;
+                bullet3.velocity.x=1;
+            }
 
 
     //Erases enemy when hit, resets bullet, adds +500 to score
-           if(compBuEn(bullet,e1)==1){
+            if (compBuEn(bullet,e1)==1){
                 eraseEnemy(e1);
                 e1.position.x = 135;
                 e1.position.y = e1.firsty;
@@ -576,6 +683,28 @@ int main(void)
                 shooting = 0;
                 bullet.position.x=3;
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
+                printf(" ");
+            }
+            if (compBuEn(bullet2,e1)==1){
+                eraseEnemy(e1);
+                e1.position.x = 135;
+                e1.position.y = e1.firsty;
+                score+=500;
+                setFreq(15000);
+                shooting2 = 0;
+                bullet2.position.x=3;
+                gotoxy(oldBullet2.position.x,oldBullet2.position.y);
+                printf(" ");
+            }
+            if (compBuEn(bullet3,e1)==1){
+                eraseEnemy(e1);
+                e1.position.x = 135;
+                e1.position.y = e1.firsty;
+                score+=500;
+                setFreq(15000);
+                shooting3 = 0;
+                bullet3.position.x=3;
+                gotoxy(oldBullet3.position.x,oldBullet3.position.y);
                 printf(" ");
             }
             if(startLevel<3 && compBuEn(bullet,e2)==1){
@@ -589,6 +718,28 @@ int main(void)
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
                 printf(" ");
             }
+            if(startLevel<3 && compBuEn(bullet2,e2)==1){
+                eraseEnemy(e2);
+                e2.position.x = 135;
+                e2.position.y = e2.firsty;
+                score+=500;
+                setFreq(15000);
+                shooting2 = 0;//resets bullet
+                bullet2.position.x=3;
+                gotoxy(oldBullet2.position.x,oldBullet2.position.y);
+                printf(" ");
+            }
+            if(startLevel<3 && compBuEn(bullet3,e2)==1){
+                eraseEnemy(e2);
+                e2.position.x = 135;
+                e2.position.y = e2.firsty;
+                score+=500;
+                setFreq(15000);
+                shooting3 = 0;//resets bullet
+                bullet3.position.x=3;
+                gotoxy(oldBullet3.position.x,oldBullet3.position.y);
+                printf(" ");
+            }
 
             if(startLevel==2 && compBuEn(bullet,e3)==1){
                 eraseEnemy(e3);
@@ -599,6 +750,28 @@ int main(void)
                 shooting = 0;//resets bullet
                 bullet.position.x=3;
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
+                printf(" ");
+            }
+            if(startLevel==2 && compBuEn(bullet2,e2)==1){
+                eraseEnemy(e2);
+                e2.position.x = 135;
+                e2.position.y = e2.firsty;
+                score+=500;
+                setFreq(15000);
+                shooting2 = 0;//resets bullet
+                bullet2.position.x=3;
+                gotoxy(oldBullet2.position.x,oldBullet2.position.y);
+                printf(" ");
+            }
+            if(startLevel==2 && compBuEn(bullet3,e2)==1){
+                eraseEnemy(e2);
+                e2.position.x = 135;
+                e2.position.y = e2.firsty;
+                score+=500;
+                setFreq(15000);
+                shooting3 = 0;//resets bullet
+                bullet3.position.x=3;
+                gotoxy(oldBullet3.position.x,oldBullet3.position.y);
                 printf(" ");
             }
 
