@@ -82,6 +82,7 @@ int main(void)
     uint8_t u=0;
     uint8_t shooting=0;
     uint8_t shooting2=0;
+    uint8_t shooting3=0;
 
     int32_t fuel=10000;
     uint16_t score=0;
@@ -323,7 +324,7 @@ int main(void)
             lives=3;
             shooting=0;
             shooting2=0;
-            //shooting3=0;
+            shooting3=0;
             pause=0;
 
             window(50,90,15,27,4);
@@ -438,6 +439,7 @@ int main(void)
                 printShip(ship, oldShip);
                 printBullet(bullet, oldBullet);
                 printBullet(bullet2, oldBullet2);
+                printBullet(bullet3, oldBullet3);
                 u=keyInput();
 //If boss-key is initiated
                 if(u==3){
@@ -454,16 +456,21 @@ int main(void)
                     }
                 }
                 moveShip(u,&ship, &oldShip);
+                if (shooting3==0 && shooting>0 && shooting2>0){
+                    shooting3=startBullet(ship,u);
+                }
+                if (shooting2==0 && shooting>0){
+                    shooting2=startBullet(ship,u);
+                }
                 if (shooting==0){//Starts bullet when trigger is pulled
                     shooting=startBullet(ship,u);//shooting gets ships y-axis position as it's value
                 }
-                if (shooting2==0 && shooting!=0){
-                    shooting2=startBullet(ship,u);
-                }
                 gotoxy(10,10);
                 printf("%d",e2.velocity.y);
+
                 bullet.position.y=shooting; // bullet gets ships y-axis position at bullet initiation
                 bullet2.position.y=shooting2;
+                bullet3.position.y=shooting3;
 
 //If time runs out or you have no lives left it is GAME OVER!
                 if (fuel<=0 || lives<=0){
@@ -485,6 +492,10 @@ int main(void)
                             bullet2.position.x=3;
                             gotoxy(oldBullet2.position.x,oldBullet2.position.y);
                             printf(" ");
+                            shooting3=0;
+                            bullet3.position.x=3;
+                            gotoxy(oldBullet3.position.x,oldBullet3.position.y);
+                            printf(" ");
                             startLevel=0;
                             pause=1;
                         }
@@ -504,6 +515,10 @@ int main(void)
                     bullet2.position.x=3;
                     gotoxy(oldBullet2.position.x,oldBullet2.position.y);
                     printf(" ");
+                    shooting3 = 0;
+                    bullet3.position.x=3;
+                    gotoxy(oldBullet3.position.x,oldBullet3.position.y);
+                    printf(" ");
                     startLevel=0;
                     pause=1;
                 }
@@ -520,11 +535,17 @@ int main(void)
                 if (shooting2>0){
                     moveBullet(shooting2, &bullet2, &oldBullet2);
                 }
+                if (shooting3>0){
+                    moveBullet(shooting3, &bullet3, &oldBullet3);
+                }
                 if (bullet.position.x==139){//bullet position and initialization is reset when the bullet reaches the end of the game field
                     shooting=0;
                 }
                 if (bullet2.position.x==139){//bullet position and initialization is reset when the bullet reaches the end of the game field
                     shooting2=0;
+                }
+                if (bullet3.position.x==139){//bullet position and initialization is reset when the bullet reaches the end of the game field
+                    shooting3=0;
                 }
                 timeFlagBullet=0;
             }
