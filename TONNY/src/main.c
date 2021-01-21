@@ -83,6 +83,7 @@ int main(void)
     uint8_t shooting=0;
     uint8_t shooting2=0;
     uint8_t shooting3=0;
+    timeFlagGame=0;
 
     int32_t fuel=10000;
     uint16_t score=0;
@@ -250,7 +251,7 @@ int main(void)
 //Main menu
     while(1){
         //if(timeFlagPrint==1){
-        setFreq(0);
+        //setFreq(0);
         window(50,90,15,27,4);
         gotoxy(65,17);
         printf("MAIN MENU");
@@ -367,6 +368,66 @@ int main(void)
                     levelMenu=0;
                 }
             }
+        }
+        uint8_t q=10;
+        gotoxy(10,10);
+        printf("%d",toneFlag);
+        if (toneFlag<50){
+            setFreq(123*q);
+        }
+        else if (toneFlag>50 && toneFlag<100){
+            setFreq(98*q);
+        }
+        else if (toneFlag>100 && toneFlag<110){
+            setFreq(0*q);
+        }
+        else if (toneFlag>110 && toneFlag<160){
+            setFreq(98*q);
+        }
+        else if (toneFlag>160 && toneFlag<210){
+            setFreq(77*q);
+        }
+        else if (toneFlag>210 && toneFlag<260){
+            setFreq(82*q);
+        }
+        else if (toneFlag>260 && toneFlag<310){
+            setFreq(64*q);
+        }
+        else if (toneFlag>310 && toneFlag<360){
+            setFreq(41*q);
+        }
+        else if (toneFlag>360 && toneFlag<410){
+            setFreq(123*q);
+        }
+        else if (toneFlag>410 && toneFlag<460){
+            setFreq(110*q);
+        }
+        else if (toneFlag>460 && toneFlag<510){
+            setFreq(87*q);
+        }
+        else if (toneFlag>510 && toneFlag<560){
+            setFreq(92*q);
+        }
+        else if (toneFlag>560 && toneFlag<610){
+            setFreq(69*q);
+        }
+        else if (toneFlag>610 && toneFlag<660){
+            setFreq(73*q);
+        }
+        else if (toneFlag>660 && toneFlag<710){
+            setFreq(120*q);
+        }
+        else if (toneFlag>710 && toneFlag<760){
+            setFreq(103*q);
+        }
+        else if (toneFlag>760 && toneFlag<810){
+            setFreq(110*q);
+        }
+        else if (toneFlag>810 && toneFlag<860){
+            setFreq(123*q);
+        }
+        else{ //if (toneFlag>1000){
+            toneFlag=0;
         }
 
 
