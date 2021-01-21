@@ -369,104 +369,104 @@ int main(void)
                 }
             }
         }
-        uint8_t q=10;
+        uint8_t q=15;
         gotoxy(10,10);
         printf("%d",toneFlag);
-        if (toneFlag<50){
+        if (toneFlag<20){
             setFreq(123*q);
         }
-        else if (toneFlag>50 && toneFlag<100){
+        else if (toneFlag>20 && toneFlag<40){
             setFreq(98*q);
         }
-        else if (toneFlag>100 && toneFlag<160){
+        else if (toneFlag>40 && toneFlag<60){
             setFreq(98*q);
         }
-        else if (toneFlag>150 && toneFlag<200){
+        else if (toneFlag>60 && toneFlag<80){
             setFreq(77*q);
         }
-        else if (toneFlag>200 && toneFlag<250){
+        else if (toneFlag>80 && toneFlag<100){
             setFreq(82*q);
         }
-        else if (toneFlag>250 && toneFlag<300){
+        else if (toneFlag>100 && toneFlag<120){
             setFreq(64*q);
         }
-        else if (toneFlag>300 && toneFlag<350){
+        else if (toneFlag>120 && toneFlag<140){
             setFreq(41*q);
         }
-        else if (toneFlag>350 && toneFlag<400){
+        else if (toneFlag>140 && toneFlag<160){
             setFreq(123*q);
         }
-        else if (toneFlag>400 && toneFlag<450){
+        else if (toneFlag>160 && toneFlag<180){
             setFreq(110*q);
         }
-        else if (toneFlag>450 && toneFlag<500){
+        else if (toneFlag>180 && toneFlag<200){
             setFreq(87*q);
         }
-        else if (toneFlag>500 && toneFlag<550){
+        else if (toneFlag>200 && toneFlag<220){
             setFreq(92*q);
         }
-        else if (toneFlag>550 && toneFlag<600){
+        else if (toneFlag>220 && toneFlag<240){
             setFreq(69*q);
         }
-        else if (toneFlag>600 && toneFlag<650){
+        else if (toneFlag>240 && toneFlag<260){
             setFreq(73*q);
         }
-        else if (toneFlag>650 && toneFlag<700){
+        else if (toneFlag>260 && toneFlag<280){
             setFreq(120*q);
         }
-        else if (toneFlag>700 && toneFlag<750){
+        else if (toneFlag>280 && toneFlag<300){
             setFreq(103*q);
         }
-        else if (toneFlag>750 && toneFlag<800){
+        else if (toneFlag>300 && toneFlag<320){
             setFreq(110*q);
         }
-        else if (toneFlag>800 && toneFlag<850){
+        else if (toneFlag>320 && toneFlag<340){
             setFreq(123*q);
         }
-        else if (toneFlag>850 && toneFlag<900){
+        else if (toneFlag>340 && toneFlag<360){
             setFreq(106*q);
         }
-        else if (toneFlag>900 && toneFlag<950){
+        else if (toneFlag>360 && toneFlag<380){
             setFreq(98*q);
         }
-        else if (toneFlag>950 && toneFlag<1000){
+        else if (toneFlag>380 && toneFlag<400){
             setFreq(82*q);
         }
-        else if (toneFlag>1000 && toneFlag<1050){
+        else if (toneFlag>400 && toneFlag<420){
             setFreq(49*q);
         }
-        else if (toneFlag>1050 && toneFlag<1100){
+        else if (toneFlag>420 && toneFlag<440){
             setFreq(65*q);
         }
-        else if (toneFlag>1100 && toneFlag<1150){
+        else if (toneFlag>440 && toneFlag<460){
             setFreq(49*q);
         }
-        else if (toneFlag>1150 && toneFlag<1200){
+        else if (toneFlag>460 && toneFlag<480){
             setFreq(43*q);
         }
-        else if (toneFlag>1200 && toneFlag<1250){
+        else if (toneFlag>480 && toneFlag<500){
             setFreq(110*q);
         }
-        else if (toneFlag>1250 && toneFlag<1300){
+        else if (toneFlag>500 && toneFlag<520){
             setFreq(78*q);
         }
-        else if (toneFlag>1300 && toneFlag<1350){
+        else if (toneFlag>520 && toneFlag<540){
             setFreq(63*q);
         }
-        else if (toneFlag>1350 && toneFlag<1400){
+        else if (toneFlag>540 && toneFlag<560){
             setFreq(73*q);
         }
-        else if (toneFlag>1400 && toneFlag<1450){
+        else if (toneFlag>560 && toneFlag<580){
             setFreq(52*q);
         }
-        else if (toneFlag>1450 && toneFlag<1500){
+        else if (toneFlag>580 && toneFlag<600){
             setFreq(93*q);
         }
-        else if (toneFlag>1500 && toneFlag<1550){
+        else if (toneFlag>600 && toneFlag<620){
             setFreq(73*q);
         }
-        else if (toneFlag>1550 && toneFlag<1600){
-            setFreq(110*q);
+        else if (toneFlag>620 && toneFlag<640){
+            setFreq(110);
         }
         else{
             toneFlag=0;
