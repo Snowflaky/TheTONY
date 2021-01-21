@@ -12,18 +12,15 @@
 
 
 struct enemy {
-    uint8_t randomNo;
     uint8_t enemyType;
     struct vector_t position;
     struct vector_t velocity;
-    uint8_t hp;
     int32_t firsty;
     int32_t firstx;
 };
 
 struct ship_t {
     struct vector_t position;
-    uint32_t hp;
 };
 
 struct asteroid_t {

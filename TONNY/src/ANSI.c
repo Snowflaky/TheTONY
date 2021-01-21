@@ -58,7 +58,7 @@ void color(uint8_t foreground, uint8_t background) {
     printf("%c[%d;%d;%dm", ESC, type, foreground+30, background+40);
 }
 
-//Resets background colour
+//Resets background color
 void resetbgcolor() {
 // gray on black text, no underline, no blink, no reverse
     printf("%c[m", ESC);
@@ -127,8 +127,6 @@ void trangNextPos(struct trang (*t)) {
     (*t).position.y = (*t).position.y + (*t).velocity.y*k;
 }
 
-
-
 //The Trang enemy ships
 void drawTrang (struct trang t) {
     color(0,0);
@@ -194,7 +192,10 @@ void trangZag (struct trang (*t)) {
 // generates random numbers in range [lower, upper].
 uint8_t randoms(uint8_t lower, uint8_t upper) {
     time_t t;
-    /* Intializes random number generator */
+     Intializes pseudo - random number generator */
+    //srand((unsigned) time(&t));
+    //return(rand() % (upper + 1 - lower) + lower);
+    //Intializes random number generator
     //srand((unsigned) time(&t));
     //return(rand() % (upper + 1 - lower) + lower);
     //srand(time(&somesec));
@@ -206,9 +207,7 @@ uint8_t randoms(uint8_t lower, uint8_t upper) {
     time (&rawtime);
     timeinfo = localtime (&rawtime);
     printf ("Current local time and date: %s", asctime(timeinfo));
-
 }
-
 
 void awakenTrang(uint8_t spawn) {    //Bring Trang, the bringer
     if (spawn == 1) {                //of doom, to LIFE
@@ -339,11 +338,5 @@ void awakenSqwog(uint8_t spawn) {    //Bring Sqwog, the bringer
         }
     }
 }
+
 */
-
-
-
-
-
-
-

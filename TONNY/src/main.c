@@ -468,7 +468,7 @@ int main(void)
                     shooting=startBullet(ship,u);//shooting gets ships y-axis position as it's value
                 }
                 gotoxy(10,10);
-                printf("%d",e2.velocity.y);
+                printf("%ld",e2.velocity.x);
 
                 bullet.position.y=shooting; // bullet gets ships y-axis position at bullet initiation
                 bullet2.position.y=shooting2;
