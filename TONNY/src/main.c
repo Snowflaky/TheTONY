@@ -240,6 +240,7 @@ int main(void)
     e3.enemyType = 1;
     e3.position.x = 135;
     e3.position.y = 13;
+    decideVel(&e3);
     e3.firstx = 135;
     e3.firsty = e3.position.y;
 
