@@ -214,7 +214,7 @@
 1610963946 source:c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\src\charset.c
 	"charset.h"
 
-1611235145 source:c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\src\game.c
+1611236052 source:c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\src\game.c
 	"game.h"
 	"string.h"
 
@@ -242,7 +242,7 @@
 	<time.h>
 	"ANSI.h"
 
-1611235826 source:c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\src\main.c
+1611236276 source:c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\src\main.c
 	"stm32f30x_conf.h"
 	"ANSI.h"
 	"string.h"

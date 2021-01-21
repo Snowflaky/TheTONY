@@ -451,6 +451,7 @@ int main(void)
                         u=keyInput();
                         if(u==8){
                             pause=0;
+                            u=0;
                             clrscr();
                             window(0,140,0,40,4);
                         }
@@ -521,7 +522,7 @@ int main(void)
                     gotoxy(oldBullet3.position.x,oldBullet3.position.y);
                     printf(" ");
                     startLevel=0;
-                    pause=1;
+                    //pause=1;
                 }
 
                 timeFlagPrint=0;
