@@ -208,31 +208,27 @@ int main(void)
 
 //Enemies are initiated
     struct enemy e1;
-    e1.randomNo = 22;//randoms(9,32);
     e1.enemyType = 1;
     e1.position.x = 135;
-    e1.position.y =e1.randomNo;
+    e1.position.y = 22;
     decideVel(&e1);
     e1.firstx = 135;
-    e1.firsty = e1.randomNo;
+    e1.firsty = e1.position.y;
 
     struct enemy e2;
-    e2.randomNo = 30;//randoms(9,32);
     e2.enemyType = 2;
     e2.position.x = 135;
-    e2.position.y = e2.randomNo;
+    e2.position.y = 30;
     decideVel(&e2);
     e2.firstx = 135;
-    e2.firsty = e2.randomNo;
+    e2.firsty = e2.position.y;
 
     struct enemy e3;
-    e3.randomNo = 13;//randoms(15,30);
     e3.enemyType = 1;
     e3.position.x = 135;
-    e3.position.y = e3.randomNo;
-    decideVel(&e3);
+    e3.position.y = 13;
     e3.firstx = 135;
-    e3.firsty = e3.randomNo;
+    e3.firsty = e3.position.y;
 
 
     setLed(3);
@@ -574,7 +570,7 @@ int main(void)
            if(compBuEn(bullet,e1)==1){
                 eraseEnemy(e1);
                 e1.position.x = 135;
-                e1.position.y = e1.randomNo;
+                e1.position.y = e1.firsty;
                 score+=500;
                 setFreq(15000);
                 shooting = 0;
@@ -585,7 +581,7 @@ int main(void)
             if(startLevel<3 && compBuEn(bullet,e2)==1){
                 eraseEnemy(e2);
                 e2.position.x = 135;
-                e2.position.y = e2.randomNo;
+                e2.position.y = e2.firsty;
                 score+=500;
                 setFreq(15000);
                 shooting = 0;//resets bullet
@@ -597,7 +593,7 @@ int main(void)
             if(startLevel==2 && compBuEn(bullet,e3)==1){
                 eraseEnemy(e3);
                 e3.position.x = 135;
-                e3.position.y = e3.randomNo;
+                e3.position.y = e3.firsty;
                 score+=500;
                 setFreq(15000);
                 shooting = 0;//resets bullet
