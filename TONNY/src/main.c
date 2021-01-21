@@ -14,6 +14,10 @@
 #include "stm32f30x_conf.h"
 #include "ANSI.h"
 #include "string.h"
+#include "inout.h"
+#include "print.h"
+#include "movement.h"
+#include "game.h"
 
 
 int main(void)

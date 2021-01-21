@@ -92,6 +92,10 @@
 		<Unit filename="inc\30010_io.h" />
 		<Unit filename="inc\ANSI.h" />
 		<Unit filename="inc\charset.h" />
+		<Unit filename="inc\game.h" />
+		<Unit filename="inc\inout.h" />
+		<Unit filename="inc\movement.h" />
+		<Unit filename="inc\print.h" />
 		<Unit filename="inc\stm32f30x.h" />
 		<Unit filename="inc\stm32f30x_conf.h" />
 		<Unit filename="inc\system_stm32f30x.h" />
@@ -193,7 +197,19 @@
 		<Unit filename="src\charset.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src\game.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\inout.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src\main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\movement.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\print.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\startup_stm32f30x.S">
@@ -225,7 +241,7 @@
 					</debug_interface>
 				</target_debugging_settings>
 				<target_debugging_settings target="Debug" active_interface="OpenOCD">
-					<debug_interface interface_id="OpenOCD" ip_address="localhost" ip_port="3333" path="C:\OpenOCD\bin-x64" executable="openocd.exe" description="" dont_start_server="false" backoff_time="100" options="0" reg_filter="0" active_family="All" gdb_before_conn="" gdb_after_conn="">
+					<debug_interface interface_id="OpenOCD" ip_address="localhost" ip_port="3333" path="C:\Users\Josefine\Documents\DTU\30010ProgProjekt\Projekt\Debugger_openocd-0.10.0\bin-x64" executable="openocd.exe" description="" dont_start_server="false" backoff_time="100" options="0" reg_filter="0" active_family="All" gdb_before_conn="" gdb_after_conn="">
 						<family_options family_id="All">
 							<option opt_id="ID_BOARD_CH" opt_value="" />
 							<option opt_id="ID_INTERFACE_CH" opt_value="stlink-v2-1" />
