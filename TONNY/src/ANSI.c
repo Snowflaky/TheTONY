@@ -106,6 +106,7 @@ uint8_t keyInput(){
     return x;
 }
 
+/*
 //Converts Trangs position and velocity to 18.14 (from 32.0)
 void fixtrangPos(struct trang (*t)) {
     (*t).position.x=(*t).position.x<<14;
@@ -192,10 +193,21 @@ void trangZag (struct trang (*t)) {
 uint8_t randoms(uint8_t lower, uint8_t upper) {
     time_t t;
     /* Intializes pseudo - random number generator */
-    srand((unsigned) time(&t));
-    return(rand() % (upper + 1 - lower) + lower);
-}
+    //srand((unsigned) time(&t));
+    //return(rand() % (upper + 1 - lower) + lower);
+    /* Intializes random number generator */
+    //srand((unsigned) time(&t));
+    //return(rand() % (upper + 1 - lower) + lower);
+    //srand(time(&somesec));
+    //int32_t num = (srand(time(0)) % (upper - lower + 1)) + lower;
+    /*
+    time_t rawtime;
+    struct tm * timeinfo;
 
+    time (&rawtime);
+    timeinfo = localtime (&rawtime);
+    printf ("Current local time and date: %s", asctime(timeinfo));
+}
 
 void awakenTrang(uint8_t spawn) {    //Bring Trang, the bringer
     if (spawn == 1) {                //of doom, to LIFE
@@ -326,3 +338,5 @@ void awakenSqwog(uint8_t spawn) {    //Bring Sqwog, the bringer
         }
     }
 }
+
+*/

@@ -27,8 +27,6 @@ void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)
    }
 }
 
-
-
 //Sets LED diode to a specific color
 void setLed(uint8_t color) {
 //0=reset, 1=red(PB4), 2=green(PC7), 3=blue(PA9), 4=yellow(PB4+PC7)

@@ -27,7 +27,8 @@ struct velocity {
     int32_t vx, vy;
 };
 
-struct trang { //One of the baddest bois around!, he's got two things inside him,- burning hatred for the player, and 180 degrees
+
+/*struct trang { //One of the baddest bois around!, he's got two things inside him,- burning hatred for the player, and 180 degrees
     uint8_t random;
     struct vector_t position;
     struct vector_t velocity;
@@ -40,7 +41,7 @@ struct sqwog { //Originally a general in the Alik'r army who was dishonoured by 
     struct vector_t velocity;
     int8_t firsty;
     int8_t firstx;
-};
+};*/
 
 
 void fgcolor(uint8_t foreground);
@@ -51,7 +52,7 @@ void clrscr ();
 void gotoxy (uint32_t c, uint32_t r);
 
 uint8_t keyInput();
-
+/*
 //TRANG BOIIIIIIII
 void fixtrangPos(struct trang (*t));
 void trangNextPos(struct trang (*t));
@@ -67,6 +68,6 @@ void drawSqwog (struct sqwog t);
 void eraseSqwog (struct sqwog t);
 void sqwogBox (struct sqwog (*t));
 void awakenSqwog(uint8_t spawn);
-
+*/
 
 #endif
