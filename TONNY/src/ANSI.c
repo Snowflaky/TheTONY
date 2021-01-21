@@ -192,10 +192,10 @@ void trangZag (struct trang (*t)) {
 // generates random numbers in range [lower, upper].
 uint8_t randoms(uint8_t lower, uint8_t upper) {
     time_t t;
-    /* Intializes pseudo - random number generator */
+     Intializes pseudo - random number generator */
     //srand((unsigned) time(&t));
     //return(rand() % (upper + 1 - lower) + lower);
-    /* Intializes random number generator */
+    //Intializes random number generator
     //srand((unsigned) time(&t));
     //return(rand() % (upper + 1 - lower) + lower);
     //srand(time(&somesec));

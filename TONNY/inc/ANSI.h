@@ -19,14 +19,6 @@ struct vector_t {
     int32_t x, y;
 };
 
-struct position {
-    int32_t x, y;
-};
-
-struct velocity {
-    int32_t vx, vy;
-};
-
 
 /*struct trang { //One of the baddest bois around!, he's got two things inside him,- burning hatred for the player, and 180 degrees
     uint8_t random;
