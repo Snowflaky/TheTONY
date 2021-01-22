@@ -239,8 +239,6 @@ int main(void)
 
         uint16_t q=16;
         uint16_t fac = 1;
-        gotoxy(10,10);
-        printf("%d",toneFlag);
         if (toneFlag<10*fac){
             setFreq(123*q);
         }
@@ -688,6 +686,8 @@ int main(void)
                 eraseEnemy(e2);
                 e2.position.x = 135;
                 e2.position.y = e2.firsty;
+                e2.velocity.x=-1;
+                e2.velocity.y=0;
                 score+=500;
                 setFreq(15000);
                 shooting = 0;//resets bullet
@@ -699,6 +699,8 @@ int main(void)
                 eraseEnemy(e2);
                 e2.position.x = 135;
                 e2.position.y = e2.firsty;
+                e2.velocity.x=-1;
+                e2.velocity.y=0;
                 score+=500;
                 setFreq(15000);
                 shooting2 = 0;//resets bullet
@@ -710,6 +712,8 @@ int main(void)
                 eraseEnemy(e2);
                 e2.position.x = 135;
                 e2.position.y = e2.firsty;
+                e2.velocity.x=-1;
+                e2.velocity.y=0;
                 score+=500;
                 setFreq(15000);
                 shooting3 = 0;//resets bullet
