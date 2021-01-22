@@ -23,17 +23,9 @@
 int main(void)
 {
     uart_init (115200);//1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200
-    //Initiate timer (interrupt is set to one every 0.01 second)
-    /*RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2;
-    TIM2->CR1 = 0x0000;//0000 0000 0000 0000
-    TIM2->ARR = 0x0000003F;//set reload value to 63 (microseconds)
-    TIM2->PSC = 0x0000;//set prescale to 0 (microseconds)
-    TIM2->CR1 |= 0x0001;//enable timer
-    TIM2->DIER |= 0x0001; // Enable timer 2 interrupts
-    NVIC_SetPriority(TIM2_IRQn, 0001); // Set interrupt priority=1 (high)
-    NVIC_EnableIRQ(TIM2_IRQn); // Enable interrupt*/
 
 //Game timer:
+    //Initiate timer (interrupt is set to one every 0.01 second)
     RCC->APB2ENR |= RCC_APB2Periph_TIM15; //enable clock line to timer 15?
     TIM15->CR1 = 0x0000;
     TIM15->ARR = 0x003F; //set reload value to 63 (microseconds)
@@ -69,13 +61,13 @@ int main(void)
 
     setFreq(0);
 
-// *************************************************************************
+/* *************************************************************************
         FLASH_Unlock();
         FLASH_ClearFlag( FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPERR );
         FLASH_ErasePage(0x0800F800);//erase page
         FLASH_ProgramHalfWord(0x0800F800,0);//write data
         FLASH_Lock();//lock flash
-        //***********************************************************************''
+        //*********************************************************************** */
 
 
     RCC->AHBENR |= RCC_AHBPeriph_GPIOA;
@@ -97,7 +89,9 @@ int main(void)
     uint16_t score=0;
     uint8_t pause=0;
     int8_t lives=3;
-    uint16_t highscore=0;
+    uint16_t highscore;//=0;
+
+
 
 
 //flags for printing enemies, asteroids and nets
@@ -256,10 +250,17 @@ int main(void)
 
     setLed(3);
 
+    /* ********************************************************************************
+    //The first time you run the program please include the following code. This clears the address for the highscore.
+    FLASH_Unlock();
+    FLASH_ClearFlag( FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPERR );
+    FLASH_ErasePage(0x0800F800);//erase page
+    FLASH_ProgramHalfWord(0x0800F800,0);//write data
+    FLASH_Lock();//lock flash*/
+
 //Main menu
     while(1){
-        //if(timeFlagPrint==1){
-        //setFreq(0);
+
         window(50,90,15,27,4);
         gotoxy(65,17);
         printf("MAIN MENU");
@@ -380,9 +381,8 @@ int main(void)
                 }
             }
         }
-        uint8_t q=20;
-        gotoxy(10,10);
-        printf("%d",toneFlag);
+        uint8_t q=20;//scale factor to tone frequency
+//theme song
         if (toneFlag<20){
             setFreq(123*q);
         }
@@ -581,8 +581,6 @@ int main(void)
                 if (shooting==0){//Starts bullet when trigger is pulled
                     shooting=startBullet(ship,u);//shooting gets ships y-axis position as it's value
                 }
-                gotoxy(10,10);
-                printf("%d",e2.velocity.y);
 
                 bullet.position.y=shooting; // bullet gets ships y-axis position at bullet initiation
                 bullet2.position.y=shooting2;
@@ -1003,4 +1001,11 @@ int main(void)
 
 
 
-
+/*RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2;
+    TIM2->CR1 = 0x0000;//0000 0000 0000 0000
+    TIM2->ARR = 0x0000003F;//set reload value to 63 (microseconds)
+    TIM2->PSC = 0x0000;//set prescale to 0 (microseconds)
+    TIM2->CR1 |= 0x0001;//enable timer
+    TIM2->DIER |= 0x0001; // Enable timer 2 interrupts
+    NVIC_SetPriority(TIM2_IRQn, 0001); // Set interrupt priority=1 (high)
+    NVIC_EnableIRQ(TIM2_IRQn); // Enable interrupt*/
