@@ -376,8 +376,6 @@ int main(void)
 
         uint16_t q=16;
         uint16_t fac = 1;
-        gotoxy(10,10);
-        printf("%d",toneFlag);
         if (toneFlag<10*fac){
             setFreq(123*q);
         }
@@ -474,12 +472,6 @@ int main(void)
         else if (toneFlag>310*fac && toneFlag<320*fac){
             setFreq(110);
         }
-        /*else if (toneFlag>320*fac && toneFlag<330*fac){
-            setFreq(123);
-        }
-        else if (toneFlag>330*fac && toneFlag<340*fac){
-            setFreq(82);
-        }*/
         else{
             toneFlag=0;
         }
