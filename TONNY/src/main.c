@@ -109,41 +109,96 @@ int main(void)
 //Asteroid belt initiated
     //old... structs are initiated, but no values are declared.
     //these filled when game is initiated
+
+
     struct asteroid_t asteroid1;
     asteroid1.position.x=20;
     asteroid1.position.y=2;
     asteroid1.velocity.y=1;
+    asteroid1.velocity.x=0;
+    asteroid1.ADFlag1=1;
+    asteroid1.ADFlag2=0;
+    asteroid1.startLevel=1;
     struct asteroid_t oldAsteroid1;
     struct asteroid_t asteroid2;
     asteroid2.position.x=35;
     asteroid2.position.y=20;
     asteroid2.velocity.y=1;
+    asteroid2.velocity.x=0;
+    asteroid2.ADFlag1=1;
+    asteroid2.ADFlag2=0;
+    asteroid2.startLevel=1;
     struct asteroid_t oldAsteroid2;
     struct asteroid_t asteroid3;
     asteroid3.position.x=50;
     asteroid3.position.y=2;
     asteroid3.velocity.y=1;
+    asteroid3.velocity.x=0;
+    asteroid3.ADFlag1=0;
+    asteroid3.ADFlag2=1;
+    asteroid3.startLevel=1;
     struct asteroid_t oldAsteroid3;
     struct asteroid_t asteroid4;
     asteroid4.position.x=62;
     asteroid4.position.y=32;
     asteroid4.velocity.y=1;
+    asteroid4.velocity.x=0;
+    asteroid4.ADFlag1=1;
+    asteroid4.ADFlag2=0;
+    asteroid4.startLevel=1;
     struct asteroid_t oldAsteroid4;
     struct asteroid_t asteroid5;
     asteroid5.position.x=70;
     asteroid5.position.y=10;
     asteroid5.velocity.y=1;
+    asteroid5.velocity.x=0;
+    asteroid5.ADFlag1=0;
+    asteroid5.ADFlag2=1;
+    asteroid5.startLevel=1;
     struct asteroid_t oldAsteroid5;
     struct asteroid_t asteroid6;
     asteroid6.position.x=41;
     asteroid6.position.y=33;
     asteroid6.velocity.y=1;
+    asteroid6.velocity.x=0;
+    asteroid6.ADFlag1=0;
+    asteroid6.ADFlag2=1;
+    asteroid6.startLevel=2;
     struct asteroid_t oldAsteroid6;
     struct asteroid_t asteroid7;
     asteroid7.position.x=83;
     asteroid7.position.y=18;
     asteroid7.velocity.y=1;
+    asteroid7.velocity.x=0;
+    asteroid7.ADFlag1=0;
+    asteroid7.ADFlag2=1;
+    asteroid7.startLevel=2;
     struct asteroid_t oldAsteroid7;
+
+
+    struct asteroid_t asteroids[7];
+    asteroids[0]=asteroid1;
+    asteroids[1]=asteroid2;
+    asteroids[2]=asteroid3;
+    asteroids[3]=asteroid4;
+    asteroids[4]=asteroid5;
+    asteroids[5]=asteroid6;
+    asteroids[6]=asteroid7;
+
+    struct asteroid_t oldAsteroids[7];
+    oldAsteroids[0]=oldAsteroid1;
+    oldAsteroids[1]=oldAsteroid2;
+    oldAsteroids[2]=oldAsteroid3;
+    oldAsteroids[3]=oldAsteroid4;
+    oldAsteroids[4]=oldAsteroid5;
+    oldAsteroids[5]=oldAsteroid6;
+    oldAsteroids[6]=oldAsteroid7;
+
+
+
+
+
+
 
 //Enemy nets initiated
     struct asteroid_t dodge1;
@@ -494,7 +549,23 @@ int main(void)
             }
 
 //Prints asteroids and enemy nets when their position has updated
-            if (ADFlag1 == 1) {
+            for (uint8_t i=0; i < sizeof(asteroids); i++){
+                    if (asteroids[i].ADFlag1==ADFlag1){
+                            printAsteroid(asteroids[i],oldAsteroids[i]);
+                    }
+                    if (asteroids[i].ADFlag2==ADFlag2){
+                            if (asteroids[i].startLevel<startLevel){
+                                printAsteroid(asteroids[i],oldAsteroids[i]);
+                            }
+                            if (asteroids[i].startLevel>=2){
+                                printAsteroid(asteroids[i],oldAsteroids[i]);
+                            }
+                    }
+            }
+            ADFlag1=0;
+            ADFlag2=0;
+
+            /*if (ADFlag1 == 1) {
                 printAsteroid(asteroid1, oldAsteroid1);
                 printAsteroid(asteroid2, oldAsteroid2);
                 printAsteroid(asteroid4, oldAsteroid4);
@@ -510,6 +581,7 @@ int main(void)
                 ADFlag1=0;
             }
 
+
             if (ADFlag2 == 1) {
                 printAsteroid(asteroid3, oldAsteroid3);
                 printAsteroid(asteroid5, oldAsteroid5);
@@ -522,7 +594,7 @@ int main(void)
                     printDodge(dodge7, oldDodge7);
                 }
                 ADFlag2=0;
-            }
+            }*/
 //LED showing how much time is left
             if( fuel>5000){
                 setLed(0);

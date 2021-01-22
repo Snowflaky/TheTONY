@@ -26,6 +26,9 @@ struct ship_t {
 struct asteroid_t {
     struct vector_t position;
     struct vector_t velocity;
+    uint8_t ADFlag1;
+    uint8_t ADFlag2;
+    uint8_t startLevel;
 };
 
 struct bullet_t {
