@@ -1,6 +1,34 @@
 #include "game.h"
 #include "string.h"
 
+void initShip(struct ship_t *ship, int32_t x, int32_t y){
+    (*ship).position.x=x;
+    (*ship).position.y=y;
+}
+
+void initAsteroid(struct asteroid_t *asteroid, int32_t x, int32_t y, int32_t vx, int32_t vy){
+    (*asteroid).position.x=x;
+    (*asteroid).position.y=y;
+    (*asteroid).velocity.x=vx;
+    (*asteroid).velocity.y=vy;
+
+}
+
+void initEnemy(struct enemy *e, uint8_t type, int32_t x, int32_t y){
+    (*e).enemyType=type;
+    (*e).position.x=x;
+    (*e).position.y=y;
+    (*e).firstx=(*e).position.x;
+    (*e).firsty=(*e).position.y;
+    if ((*e).enemyType == 1) {
+        (*e).velocity.x = -1;
+        (*e).velocity.y = 1;
+    } else if ((*e).enemyType == 2) {
+        (*e).velocity.x = -1;
+        (*e).velocity.y = 0;
+    }
+}
+
 
 
 //Compares asteroid and bullet positions

@@ -10,6 +10,9 @@
 #ifndef _game_H_
 #define _game_H_
 
+struct vector_t {
+    int32_t x, y;
+};
 
 struct enemy {
     uint8_t enemyType;

@@ -125,6 +125,7 @@ void enemyMotion (struct enemy (*e)) {
     }
 }
 
+
 void decideVel (struct enemy (*e)) {
     if ((*e).enemyType == 1) {
         (*e).velocity.x = -1;
