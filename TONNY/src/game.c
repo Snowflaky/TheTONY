@@ -46,7 +46,7 @@ uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge){
     return g;
 }
 
-//Checks if new score is higher than previous highscore and updates it
+//Checks if new score is higher than previous highscore and updates it in the flash memory
 uint16_t updateHighscore (uint16_t highscore, uint16_t score){
 //input:current highscore, current score
     //reading from flash:
