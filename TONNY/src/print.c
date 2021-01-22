@@ -80,6 +80,44 @@ void printShip (struct ship_t ship, struct ship_t oldShip) {
     color(15,0);
 }
 
+void printPowerShip (struct ship_t ship, struct ship_t oldShip) {
+//Delete ship at old position and prints spaceship at position (x,y).
+//Input: pointer to ship structure.
+    color(0,0);
+    gotoxy(oldShip.position.x + 1,oldShip.position.y);
+    printf(" ");
+    gotoxy(oldShip.position.x,oldShip.position.y - 1);
+    printf(" ");
+    gotoxy(oldShip.position.x,oldShip.position.y + 1);
+    printf(" ");
+    gotoxy(oldShip.position.x,oldShip.position.y);
+    printf(" ");
+    gotoxy(oldShip.position.x + 1,oldShip.position.y - 1);
+    printf(" ");
+    gotoxy(oldShip.position.x + 1,oldShip.position.y + 1);
+    printf(" ");
+//Draw Tonny's ship in it's current position
+    color(0,2);
+    gotoxy(ship.position.x + 1,ship.position.y);
+    printf("O");
+    color(9,2);
+    gotoxy(ship.position.x,ship.position.y - 1);
+    printf("D");
+    gotoxy(ship.position.x,ship.position.y + 1);
+    printf("D");
+    color(10,2);
+    gotoxy(ship.position.x,ship.position.y);
+    printf("=");
+    color(1,0);
+    printf("%c[1m", ESC);
+    gotoxy(ship.position.x + 1,ship.position.y - 1);
+    printf("-");
+    gotoxy(ship.position.x + 1,ship.position.y + 1);
+    printf("-");
+    printf("%c[22m", ESC);
+    color(15,0);
+}
+
 //Prints asteroids
 void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid){
 //Delete asteroid at old position and prints asteroid at position (x,y).

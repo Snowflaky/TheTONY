@@ -56,7 +56,8 @@ int main(void)
     uint16_t score=0;
     uint8_t pause=0;
     int8_t lives=3;
-    uint16_t highscore;//=0;
+    uint16_t highscore;
+    uint8_t powerFlag=0;
 
 //flags for printing enemies, asteroids and nets
     uint8_t ADFlag1=1;
@@ -179,6 +180,7 @@ int main(void)
         }
 //Level menu
         if (v==5){
+                //initall(&setFreq, &ADFlag..)********************'
             setFreq(0);
             levelMenu=1;
             clrscr();
@@ -191,6 +193,7 @@ int main(void)
             timeFlagEnemy=0;
             timeFlagGame=0;
             enemyFlag=0;
+            powerFlag=0;
             fuel=10000;
             score=0;
             lives=3;
@@ -410,7 +413,12 @@ int main(void)
 
 //Prints the spaceship and bullet, and reads input from player
             if(timeFlagPrint==1){
-                printShip(ship, oldShip);
+                if (powerFlag==1){
+                    printPowerShip(ship, oldShip);
+                }
+                else{
+                    printShip(ship, oldShip);
+                }
                 printBullet(bullet, oldBullet);
                 printBullet(bullet2, oldBullet2);
                 printBullet(bullet3, oldBullet3);
@@ -445,9 +453,13 @@ int main(void)
                 bullet2.position.y=shooting2;
                 bullet3.position.y=shooting3;
 
-                if (fuel<8000 && power.position.x>0){
+                if (fuel<6000 && power.position.x>2){
                     printPower(power, oldPower);
                     movePower(&power, &oldPower);
+                }
+
+                if (fuel<2000){
+                    powerFlag=0;
                 }
 
 //If time runs out or you have no lives left it is GAME OVER!
@@ -543,9 +555,10 @@ int main(void)
                 }
 
             //checks if net hits ship
-                if (compDoSh(ship,dodge1)==1 || compDoSh(ship,dodge2)==1 || compDoSh(ship,dodge3)==1 ||
+                if ((compDoSh(ship,dodge1)==1 || compDoSh(ship,dodge2)==1 || compDoSh(ship,dodge3)==1 ||
                     compDoSh(ship,dodge4)==1 || compDoSh(ship,dodge5)==1 || compDoSh(ship,dodge6)==1 ||
-                    compDoSh(ship,dodge7)==1 || compDoSh(ship,dodge8)==1 || compDoSh(ship,dodge9)==1 || compDoSh(ship,dodge10)==1){
+                    compDoSh(ship,dodge7)==1 || compDoSh(ship,dodge8)==1 || compDoSh(ship,dodge9)==1 ||
+                    compDoSh(ship,dodge10)==1) && powerFlag!=1){
                     lives-=1;//when nets hits, one life is lost
                     gotoxy(ship.position.x+2,ship.position.y+2);
                     printf("OW!");
@@ -764,6 +777,7 @@ int main(void)
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
                 printf(" ");
                 power.position.x=3;
+                powerFlag=1;
             }
             if (compBuPo(bullet2,power)==1){
                 shooting2 = 0;
@@ -771,6 +785,7 @@ int main(void)
                 gotoxy(oldBullet2.position.x,oldBullet2.position.y);
                 printf(" ");
                 power.position.x=3;
+                powerFlag=1;
             }
             if (compBuPo(bullet3,power)==1){
                 shooting3 = 0;
@@ -778,6 +793,7 @@ int main(void)
                 gotoxy(oldBullet3.position.x,oldBullet3.position.y);
                 printf(" ");
                 power.position.x=3;
+                powerFlag=1;
             }
 
     //Enemy positions is updated every 1/25 second
