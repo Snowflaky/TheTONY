@@ -99,6 +99,9 @@ int main(void)
     initBullet(&bullet2,3,ship.position.y,1,0);
     initBullet(&bullet3,3,ship.position.y,1,0);
 
+    struct bullet_t power, oldPower;
+    initBullet(&power, 135, 16, -1, 0);
+
 //Enemies are initiated
     struct enemy e1, e2, e3;
     initEnemy(&e1,1,135,22);
@@ -440,6 +443,11 @@ int main(void)
                 bullet.position.y=shooting; // bullet gets ships y-axis position at bullet initiation
                 bullet2.position.y=shooting2;
                 bullet3.position.y=shooting3;
+
+                if (fuel<8000 && power.position.x>0){
+                    printPower(power, oldPower);
+                    movePower(&power, &oldPower);
+                }
 
 //If time runs out or you have no lives left it is GAME OVER!
                 if (fuel<=0 || lives<=0){

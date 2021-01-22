@@ -128,6 +128,22 @@ void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge){
         printf("%c[22m", ESC);
 }
 
+//Prints power uo
+void printPower (struct bullet_t power, struct bullet_t oldPower){
+    if (power.position.x>2){
+        gotoxy(oldPower.position.x,oldPower.position.y);
+        printf(" ");
+    }
+    if (power.position.x>3){
+        gotoxy(power.position.x,power.position.y);
+        color(14,2);
+        printf("%c[1m", ESC);
+        printf("¤");
+        color(15,0);
+        printf("%c[22m", ESC);
+    }
+}
+
 
 void drawEnemy (struct enemy e) {
     if (e.enemyType == 1) {

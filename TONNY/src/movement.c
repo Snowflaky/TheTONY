@@ -73,6 +73,11 @@ void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge
     (*dodge).position.y=y;
 }
 
+void movePower (struct bullet_t *power, struct bullet_t *oldPower){
+    (*oldPower).position.x=(*power).position.x;
+    (*oldPower).position.y=(*power).position.y;
+    (*power).position.x=(*power).position.x+(*power).velocity.x;
+}
 
 void enemyMotion (struct enemy (*e)) {
     uint8_t k=1;
