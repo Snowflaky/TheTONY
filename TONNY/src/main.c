@@ -31,6 +31,17 @@ int main(void)
 
     initGPIO();//Initialize GPIO
 
+//LCD Display
+    lcd_init(); //initialize display
+    uint8_t buffer[512];//initialize buffer array
+    memset (buffer,0x00,512);//set buffer to all 0's (clear LCD screen)
+
+    setLed(3);
+
+//resets colors and clears screen
+    color(15,0);
+    clrscr();
+
     uint8_t startLevel=0;
     uint8_t v=0;
     uint8_t levelMenu=0;
@@ -51,15 +62,6 @@ int main(void)
     uint8_t ADFlag1=1;
     uint8_t ADFlag2=1;
     uint8_t enemyFlag=1;
-
-//LCD Display
-    lcd_init(); //initialize display
-    uint8_t buffer[512];//initialize buffer array
-    memset (buffer,0x00,512);//set buffer to all 0's (clear LCD screen)
-
-//resets colors and clears screen
-    color(15,0);
-    clrscr();
 
 //TONNY's Spaceship is built
     struct ship_t ship;
@@ -102,8 +104,6 @@ int main(void)
     initEnemy(&e1,1,135,22);
     initEnemy(&e2,2,135,30);
     initEnemy(&e3,1,135,13);
-
-    setLed(3);
 
     /* ********************************************************************************
     //The first time you run the program please include the following code. This clears the address for the highscore.

@@ -126,7 +126,7 @@ void enemyMotion (struct enemy (*e)) {
 }
 
 
-void decideVel (struct enemy (*e)) {
+/*void decideVel (struct enemy (*e)) {
     if ((*e).enemyType == 1) {
         (*e).velocity.x = -1;
         (*e).velocity.y = 1;
@@ -135,6 +135,7 @@ void decideVel (struct enemy (*e)) {
         (*e).velocity.y = 0;
     }
 }
+included in initEnemy!!*/
 
 void enemyNextPos (struct enemy *e) {
     //Calculate new position for Trang. Input is a pointer.
