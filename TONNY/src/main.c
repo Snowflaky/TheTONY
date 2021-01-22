@@ -373,104 +373,113 @@ int main(void)
                 }
             }
         }
-        uint8_t q=20;//scale factor to tone frequency
-//theme song
-        if (toneFlag<20){
+
+        uint16_t q=16;
+        uint16_t fac = 1;
+        gotoxy(10,10);
+        printf("%d",toneFlag);
+        if (toneFlag<10*fac){
             setFreq(123*q);
         }
-        else if (toneFlag>20 && toneFlag<40){
-            setFreq(98*q);
-        }
-        else if (toneFlag>40 && toneFlag<60){
-            setFreq(98*q);
-        }
-        else if (toneFlag>60 && toneFlag<80){
-            setFreq(77*q);
-        }
-        else if (toneFlag>80 && toneFlag<100){
+        else if (toneFlag>10*fac && toneFlag<20*fac){
             setFreq(82*q);
         }
-        else if (toneFlag>100 && toneFlag<120){
-            setFreq(64*q);
+        else if (toneFlag>20*fac && toneFlag<30*fac){
+            setFreq(98*q);
         }
-        else if (toneFlag>120 && toneFlag<140){
+        else if (toneFlag>30*fac && toneFlag<40*fac){
+            setFreq(61*q);
+        }
+        else if (toneFlag>40*fac && toneFlag<50*fac){//5
+            setFreq(82*q);
+        }
+        else if (toneFlag>50*fac && toneFlag<60*fac){
+            setFreq(49*q);
+        }
+        else if (toneFlag>60*fac && toneFlag<70*fac){
             setFreq(41*q);
         }
-        else if (toneFlag>140 && toneFlag<160){
+        else if (toneFlag>70*fac && toneFlag<80*fac){
             setFreq(123*q);
         }
-        else if (toneFlag>160 && toneFlag<180){
+        else if (toneFlag>80*fac && toneFlag<90*fac){
             setFreq(110*q);
         }
-        else if (toneFlag>180 && toneFlag<200){
-            setFreq(87*q);
-        }
-        else if (toneFlag>200 && toneFlag<220){
-            setFreq(92*q);
-        }
-        else if (toneFlag>220 && toneFlag<240){
-            setFreq(69*q);
-        }
-        else if (toneFlag>240 && toneFlag<260){
+        else if (toneFlag>90*fac && toneFlag<100*fac){//10
             setFreq(73*q);
         }
-        else if (toneFlag>260 && toneFlag<280){
-            setFreq(120*q);
-        }
-        else if (toneFlag>280 && toneFlag<300){
-            setFreq(103*q);
-        }
-        else if (toneFlag>300 && toneFlag<320){
-            setFreq(110*q);
-        }
-        else if (toneFlag>320 && toneFlag<340){
-            setFreq(123*q);
-        }
-        else if (toneFlag>340 && toneFlag<360){
-            setFreq(106*q);
-        }
-        else if (toneFlag>360 && toneFlag<380){
-            setFreq(98*q);
-        }
-        else if (toneFlag>380 && toneFlag<400){
-            setFreq(82*q);
-        }
-        else if (toneFlag>400 && toneFlag<420){
-            setFreq(49*q);
-        }
-        else if (toneFlag>420 && toneFlag<440){
-            setFreq(65*q);
-        }
-        else if (toneFlag>440 && toneFlag<460){
-            setFreq(49*q);
-        }
-        else if (toneFlag>460 && toneFlag<480){
-            setFreq(43*q);
-        }
-        else if (toneFlag>480 && toneFlag<500){
-            setFreq(110*q);
-        }
-        else if (toneFlag>500 && toneFlag<520){
-            setFreq(78*q);
-        }
-        else if (toneFlag>520 && toneFlag<540){
-            setFreq(63*q);
-        }
-        else if (toneFlag>540 && toneFlag<560){
-            setFreq(73*q);
-        }
-        else if (toneFlag>560 && toneFlag<580){
-            setFreq(52*q);
-        }
-        else if (toneFlag>580 && toneFlag<600){
+        else if (toneFlag>100*fac && toneFlag<110*fac){
             setFreq(93*q);
         }
-        else if (toneFlag>600 && toneFlag<620){
+        else if (toneFlag>110*fac && toneFlag<120*fac){
+            setFreq(55*q);
+        }
+        else if (toneFlag>120*fac && toneFlag<130*fac){
             setFreq(73*q);
         }
-        else if (toneFlag>620 && toneFlag<640){
+        else if (toneFlag>130*fac && toneFlag<140*fac){
+            setFreq(46*q);
+        }
+        else if (toneFlag>140*fac && toneFlag<150*fac){ //15
+            setFreq(36*q);
+        }
+        else if (toneFlag>150*fac && toneFlag<160*fac){
+            setFreq(110*q);
+        }
+        else if (toneFlag>160*fac && toneFlag<170*fac){
+            setFreq(123*q);
+        }
+        else if (toneFlag>170*fac && toneFlag<180*fac){
+            setFreq(93*q);
+        }
+        else if (toneFlag>180*fac && toneFlag<190*fac){
+            setFreq(98*q);
+        }
+        else if (toneFlag>190*fac && toneFlag<200*fac){ //20
+            setFreq(65*q);
+        }
+        else if (toneFlag>200*fac && toneFlag<210*fac){
+            setFreq(49*q);
+        }
+        else if (toneFlag>210*fac && toneFlag<220*fac){
+            setFreq(65*q);
+        }
+        else if (toneFlag>220*fac && toneFlag<230*fac){
+            setFreq(49*q);
+        }
+        else if (toneFlag>230*fac && toneFlag<240*fac){
+            setFreq(41*q);
+        }
+        else if (toneFlag>240*fac && toneFlag<250*fac){ //25
+            setFreq(110*q);
+        }
+        else if (toneFlag>250*fac && toneFlag<260*fac){
+            setFreq(55*q);
+        }
+        else if (toneFlag>260*fac && toneFlag<270*fac){
+            setFreq(36*q);
+        }
+        else if (toneFlag>270*fac && toneFlag<280*fac){
+            setFreq(73*q);
+        }
+        else if (toneFlag>280*fac && toneFlag<290*fac){
+            setFreq(36*q);
+        }
+        else if (toneFlag>290*fac && toneFlag<300*fac){ //30
+            setFreq(93*q);
+        }
+        else if (toneFlag>300*fac && toneFlag<310*fac){
+            setFreq(73*q);
+        }
+        else if (toneFlag>310*fac && toneFlag<320*fac){
             setFreq(110);
         }
+        /*else if (toneFlag>320*fac && toneFlag<330*fac){
+            setFreq(123);
+        }
+        else if (toneFlag>330*fac && toneFlag<340*fac){
+            setFreq(82);
+        }*/
         else{
             toneFlag=0;
         }
