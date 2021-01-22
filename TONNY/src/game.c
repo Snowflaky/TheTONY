@@ -14,6 +14,14 @@ void initAsteroid(struct asteroid_t *asteroid, int32_t x, int32_t y, int32_t vx,
 
 }
 
+void initBullet(struct bullet_t *bullet, int32_t x, int32_t y, int32_t vx, int32_t vy){
+    (*bullet).position.x=x;
+    (*bullet).position.y=y;
+    (*bullet).velocity.x=vx;
+    (*bullet).velocity.y=vy;
+}
+
+
 void initEnemy(struct enemy *e, uint8_t type, int32_t x, int32_t y){
     (*e).enemyType=type;
     (*e).position.x=x;

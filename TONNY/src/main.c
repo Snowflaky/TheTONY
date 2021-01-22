@@ -31,7 +31,6 @@ int main(void)
 
     initGPIO();//Initialize GPIO
 
-
     uint8_t startLevel=0;
     uint8_t v=0;
     uint8_t levelMenu=0;
@@ -42,13 +41,11 @@ int main(void)
     uint8_t shooting2=0;
     uint8_t shooting3=0;
     timeFlagGame=0;
-
     int32_t fuel=10000;
     uint16_t score=0;
     uint8_t pause=0;
     int8_t lives=3;
     uint16_t highscore;//=0;
-
 
 //flags for printing enemies, asteroids and nets
     uint8_t ADFlag1=1;
@@ -66,150 +63,45 @@ int main(void)
 
 //TONNY's Spaceship is built
     struct ship_t ship;
-    ship.position.x = 2;
-    ship.position.y=19;
     struct ship_t oldShip;
+    initShip(&ship,2,19);
 
-//Asteroid belt initiated
+//Asteroid belt and enemy nets initiated
     //old... structs are initiated, but no values are declared.
     //these filled when game is initiated
-    struct asteroid_t asteroid1;
-    asteroid1.position.x=20;
-    asteroid1.position.y=2;
-    asteroid1.velocity.y=1;
-    struct asteroid_t oldAsteroid1;
-    struct asteroid_t asteroid2;
-    asteroid2.position.x=35;
-    asteroid2.position.y=20;
-    asteroid2.velocity.y=1;
-    struct asteroid_t oldAsteroid2;
-    struct asteroid_t asteroid3;
-    asteroid3.position.x=50;
-    asteroid3.position.y=2;
-    asteroid3.velocity.y=1;
-    struct asteroid_t oldAsteroid3;
-    struct asteroid_t asteroid4;
-    asteroid4.position.x=62;
-    asteroid4.position.y=32;
-    asteroid4.velocity.y=1;
-    struct asteroid_t oldAsteroid4;
-    struct asteroid_t asteroid5;
-    asteroid5.position.x=70;
-    asteroid5.position.y=10;
-    asteroid5.velocity.y=1;
-    struct asteroid_t oldAsteroid5;
-    struct asteroid_t asteroid6;
-    asteroid6.position.x=41;
-    asteroid6.position.y=33;
-    asteroid6.velocity.y=1;
-    struct asteroid_t oldAsteroid6;
-    struct asteroid_t asteroid7;
-    asteroid7.position.x=83;
-    asteroid7.position.y=18;
-    asteroid7.velocity.y=1;
-    struct asteroid_t oldAsteroid7;
-
-//Enemy nets initiated
-    struct asteroid_t dodge1;
-    dodge1.position.x=139;
-    dodge1.position.y=7;
-    dodge1.velocity.x=-1;
-    struct asteroid_t oldDodge1;
-    struct asteroid_t dodge2;
-    dodge2.position.x=117;
-    dodge2.position.y=16;
-    dodge2.velocity.x=-1;
-    struct asteroid_t oldDodge2;
-    struct asteroid_t dodge3;
-    dodge3.position.x=130;
-    dodge3.position.y=23;
-    dodge3.velocity.x=-1;
-    struct asteroid_t oldDodge3;
-    struct asteroid_t dodge4;
-    dodge4.position.x=107;
-    dodge4.position.y=29;
-    dodge4.velocity.x=-1;
-    struct asteroid_t oldDodge4;
-    struct asteroid_t dodge5;
-    dodge5.position.x=125;
-    dodge5.position.y=34;
-    dodge5.velocity.x=-1;
-    struct asteroid_t oldDodge5;
-    struct asteroid_t dodge6;
-    dodge6.position.x=126;
-    dodge6.position.y=11;
-    dodge6.velocity.x=-1;
-    struct asteroid_t oldDodge6;
-    struct asteroid_t dodge7;
-    dodge7.position.x=98;
-    dodge7.position.y=20;
-    dodge7.velocity.x=-1;
-    struct asteroid_t oldDodge7;
-    struct asteroid_t dodge8;
-    dodge8.position.x=50;
-    dodge8.position.y=35;
-    dodge8.velocity.x=-1;
-    struct asteroid_t oldDodge8;
-    struct asteroid_t dodge9;
-    dodge9.position.x=70;
-    dodge9.position.y=28;
-    dodge9.velocity.x=-1;
-    struct asteroid_t oldDodge9;
-    struct asteroid_t dodge10;
-    dodge10.position.x=82;
-    dodge10.position.y=31;
-    dodge10.velocity.x=-1;
-    struct asteroid_t oldDodge10;
+    struct asteroid_t asteroid1, asteroid2, asteroid3, asteroid4, asteroid5, asteroid6, asteroid7;
+    struct asteroid_t oldAsteroid1, oldAsteroid2, oldAsteroid3, oldAsteroid4, oldAsteroid5, oldAsteroid6, oldAsteroid7;
+    struct asteroid_t dodge1, dodge2, dodge3, dodge4, dodge5, dodge6, dodge7, dodge8, dodge9, dodge10;
+    struct asteroid_t oldDodge1, oldDodge2, oldDodge3, oldDodge4, oldDodge5, oldDodge6, oldDodge7, oldDodge8, oldDodge9, oldDodge10;
+    initAsteroid(&asteroid1, 20, 2, 0, 1);
+    initAsteroid(&asteroid2, 35, 20, 0, 1);
+    initAsteroid(&asteroid3, 50, 2, 0, 1);
+    initAsteroid(&asteroid4, 62, 32, 0, 1);
+    initAsteroid(&asteroid5, 70, 10, 0, 1);
+    initAsteroid(&asteroid6, 41, 33, 0, 1);
+    initAsteroid(&asteroid7, 83, 18, 0, 1);
+    initAsteroid(&dodge1, 139, 7, -1, 0);
+    initAsteroid(&dodge2, 117, 16, -1, 0);
+    initAsteroid(&dodge3, 130, 23, -1, 0);
+    initAsteroid(&dodge4, 107, 29, -1, 0);
+    initAsteroid(&dodge5, 125, 34, -1, 0);
+    initAsteroid(&dodge6, 126, 11, -1, 0);
+    initAsteroid(&dodge7, 98, 20, -1, 0);
+    initAsteroid(&dodge8, 50, 35, -1, 0);
+    initAsteroid(&dodge9, 70, 28, -1, 0);
+    initAsteroid(&dodge10, 82, 31, -1, 0);
 
 //Bullet initiated
-    struct bullet_t bullet;
-    bullet.position.x = 3;
-    bullet.position.y = ship.position.y;
-    bullet.velocity.x = 1;
-    struct bullet_t oldBullet;
-    struct bullet_t bullet2;
-    bullet2.position.x = 3;
-    bullet2.position.y = ship.position.y;
-    bullet2.velocity.x = 1;
-    struct bullet_t oldBullet2;
-    struct bullet_t bullet3;
-    bullet3.position.x = 3;
-    bullet3.position.y = ship.position.y;
-    bullet3.velocity.x = 1;
-    struct bullet_t oldBullet3;
+    struct bullet_t bullet, bullet2, bullet3, oldBullet, oldBullet2, oldBullet3;
+    initBullet(&bullet,3,ship.position.y,1,0);
+    initBullet(&bullet2,3,ship.position.y,1,0);
+    initBullet(&bullet3,3,ship.position.y,1,0);
 
 //Enemies are initiated
-    /*struct enemy e1, e2, e3;
+    struct enemy e1, e2, e3;
     initEnemy(&e1,1,135,22);
     initEnemy(&e2,2,135,30);
-    initEnemy(&e3,1,135,13);*/
-
-
-
-    struct enemy e1;
-    e1.enemyType = 1;
-    e1.position.x = 135;
-    e1.position.y = 22;
-    decideVel(&e1);
-    e1.firstx = 135;
-    e1.firsty = e1.position.y;
-
-    struct enemy e2;
-    e2.enemyType = 2;
-    e2.position.x = 135;
-    e2.position.y = 30;
-    decideVel(&e2);
-    e2.firstx = 135;
-    e2.firsty = e2.position.y;
-
-    struct enemy e3;
-    e3.enemyType = 1;
-    e3.position.x = 135;
-    e3.position.y = 13;
-    decideVel(&e3);
-    e3.firstx = 135;
-    e3.firsty = e3.position.y;
-
+    initEnemy(&e3,1,135,13);
 
     setLed(3);
 
@@ -961,6 +853,138 @@ int main(void)
 
 }//END OF MAIN!!!!!
 
+
+/*
+    struct asteroid_t dodge1;
+    dodge1.position.x=139;
+    dodge1.position.y=7;
+    dodge1.velocity.x=-1;
+    struct asteroid_t oldDodge1;
+    struct asteroid_t dodge2;
+    dodge2.position.x=117;
+    dodge2.position.y=16;
+    dodge2.velocity.x=-1;
+    struct asteroid_t oldDodge2;
+    struct asteroid_t dodge3;
+    dodge3.position.x=130;
+    dodge3.position.y=23;
+    dodge3.velocity.x=-1;
+    struct asteroid_t oldDodge3;
+    struct asteroid_t dodge4;
+    dodge4.position.x=107;
+    dodge4.position.y=29;
+    dodge4.velocity.x=-1;
+    struct asteroid_t oldDodge4;
+    struct asteroid_t dodge5;
+    dodge5.position.x=125;
+    dodge5.position.y=34;
+    dodge5.velocity.x=-1;
+    struct asteroid_t oldDodge5;
+    struct asteroid_t dodge6;
+    dodge6.position.x=126;
+    dodge6.position.y=11;
+    dodge6.velocity.x=-1;
+    struct asteroid_t oldDodge6;
+    struct asteroid_t dodge7;
+    dodge7.position.x=98;
+    dodge7.position.y=20;
+    dodge7.velocity.x=-1;
+    struct asteroid_t oldDodge7;
+    struct asteroid_t dodge8;
+    dodge8.position.x=50;
+    dodge8.position.y=35;
+    dodge8.velocity.x=-1;
+    struct asteroid_t oldDodge8;
+    struct asteroid_t dodge9;
+    dodge9.position.x=70;
+    dodge9.position.y=28;
+    dodge9.velocity.x=-1;
+    struct asteroid_t oldDodge9;
+    struct asteroid_t dodge10;
+    dodge10.position.x=82;
+    dodge10.position.y=31;
+    dodge10.velocity.x=-1;
+    struct asteroid_t oldDodge10;
+    */
+
+/*
+    struct asteroid_t asteroid1;
+    asteroid1.position.x=20;
+    asteroid1.position.y=2;
+    asteroid1.velocity.y=1;
+    struct asteroid_t oldAsteroid1;
+    struct asteroid_t asteroid2;
+    asteroid2.position.x=35;
+    asteroid2.position.y=20;
+    asteroid2.velocity.y=1;
+    struct asteroid_t oldAsteroid2;
+    struct asteroid_t asteroid3;
+    asteroid3.position.x=50;
+    asteroid3.position.y=2;
+    asteroid3.velocity.y=1;
+    struct asteroid_t oldAsteroid3;
+    struct asteroid_t asteroid4;
+    asteroid4.position.x=62;
+    asteroid4.position.y=32;
+    asteroid4.velocity.y=1;
+    struct asteroid_t oldAsteroid4;
+    struct asteroid_t asteroid5;
+    asteroid5.position.x=70;
+    asteroid5.position.y=10;
+    asteroid5.velocity.y=1;
+    struct asteroid_t oldAsteroid5;
+    struct asteroid_t asteroid6;
+    asteroid6.position.x=41;
+    asteroid6.position.y=33;
+    asteroid6.velocity.y=1;
+    struct asteroid_t oldAsteroid6;
+    struct asteroid_t asteroid7;
+    asteroid7.position.x=83;
+    asteroid7.position.y=18;
+    asteroid7.velocity.y=1;
+    struct asteroid_t oldAsteroid7;*/
+
+
+/*
+    bullet.position.x = 3;
+    bullet.position.y = ship.position.y;
+    bullet.velocity.x = 1;
+    struct bullet_t oldBullet;
+    struct bullet_t bullet2;
+    bullet2.position.x = 3;
+    bullet2.position.y = ship.position.y;
+    bullet2.velocity.x = 1;
+    struct bullet_t oldBullet2;
+    struct bullet_t bullet3;
+    bullet3.position.x = 3;
+    bullet3.position.y = ship.position.y;
+    bullet3.velocity.x = 1;
+    struct bullet_t oldBullet3;*/
+/*
+    struct enemy e1;
+    e1.enemyType = 1;
+    e1.position.x = 135;
+    e1.position.y = 22;
+    decideVel(&e1);
+    e1.firstx = 135;
+    e1.firsty = e1.position.y;
+
+    struct enemy e2;
+    e2.enemyType = 2;
+    e2.position.x = 135;
+    e2.position.y = 30;
+    decideVel(&e2);
+    e2.firstx = 135;
+    e2.firsty = e2.position.y;
+
+    struct enemy e3;
+    e3.enemyType = 1;
+    e3.position.x = 135;
+    e3.position.y = 13;
+    decideVel(&e3);
+    e3.firstx = 135;
+    e3.firsty = e3.position.y;
+*/
 
 
 
