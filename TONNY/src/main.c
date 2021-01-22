@@ -735,10 +735,10 @@ int main(void)
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
                 printf(" ");
             }
-            if(startLevel==2 && compBuEn(bullet2,e2)==1){
-                eraseEnemy(e2);
-                e2.position.x = 135;
-                e2.position.y = e2.firsty;
+            if(startLevel==2 && compBuEn(bullet2,e3)==1){
+                eraseEnemy(e3);
+                e3.position.x = 135;
+                e3.position.y = e3.firsty;
                 score+=500;
                 setFreq(15000);
                 shooting2 = 0;//resets bullet
@@ -746,10 +746,10 @@ int main(void)
                 gotoxy(oldBullet2.position.x,oldBullet2.position.y);
                 printf(" ");
             }
-            if(startLevel==2 && compBuEn(bullet3,e2)==1){
-                eraseEnemy(e2);
-                e2.position.x = 135;
-                e2.position.y = e2.firsty;
+            if(startLevel==2 && compBuEn(bullet3,e3)==1){
+                eraseEnemy(e3);
+                e3.position.x = 135;
+                e3.position.y = e3.firsty;
                 score+=500;
                 setFreq(15000);
                 shooting3 = 0;//resets bullet

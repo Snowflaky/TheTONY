@@ -77,7 +77,7 @@ uint8_t compBuEn(struct bullet_t bullet, struct enemy e){
 uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge){
     //if collision is detected, 1 is returned
     uint8_t g=0;
-    if (ship.position.x==dodge.position.x-1 && (ship.position.y==dodge.position.y ||
+    if ((ship.position.x==dodge.position.x-1||ship.position.x==dodge.position.x) && (ship.position.y==dodge.position.y ||
                                                 ship.position.y==dodge.position.y+1 ||
                                                 ship.position.y==dodge.position.y-1 )){
         g=1;
