@@ -80,7 +80,6 @@ void printShip (struct ship_t ship, struct ship_t oldShip) {
     color(15,0);
 }
 
-
 //Prints asteroids
 void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid){
 //Delete asteroid at old position and prints asteroid at position (x,y).
