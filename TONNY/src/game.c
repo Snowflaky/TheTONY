@@ -61,7 +61,7 @@ uint8_t compBuEn(struct bullet_t bullet, struct enemy e){
          bullet.position.x==e.position.x + 1 ||
          bullet.position.x==e.position.x + 2 ||
          bullet.position.x==e.position.x - 1 ||
-         bullet.position.x==e.position.x - 1)
+         bullet.position.x==e.position.x - 2)
         &&
         (bullet.position.y==e.position.y ||
         bullet.position.y==e.position.y+1 ||
@@ -111,4 +111,15 @@ uint8_t enemyBreach(struct enemy e){
         breach=1;
     }
     return breach;
+}
+
+
+uint8_t compBuPo(struct bullet_t bullet, struct bullet_t power){
+//if collision is detected, 1 is returned
+    uint8_t g=0;
+    if ((bullet.position.x==power.position.x-1 || bullet.position.x==power.position.x) && bullet.position.y==power.position.y){
+        g=1;
+    }
+
+    return g;
 }

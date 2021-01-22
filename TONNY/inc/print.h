@@ -19,6 +19,7 @@ void printShip (struct ship_t ship, struct ship_t oldShip);
 void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid);
 void printBullet (struct bullet_t bullet, struct bullet_t oldBullet);
 void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge);
+void printPower (struct bullet_t power, struct bullet_t oldPower);
 void drawEnemy (struct enemy e);
 void eraseEnemy (struct enemy e);
 void boss ();

@@ -45,5 +45,6 @@ uint8_t compBuEn(struct bullet_t bullet, struct enemy e);
 uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge);
 uint16_t updateHighscore (uint16_t highscore, uint16_t score);
 uint8_t enemyBreach(struct enemy e);
+uint8_t compBuPo(struct bullet_t bullet, struct bullet_t power);
 
 #endif

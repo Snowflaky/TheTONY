@@ -198,7 +198,7 @@ int main(void)
             shooting2=0;
             shooting3=0;
             pause=0;
-
+            initBullet(&power, 135, 16, -1, 0);
             window(50,90,15,27,4);
             gotoxy(64,17);
             printf("CHOOSE LEVEL");
@@ -338,12 +338,6 @@ int main(void)
         else if (toneFlag>310*fac && toneFlag<320*fac){
             setFreq(110);
         }
-        /*else if (toneFlag>320*fac && toneFlag<330*fac){
-            setFreq(123);
-        }
-        else if (toneFlag>330*fac && toneFlag<340*fac){
-            setFreq(82);
-        }*/
         else{
             toneFlag=0;
         }
@@ -762,6 +756,28 @@ int main(void)
                 bullet3.position.x=3;
                 gotoxy(oldBullet3.position.x,oldBullet3.position.y);
                 printf(" ");
+            }
+
+            if (compBuPo(bullet,power)==1){
+                shooting = 0;
+                bullet.position.x=3;
+                gotoxy(oldBullet.position.x,oldBullet.position.y);
+                printf(" ");
+                power.position.x=3;
+            }
+            if (compBuPo(bullet2,power)==1){
+                shooting2 = 0;
+                bullet2.position.x=3;
+                gotoxy(oldBullet2.position.x,oldBullet2.position.y);
+                printf(" ");
+                power.position.x=3;
+            }
+            if (compBuPo(bullet3,power)==1){
+                shooting3 = 0;
+                bullet3.position.x=3;
+                gotoxy(oldBullet3.position.x,oldBullet3.position.y);
+                printf(" ");
+                power.position.x=3;
             }
 
     //Enemy positions is updated every 1/25 second
