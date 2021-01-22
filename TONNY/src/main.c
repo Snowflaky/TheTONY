@@ -372,7 +372,7 @@ int main(void)
                 }
             }
         }
-        uint8_t q=15;
+        uint8_t q=20;
         gotoxy(10,10);
         printf("%d",toneFlag);
         if (toneFlag<20){
