@@ -74,37 +74,7 @@ void gotoxy (uint32_t c, uint32_t r) {
     printf("%c[%lu;%luH", ESC, r, c);
 }
 
-//Detect if keyboard input is w (up), s (down), b (boss) or p (shoot, phew!)
-uint8_t keyInput(){
-//Any other key --> return 0.
-    uint8_t x=0;
-    uint8_t input=uart_get_char();
-    if (input=='w'){
-        x=1;
-    }
-    else if (input=='s'){
-        x=2;
-    }
-    else if (input=='b'){   //boss-button
-        x=3;
-    }
-    else if (input=='p'){  //phew! gun trigger
-        x=4;
-    }
-    else if (input=='1'){
-        x=5;
-    }
-    else if (input=='2'){
-        x=6;
-    }
-    else if (input=='3'){
-        x=7;
-    }
-    else if (input=='0'){
-        x=8;
-    }
-    return x;
-}
+
 
 /*
 //Converts Trangs position and velocity to 18.14 (from 32.0)

@@ -15,9 +15,7 @@
 
 
 
-struct vector_t {
-    int32_t x, y;
-};
+
 
 
 /*struct trang { //One of the baddest bois around!, he's got two things inside him,- burning hatred for the player, and 180 degrees
@@ -43,7 +41,7 @@ void resetbgcolor();
 void clrscr ();
 void gotoxy (uint32_t c, uint32_t r);
 
-uint8_t keyInput();
+
 /*
 //TRANG BOIIIIIIII
 void fixtrangPos(struct trang (*t));

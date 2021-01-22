@@ -20,7 +20,7 @@ void moveBullet (uint8_t y, struct bullet_t *bullet, struct bullet_t *oldBullet)
 void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge);
 
 void enemyMotion (struct enemy (*e));
-void decideVel (struct enemy (*e));
+//void decideVel (struct enemy (*e));
 void enemyNextPos (struct enemy *e);
 
 
