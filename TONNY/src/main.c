@@ -69,6 +69,14 @@ int main(void)
 
     setFreq(0);
 
+// *************************************************************************
+        FLASH_Unlock();
+        FLASH_ClearFlag( FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPERR );
+        FLASH_ErasePage(0x0800F800);//erase page
+        FLASH_ProgramHalfWord(0x0800F800,0);//write data
+        FLASH_Lock();//lock flash
+        //***********************************************************************''
+
 
     RCC->AHBENR |= RCC_AHBPeriph_GPIOA;
     RCC->AHBENR |= RCC_AHBPeriph_GPIOB;
@@ -372,7 +380,7 @@ int main(void)
                 }
             }
         }
-        uint8_t q=15;
+        uint8_t q=20;
         gotoxy(10,10);
         printf("%d",toneFlag);
         if (toneFlag<20){

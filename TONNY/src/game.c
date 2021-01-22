@@ -49,8 +49,16 @@ uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge){
 //Checks if new score is higher than previous highscore and updates it
 uint16_t updateHighscore (uint16_t highscore, uint16_t score){
 //input:current highscore, current score
+    //reading from flash:
+    highscore = *(uint16_t *)(0x0800F800);
     if(score > highscore){
-       highscore = score;
+        highscore = score;
+            //unlock flash:
+        FLASH_Unlock();
+        FLASH_ClearFlag( FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPERR );
+        FLASH_ErasePage(0x0800F800);//erase page
+        FLASH_ProgramHalfWord(0x0800F800,highscore);//write data
+        FLASH_Lock();//lock flash
        }
     return highscore;
 }
