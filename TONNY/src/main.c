@@ -18,240 +18,94 @@
 #include "print.h"
 #include "movement.h"
 #include "game.h"
+#include "timer.h"
 
 
 int main(void)
 {
     uart_init (115200);//1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200
-    //Initiate timer (interrupt is set to one every 0.01 second)
-    /*RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2;
-    TIM2->CR1 = 0x0000;//0000 0000 0000 0000
-    TIM2->ARR = 0x0000003F;//set reload value to 63 (microseconds)
-    TIM2->PSC = 0x0000;//set prescale to 0 (microseconds)
-    TIM2->CR1 |= 0x0001;//enable timer
-    TIM2->DIER |= 0x0001; // Enable timer 2 interrupts
-    NVIC_SetPriority(TIM2_IRQn, 0001); // Set interrupt priority=1 (high)
-    NVIC_EnableIRQ(TIM2_IRQn); // Enable interrupt*/
 
-//Game timer:
-    RCC->APB2ENR |= RCC_APB2Periph_TIM15; //enable clock line to timer 15?
-    TIM15->CR1 = 0x0000;
-    TIM15->ARR = 0x003F; //set reload value to 63 (microseconds)
-    TIM15->PSC = 0x0000; //set prescale to 0 (microseconds)
-    TIM15->DIER |= 0x0001; //enable timer interrupt
-    NVIC_SetPriority(TIM1_BRK_TIM15_IRQn, 0);
-    NVIC_EnableIRQ(TIM1_BRK_TIM15_IRQn);
-    TIM15->CR1 |= 0x0001; //enable timer
-
-//Sound timer:
-    RCC->APB1ENR |= 0x00000001; // Enable clock line to timer 2;
-    TIM2->CR1 = 0x0000; // Disable timer
-    TIM2->ARR = 1000; // Set auto reload value
-    TIM2->PSC = 0x0C7F;//PRESCALER_VALUE; // Set pre-scaler value****************************
-        //0x003F = millieconds
-        //0x18FF = centiseconds
-        //0x0C7F
-    TIM2->CR1 |= 0x0001; // Enable timer
-        //configure counter compare register:
-    TIM2->CCER &= ~TIM_CCER_CC3P; // Clear CCER register
-    TIM2->CCER |= 0x00000001 << 8; // Enable OC3 output
-    TIM2->CCMR2 &= ~TIM_CCMR2_OC3M; // Clear CCMR2 register
-    TIM2->CCMR2 &= ~TIM_CCMR2_CC3S;
-    TIM2->CCMR2 |= TIM_OCMode_PWM1; // Set output mode to PWM1
-    TIM2->CCMR2 &= ~TIM_CCMR2_OC3PE;
-    TIM2->CCMR2 |= TIM_OCPreload_Enable;
-    TIM2->CCR3 = 500; // Set duty cycle to 50 %
-        //connect pin PB10 to timer (for alternate function):
-    RCC->AHBENR |= RCC_AHBENR_GPIOBEN; // Enable clock line for GPIO bank B
-    GPIOB->MODER &= ~(0x00000003 << (10 * 2)); // Clear mode register
-    GPIOB->MODER |= (0x00000002 << (10 * 2)); // Set mode register
-    GPIO_PinAFConfig(GPIOB, GPIO_PinSource10, GPIO_AF_1);
-
+    initTimer15();//Game timer:
+    initTimer2();//Sound timer
     setFreq(0);
 
-
-    RCC->AHBENR |= RCC_AHBPeriph_GPIOA;
-    RCC->AHBENR |= RCC_AHBPeriph_GPIOB;
-    RCC->AHBENR |= RCC_AHBPeriph_GPIOC;
-
-    uint8_t startLevel=0;
-    uint8_t v=0;
-    uint8_t levelMenu=0;
-    uint8_t useMenu=0;
-    uint8_t creditMenu=0;
-    uint8_t u=0;
-    uint8_t shooting=0;
-    uint8_t shooting2=0;
-    uint8_t shooting3=0;
-    timeFlagGame=0;
-
-    int32_t fuel=10000;
-    uint16_t score=0;
-    uint8_t pause=0;
-    int8_t lives=3;
-    uint16_t highscore=0;
-
-
-//flags for printing enemies, asteroids and nets
-    uint8_t ADFlag1=1;
-    uint8_t ADFlag2=1;
-    uint8_t enemyFlag=1;
+    initGPIO();//Initialize GPIO
 
 //LCD Display
     lcd_init(); //initialize display
     uint8_t buffer[512];//initialize buffer array
     memset (buffer,0x00,512);//set buffer to all 0's (clear LCD screen)
 
+    setLed(3);
+
 //resets colors and clears screen
     color(15,0);
     clrscr();
 
+    uint8_t startLevel=0, v=0, levelMenu=0, useMenu=0, creditMenu=0, u=0, shooting=0, shooting2=0, shooting3=0, pause=0, powerFlag=0, ADFlag1=1, ADFlag2=1, enemyFlag=1;
+    timeFlagGame=0;
+    int32_t fuel=10000;
+    uint16_t score=0, highscore;
+    int8_t lives=3;
+
+//flags for printing enemies, asteroids and nets
 //TONNY's Spaceship is built
     struct ship_t ship;
-    ship.position.x = 2;
-    ship.position.y=19;
     struct ship_t oldShip;
+    initShip(&ship,2,19);
 
-//Asteroid belt initiated
+//Asteroid belt and enemy nets initiated
     //old... structs are initiated, but no values are declared.
     //these filled when game is initiated
-    struct asteroid_t asteroid1;
-    asteroid1.position.x=20;
-    asteroid1.position.y=2;
-    asteroid1.velocity.y=1;
-    struct asteroid_t oldAsteroid1;
-    struct asteroid_t asteroid2;
-    asteroid2.position.x=35;
-    asteroid2.position.y=20;
-    asteroid2.velocity.y=1;
-    struct asteroid_t oldAsteroid2;
-    struct asteroid_t asteroid3;
-    asteroid3.position.x=50;
-    asteroid3.position.y=2;
-    asteroid3.velocity.y=1;
-    struct asteroid_t oldAsteroid3;
-    struct asteroid_t asteroid4;
-    asteroid4.position.x=62;
-    asteroid4.position.y=32;
-    asteroid4.velocity.y=1;
-    struct asteroid_t oldAsteroid4;
-    struct asteroid_t asteroid5;
-    asteroid5.position.x=70;
-    asteroid5.position.y=10;
-    asteroid5.velocity.y=1;
-    struct asteroid_t oldAsteroid5;
-    struct asteroid_t asteroid6;
-    asteroid6.position.x=41;
-    asteroid6.position.y=33;
-    asteroid6.velocity.y=1;
-    struct asteroid_t oldAsteroid6;
-    struct asteroid_t asteroid7;
-    asteroid7.position.x=83;
-    asteroid7.position.y=18;
-    asteroid7.velocity.y=1;
-    struct asteroid_t oldAsteroid7;
-
-//Enemy nets initiated
-    struct asteroid_t dodge1;
-    dodge1.position.x=139;
-    dodge1.position.y=7;
-    dodge1.velocity.x=-1;
-    struct asteroid_t oldDodge1;
-    struct asteroid_t dodge2;
-    dodge2.position.x=117;
-    dodge2.position.y=16;
-    dodge2.velocity.x=-1;
-    struct asteroid_t oldDodge2;
-    struct asteroid_t dodge3;
-    dodge3.position.x=130;
-    dodge3.position.y=23;
-    dodge3.velocity.x=-1;
-    struct asteroid_t oldDodge3;
-    struct asteroid_t dodge4;
-    dodge4.position.x=107;
-    dodge4.position.y=29;
-    dodge4.velocity.x=-1;
-    struct asteroid_t oldDodge4;
-    struct asteroid_t dodge5;
-    dodge5.position.x=125;
-    dodge5.position.y=34;
-    dodge5.velocity.x=-1;
-    struct asteroid_t oldDodge5;
-    struct asteroid_t dodge6;
-    dodge6.position.x=126;
-    dodge6.position.y=11;
-    dodge6.velocity.x=-1;
-    struct asteroid_t oldDodge6;
-    struct asteroid_t dodge7;
-    dodge7.position.x=98;
-    dodge7.position.y=20;
-    dodge7.velocity.x=-1;
-    struct asteroid_t oldDodge7;
-    struct asteroid_t dodge8;
-    dodge8.position.x=50;
-    dodge8.position.y=35;
-    dodge8.velocity.x=-1;
-    struct asteroid_t oldDodge8;
-    struct asteroid_t dodge9;
-    dodge9.position.x=70;
-    dodge9.position.y=28;
-    dodge9.velocity.x=-1;
-    struct asteroid_t oldDodge9;
-    struct asteroid_t dodge10;
-    dodge10.position.x=82;
-    dodge10.position.y=31;
-    dodge10.velocity.x=-1;
-    struct asteroid_t oldDodge10;
+    struct asteroid_t asteroid1, asteroid2, asteroid3, asteroid4, asteroid5, asteroid6, asteroid7;
+    struct asteroid_t oldAsteroid1, oldAsteroid2, oldAsteroid3, oldAsteroid4, oldAsteroid5, oldAsteroid6, oldAsteroid7;
+    struct asteroid_t dodge1, dodge2, dodge3, dodge4, dodge5, dodge6, dodge7, dodge8, dodge9, dodge10;
+    struct asteroid_t oldDodge1, oldDodge2, oldDodge3, oldDodge4, oldDodge5, oldDodge6, oldDodge7, oldDodge8, oldDodge9, oldDodge10;
+    initAsteroid(&asteroid1, 20, 2, 0, 1);
+    initAsteroid(&asteroid2, 35, 20, 0, 1);
+    initAsteroid(&asteroid3, 50, 2, 0, 1);
+    initAsteroid(&asteroid4, 62, 32, 0, 1);
+    initAsteroid(&asteroid5, 70, 10, 0, 1);
+    initAsteroid(&asteroid6, 41, 33, 0, 1);
+    initAsteroid(&asteroid7, 83, 18, 0, 1);
+    initAsteroid(&dodge1, 139, 7, -1, 0);
+    initAsteroid(&dodge2, 117, 16, -1, 0);
+    initAsteroid(&dodge3, 130, 23, -1, 0);
+    initAsteroid(&dodge4, 107, 29, -1, 0);
+    initAsteroid(&dodge5, 125, 34, -1, 0);
+    initAsteroid(&dodge6, 126, 11, -1, 0);
+    initAsteroid(&dodge7, 98, 20, -1, 0);
+    initAsteroid(&dodge8, 50, 35, -1, 0);
+    initAsteroid(&dodge9, 70, 28, -1, 0);
+    initAsteroid(&dodge10, 82, 31, -1, 0);
 
 //Bullet initiated
-    struct bullet_t bullet;
-    bullet.position.x = 3;
-    bullet.position.y = ship.position.y;
-    bullet.velocity.x = 1;
-    struct bullet_t oldBullet;
-    struct bullet_t bullet2;
-    bullet2.position.x = 3;
-    bullet2.position.y = ship.position.y;
-    bullet2.velocity.x = 1;
-    struct bullet_t oldBullet2;
-    struct bullet_t bullet3;
-    bullet3.position.x = 3;
-    bullet3.position.y = ship.position.y;
-    bullet3.velocity.x = 1;
-    struct bullet_t oldBullet3;
+    struct bullet_t bullet, bullet2, bullet3, oldBullet, oldBullet2, oldBullet3;
+    initBullet(&bullet,3,ship.position.y,1,0);
+    initBullet(&bullet2,3,ship.position.y,1,0);
+    initBullet(&bullet3,3,ship.position.y,1,0);
+
+//Power up initiated
+    struct bullet_t power, oldPower;
+    initBullet(&power, 135, 16, -1, 0);
 
 //Enemies are initiated
-    struct enemy e1;
-    e1.enemyType = 1;
-    e1.position.x = 135;
-    e1.position.y = 22;
-    decideVel(&e1);
-    e1.firstx = 135;
-    e1.firsty = e1.position.y;
+    struct enemy e1, e2, e3;
+    initEnemy(&e1,1,135,22);
+    initEnemy(&e2,2,135,30);
+    initEnemy(&e3,1,135,13);
 
-    struct enemy e2;
-    e2.enemyType = 2;
-    e2.position.x = 135;
-    e2.position.y = 30;
-    decideVel(&e2);
-    e2.firstx = 135;
-    e2.firsty = e2.position.y;
-
-    struct enemy e3;
-    e3.enemyType = 1;
-    e3.position.x = 135;
-    e3.position.y = 13;
-    decideVel(&e3);
-    e3.firstx = 135;
-    e3.firsty = e3.position.y;
-
-
-    setLed(3);
+    /* ********************************************************************************
+    //The first time you run the program please include the following code. This clears the address for the highscore.
+    FLASH_Unlock();
+    FLASH_ClearFlag( FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPERR );
+    FLASH_ErasePage(0x0800F800);//erase page
+    FLASH_ProgramHalfWord(0x0800F800,0);//write data
+    FLASH_Lock();//lock flash*/
 
 //Main menu
     while(1){
-        //if(timeFlagPrint==1){
-        //setFreq(0);
+
         window(50,90,15,27,4);
         gotoxy(65,17);
         printf("MAIN MENU");
@@ -265,6 +119,7 @@ int main(void)
 
 //How to play
         if (v==6){
+            setFreq(0);
             useMenu=1;
             clrscr();
             gotoxy(0,10);
@@ -294,6 +149,7 @@ int main(void)
         }
 //Credits
         if (v==7){
+            setFreq(0);
             creditMenu=1;
             clrscr();
             gotoxy(0,10);
@@ -306,10 +162,10 @@ int main(void)
                     creditMenu=0;
                 }
             }
-
         }
 //Level menu
         if (v==5){
+            setFreq(0);
             levelMenu=1;
             clrscr();
             ADFlag1=0;
@@ -321,6 +177,7 @@ int main(void)
             timeFlagEnemy=0;
             timeFlagGame=0;
             enemyFlag=0;
+            powerFlag=0;
             fuel=10000;
             score=0;
             lives=3;
@@ -328,7 +185,7 @@ int main(void)
             shooting2=0;
             shooting3=0;
             pause=0;
-
+            initBullet(&power, 135, 16, -1, 0);
             window(50,90,15,27,4);
             gotoxy(64,17);
             printf("CHOOSE LEVEL");
@@ -369,110 +226,107 @@ int main(void)
                 }
             }
         }
-        uint8_t q=20;
-        gotoxy(10,10);
-        printf("%d",toneFlag);
-        if (toneFlag<20){
+//This code plays the title melody in main menu
+        uint16_t q=16;
+        if (toneFlag<10){
             setFreq(123*q);
         }
-        else if (toneFlag>20 && toneFlag<40){
-            setFreq(98*q);
-        }
-        else if (toneFlag>40 && toneFlag<60){
-            setFreq(98*q);
-        }
-        else if (toneFlag>60 && toneFlag<80){
-            setFreq(77*q);
-        }
-        else if (toneFlag>80 && toneFlag<100){
+        else if (toneFlag>10 && toneFlag<20){
             setFreq(82*q);
         }
-        else if (toneFlag>100 && toneFlag<120){
-            setFreq(64*q);
+        else if (toneFlag>20 && toneFlag<30){
+            setFreq(98*q);
         }
-        else if (toneFlag>120 && toneFlag<140){
+        else if (toneFlag>30 && toneFlag<40){
+            setFreq(61*q);
+        }
+        else if (toneFlag>40 && toneFlag<50){//5
+            setFreq(82*q);
+        }
+        else if (toneFlag>50 && toneFlag<60){
+            setFreq(49*q);
+        }
+        else if (toneFlag>60 && toneFlag<70){
             setFreq(41*q);
         }
-        else if (toneFlag>140 && toneFlag<160){
+        else if (toneFlag>70 && toneFlag<80){
             setFreq(123*q);
         }
-        else if (toneFlag>160 && toneFlag<180){
+        else if (toneFlag>80 && toneFlag<90){
             setFreq(110*q);
         }
-        else if (toneFlag>180 && toneFlag<200){
-            setFreq(87*q);
-        }
-        else if (toneFlag>200 && toneFlag<220){
-            setFreq(92*q);
-        }
-        else if (toneFlag>220 && toneFlag<240){
-            setFreq(69*q);
-        }
-        else if (toneFlag>240 && toneFlag<260){
+        else if (toneFlag>90 && toneFlag<100){//10
             setFreq(73*q);
         }
-        else if (toneFlag>260 && toneFlag<280){
-            setFreq(120*q);
-        }
-        else if (toneFlag>280 && toneFlag<300){
-            setFreq(103*q);
-        }
-        else if (toneFlag>300 && toneFlag<320){
-            setFreq(110*q);
-        }
-        else if (toneFlag>320 && toneFlag<340){
-            setFreq(123*q);
-        }
-        else if (toneFlag>340 && toneFlag<360){
-            setFreq(106*q);
-        }
-        else if (toneFlag>360 && toneFlag<380){
-            setFreq(98*q);
-        }
-        else if (toneFlag>380 && toneFlag<400){
-            setFreq(82*q);
-        }
-        else if (toneFlag>400 && toneFlag<420){
-            setFreq(49*q);
-        }
-        else if (toneFlag>420 && toneFlag<440){
-            setFreq(65*q);
-        }
-        else if (toneFlag>440 && toneFlag<460){
-            setFreq(49*q);
-        }
-        else if (toneFlag>460 && toneFlag<480){
-            setFreq(43*q);
-        }
-        else if (toneFlag>480 && toneFlag<500){
-            setFreq(110*q);
-        }
-        else if (toneFlag>500 && toneFlag<520){
-            setFreq(78*q);
-        }
-        else if (toneFlag>520 && toneFlag<540){
-            setFreq(63*q);
-        }
-        else if (toneFlag>540 && toneFlag<560){
-            setFreq(73*q);
-        }
-        else if (toneFlag>560 && toneFlag<580){
-            setFreq(52*q);
-        }
-        else if (toneFlag>580 && toneFlag<600){
+        else if (toneFlag>100 && toneFlag<110){
             setFreq(93*q);
         }
-        else if (toneFlag>600 && toneFlag<620){
+        else if (toneFlag>110 && toneFlag<120){
+            setFreq(55*q);
+        }
+        else if (toneFlag>120 && toneFlag<130){
             setFreq(73*q);
         }
-        else if (toneFlag>620 && toneFlag<640){
+        else if (toneFlag>130 && toneFlag<140){
+            setFreq(46*q);
+        }
+        else if (toneFlag>140 && toneFlag<150){ //15
+            setFreq(36*q);
+        }
+        else if (toneFlag>150 && toneFlag<160){
+            setFreq(110*q);
+        }
+        else if (toneFlag>160 && toneFlag<170){
+            setFreq(123*q);
+        }
+        else if (toneFlag>170 && toneFlag<180){
+            setFreq(93*q);
+        }
+        else if (toneFlag>180 && toneFlag<190){
+            setFreq(98*q);
+        }
+        else if (toneFlag>190 && toneFlag<200){ //20
+            setFreq(65*q);
+        }
+        else if (toneFlag>200 && toneFlag<210){
+            setFreq(49*q);
+        }
+        else if (toneFlag>210 && toneFlag<220){
+            setFreq(65*q);
+        }
+        else if (toneFlag>220 && toneFlag<230){
+            setFreq(49*q);
+        }
+        else if (toneFlag>230 && toneFlag<240){
+            setFreq(41*q);
+        }
+        else if (toneFlag>240 && toneFlag<250){ //25
+            setFreq(110*q);
+        }
+        else if (toneFlag>250 && toneFlag<260){
+            setFreq(55*q);
+        }
+        else if (toneFlag>260 && toneFlag<270){
+            setFreq(36*q);
+        }
+        else if (toneFlag>270 && toneFlag<280){
+            setFreq(73*q);
+        }
+        else if (toneFlag>280 && toneFlag<290){
+            setFreq(36*q);
+        }
+        else if (toneFlag>290 && toneFlag<300){ //30
+            setFreq(93*q);
+        }
+        else if (toneFlag>300 && toneFlag<310){
+            setFreq(73*q);
+        }
+        else if (toneFlag>310 && toneFlag<320){
             setFreq(110);
         }
         else{
             toneFlag=0;
         }
-
-           // timeFlagPrint=0;
 
 //GAME WHILE LOOP BEGINS
         while(startLevel>0){
@@ -502,7 +356,6 @@ int main(void)
                     printDodge(dodge9,oldDodge9);
                     printDodge(dodge10,oldDodge10);
                 }
-
                 ADFlag1=0;
             }
 
@@ -519,6 +372,7 @@ int main(void)
                 }
                 ADFlag2=0;
             }
+
 //LED showing how much time is left
             if( fuel>5000){
                 setLed(0);
@@ -532,14 +386,15 @@ int main(void)
                 setLed(0);
                 setLed(1);//green
             }
-            else {
-                    setLed(2);
-                    setLed(3);
-            }
 
 //Prints the spaceship and bullet, and reads input from player
             if(timeFlagPrint==1){
-                printShip(ship, oldShip);
+                if (powerFlag==1){//Prints ship in a different color when power up is activated
+                    printPowerShip(ship, oldShip);
+                }
+                else{
+                    printShip(ship, oldShip);
+                }
                 printBullet(bullet, oldBullet);
                 printBullet(bullet2, oldBullet2);
                 printBullet(bullet3, oldBullet3);
@@ -560,21 +415,30 @@ int main(void)
                     }
                 }
                 moveShip(u,&ship, &oldShip);
-                if (shooting3==0 && shooting>0 && shooting2>0){
-                    shooting3=startBullet(ship,u);
+                //Starts bullets when trigger is pulled
+                if (shooting3==0 && shooting>0 && shooting2>0){//bullet3 can only be activated when bullet and bullet2 is active
+                    shooting3=startBullet(ship,u);//shooting gets ships y-axis position as it's value
                 }
-                if (shooting2==0 && shooting>0){
+                if (shooting2==0 && shooting>0){//bullet2 can only be activated when bullet is active
                     shooting2=startBullet(ship,u);
                 }
-                if (shooting==0){//Starts bullet when trigger is pulled
-                    shooting=startBullet(ship,u);//shooting gets ships y-axis position as it's value
+                if (shooting==0){
+                    shooting=startBullet(ship,u);
                 }
-                gotoxy(10,10);
-                printf("%ld",e2.velocity.x);
 
                 bullet.position.y=shooting; // bullet gets ships y-axis position at bullet initiation
                 bullet2.position.y=shooting2;
                 bullet3.position.y=shooting3;
+
+//Power up
+                if (fuel<6000 && power.position.x>2){//Sends power up when fuel is 6000
+                    printPower(power, oldPower);
+                    movePower(&power, &oldPower);
+                }
+
+                if (fuel<2000){//Ends power up when fuel is 2000
+                    powerFlag=0;
+                }
 
 //If time runs out or you have no lives left it is GAME OVER!
                 if (fuel<=0 || lives<=0){
@@ -588,6 +452,7 @@ int main(void)
                         gotoxy(59,22);
                         printf("Press 0 to return to main menu");
                         if (u==8){
+                                //Resets and deletes bullets:
                             shooting = 0;
                             bullet.position.x=3;
                             gotoxy(oldBullet.position.x,oldBullet.position.y);
@@ -600,17 +465,18 @@ int main(void)
                             bullet3.position.x=3;
                             gotoxy(oldBullet3.position.x,oldBullet3.position.y);
                             printf(" ");
+
                             startLevel=0;
                             pause=1;
                         }
-                        //to be continued...
                     }
                 }
-                //ends game and returns to main menu
+//Ends game and returns to main menu when '0' is pressed
                 if (u==8) {
                     clrscr();
                     setLed(0);
                     setLed(3);//blue LED
+                        //Resets and deletes bullets:
                     shooting = 0;
                     bullet.position.x=3;
                     gotoxy(oldBullet.position.x,oldBullet.position.y);
@@ -623,16 +489,16 @@ int main(void)
                     bullet3.position.x=3;
                     gotoxy(oldBullet3.position.x,oldBullet3.position.y);
                     printf(" ");
+
                     startLevel=0;
-                    //pause=1;
                 }
 
-                timeFlagPrint=0;
+                timeFlagPrint=0;//Print cycle ends
             }
 
 
-    //Updates bullet position
-            if(timeFlagBullet>=1){//change this number for change of bullet speed
+//Updates bullet position
+            if(timeFlagBullet>=1){
                 if (shooting>0){//only updates position if bullet has been started
                     moveBullet(shooting, &bullet, &oldBullet);
                 }
@@ -645,17 +511,17 @@ int main(void)
                 if (bullet.position.x==139){//bullet position and initialization is reset when the bullet reaches the end of the game field
                     shooting=0;
                 }
-                if (bullet2.position.x==139){//bullet position and initialization is reset when the bullet reaches the end of the game field
+                if (bullet2.position.x==139){
                     shooting2=0;
                 }
-                if (bullet3.position.x==139){//bullet position and initialization is reset when the bullet reaches the end of the game field
+                if (bullet3.position.x==139){
                     shooting3=0;
                 }
                 timeFlagBullet=0;
             }
 
-    //Moves asteroids and enemy nets
-            if(timeFlagA1>=10){//change this number for change of asteroid speed
+//Moves asteroids and enemy nets
+            if(timeFlagA1>=10){//Moves obstacles every 1/10 second
                 moveAsteroid(asteroid1.position.x,&asteroid1,&oldAsteroid1);
                 moveAsteroid(asteroid2.position.x,&asteroid2,&oldAsteroid2);
                 moveAsteroid(asteroid4.position.x,&asteroid4,&oldAsteroid4);
@@ -669,9 +535,10 @@ int main(void)
                 }
 
             //checks if net hits ship
-                if (compDoSh(ship,dodge1)==1 || compDoSh(ship,dodge2)==1 || compDoSh(ship,dodge3)==1 ||
+                if ((compDoSh(ship,dodge1)==1 || compDoSh(ship,dodge2)==1 || compDoSh(ship,dodge3)==1 ||
                     compDoSh(ship,dodge4)==1 || compDoSh(ship,dodge5)==1 || compDoSh(ship,dodge6)==1 ||
-                    compDoSh(ship,dodge7)==1 || compDoSh(ship,dodge8)==1 || compDoSh(ship,dodge9)==1 || compDoSh(ship,dodge10)==1){
+                    compDoSh(ship,dodge7)==1 || compDoSh(ship,dodge8)==1 || compDoSh(ship,dodge9)==1 ||
+                    compDoSh(ship,dodge10)==1) && powerFlag!=1){
                     lives-=1;//when nets hits, one life is lost
                     gotoxy(ship.position.x+2,ship.position.y+2);
                     printf("OW!");
@@ -679,7 +546,7 @@ int main(void)
                 timeFlagA1=0;
                 ADFlag1=1;//Asteroid and net positions have updated
             }
-            if(timeFlagA2>=6){//change this number for change of asteroid speed
+            if(timeFlagA2>=6){//Moves obstacles 6/100 second
                 moveAsteroid(asteroid3.position.x,&asteroid3,&oldAsteroid3);
                 moveAsteroid(asteroid5.position.x,&asteroid5,&oldAsteroid5);
                 moveDodge(dodge2.position.y,&dodge2,&oldDodge2);
@@ -694,7 +561,7 @@ int main(void)
                 ADFlag2=1;//Asteroid and net positions have updated
             }
 
-    // Detects asteroid hit, by comparing bullet and asteroid positions
+// Detects asteroid hit, by comparing bullet and asteroid positions
             //if hit detected, bullet bounces back
             if (compBuAs(bullet,asteroid1)==1){
                 bullet.velocity.x=-1;
@@ -761,7 +628,7 @@ int main(void)
                     bullet3.velocity.x=-1;
                 }
             }
-    //Restarts reflected bullets
+//Restarts reflected bullets
             if (bullet.position.x==3 && bullet.velocity.x==-1){
                 shooting=0;
                 bullet.velocity.x=1;
@@ -776,7 +643,7 @@ int main(void)
             }
 
 
-    //Erases enemy when hit, resets bullet, adds +500 to score
+//Erases enemy when hit, resets bullet, adds +500 to score and indicate hit by sound
             if (compBuEn(bullet,e1)==1){
                 eraseEnemy(e1);
                 e1.position.x = 135;
@@ -814,6 +681,8 @@ int main(void)
                 eraseEnemy(e2);
                 e2.position.x = 135;
                 e2.position.y = e2.firsty;
+                e2.velocity.x=-1;
+                e2.velocity.y=0;
                 score+=500;
                 setFreq(15000);
                 shooting = 0;//resets bullet
@@ -825,6 +694,8 @@ int main(void)
                 eraseEnemy(e2);
                 e2.position.x = 135;
                 e2.position.y = e2.firsty;
+                e2.velocity.x=-1;
+                e2.velocity.y=0;
                 score+=500;
                 setFreq(15000);
                 shooting2 = 0;//resets bullet
@@ -836,6 +707,8 @@ int main(void)
                 eraseEnemy(e2);
                 e2.position.x = 135;
                 e2.position.y = e2.firsty;
+                e2.velocity.x=-1;
+                e2.velocity.y=0;
                 score+=500;
                 setFreq(15000);
                 shooting3 = 0;//resets bullet
@@ -855,10 +728,10 @@ int main(void)
                 gotoxy(oldBullet.position.x,oldBullet.position.y);
                 printf(" ");
             }
-            if(startLevel==2 && compBuEn(bullet2,e2)==1){
-                eraseEnemy(e2);
-                e2.position.x = 135;
-                e2.position.y = e2.firsty;
+            if(startLevel==2 && compBuEn(bullet2,e3)==1){
+                eraseEnemy(e3);
+                e3.position.x = 135;
+                e3.position.y = e3.firsty;
                 score+=500;
                 setFreq(15000);
                 shooting2 = 0;//resets bullet
@@ -866,10 +739,10 @@ int main(void)
                 gotoxy(oldBullet2.position.x,oldBullet2.position.y);
                 printf(" ");
             }
-            if(startLevel==2 && compBuEn(bullet3,e2)==1){
-                eraseEnemy(e2);
-                e2.position.x = 135;
-                e2.position.y = e2.firsty;
+            if(startLevel==2 && compBuEn(bullet3,e3)==1){
+                eraseEnemy(e3);
+                e3.position.x = 135;
+                e3.position.y = e3.firsty;
                 score+=500;
                 setFreq(15000);
                 shooting3 = 0;//resets bullet
@@ -878,13 +751,39 @@ int main(void)
                 printf(" ");
             }
 
-    //Enemy positions is updated every 1/25 second
-    //If enemies get TONNY he loses time
+//Detects whether power up is activated and raises powerFlag
+            if (compBuPo(bullet,power)==1){
+                shooting = 0;
+                bullet.position.x=3;
+                gotoxy(oldBullet.position.x,oldBullet.position.y);
+                printf(" ");
+                power.position.x=3;
+                powerFlag=1;
+            }
+            if (compBuPo(bullet2,power)==1){
+                shooting2 = 0;
+                bullet2.position.x=3;
+                gotoxy(oldBullet2.position.x,oldBullet2.position.y);
+                printf(" ");
+                power.position.x=3;
+                powerFlag=1;
+            }
+            if (compBuPo(bullet3,power)==1){
+                shooting3 = 0;
+                bullet3.position.x=3;
+                gotoxy(oldBullet3.position.x,oldBullet3.position.y);
+                printf(" ");
+                power.position.x=3;
+                powerFlag=1;
+            }
+
+//Enemy positions is updated every 1/25 second
+    //If enemies get past TONNY he loses fuel
             if (timeFlagEnemy>=4){
                 eraseEnemy(e1);
                 enemyNextPos(&e1);
                 enemyMotion(&e1);
-                if (enemyBreach(e1)==1){//Detects that the enemy has breached and subtracts 1000 from time
+                if (enemyBreach(e1)==1){//Detects that the enemy has breached and subtracts 1000 from fuel
                     fuel-=1000;
                 }
                 if (startLevel<3){
@@ -892,7 +791,7 @@ int main(void)
                     enemyNextPos(&e2);
                     enemyMotion(&e2);
                     timeFlagEnemy=0;
-                    if (enemyBreach(e2)==1){//Detects that the enemy has breached and subtracts 1000 from time
+                    if (enemyBreach(e2)==1){
                         fuel-=1000;
                     }
                 }
@@ -901,16 +800,14 @@ int main(void)
                     enemyNextPos(&e3);
                     enemyMotion(&e3);
                     timeFlagEnemy=0;
-                    if (enemyBreach(e3)==1){//Detects that the enemy has breached and subtracts 1000 from time
+                    if (enemyBreach(e3)==1){
                         fuel-=1000;
                     }
                 }
                 enemyFlag=1;//enemies position has updated
-                //setLed(3);
-
             }
 
-
+//Fuel level indicated by sound. As it drops frequency gets higher
             if (fuel>7540){
                 setFreq(80);
             }
@@ -942,14 +839,14 @@ int main(void)
                 setFreq(20000);
             }
 
-    //gameTime is the remaining time the game
+//Fuel indicates the remaining fly time of the spaceship
     //counts down every 10th of a second
-            fuel=fuel-timeFlagGame;//genstart timeFlagGame!!!!!!!!!!
+            fuel -= timeFlagGame;
             highscore = updateHighscore(highscore,score);
 
     // Casting integers to strings
             char strFuel[10];
-            sprintf(strFuel, "%ld", fuel);//convert goTime to string
+            sprintf(strFuel, "%ld", fuel);//convert fuel to string
             char strScore[10];
             sprintf(strScore, "%d", score);//convert score to string
             char strLives[5];
@@ -957,7 +854,7 @@ int main(void)
             char strHighscore[10];
             sprintf(strHighscore, "%d", highscore);
 
-
+            //fills buffer with 0's and pushes it (clears display)
             memset (buffer,0x00,512);
             lcd_push_buffer(buffer);
 
@@ -972,7 +869,7 @@ int main(void)
             lcd_write_string(strScore,40,3,&buffer);
 
             lcd_write_string("Highscore:",0,4,&buffer);
-            lcd_write_string(strHighscore,60,4,&buffer);
+            lcd_write_string(strHighscore,65,4,&buffer);
 
     //Push buffer
             lcd_push_buffer(buffer);
@@ -984,11 +881,8 @@ int main(void)
             }
         }//   END OF GAME WHILE LOOP
 
-    }//END OF PRIORITY WHILE LOOP!!!
+    }//END OF MENU WHILE LOOP!!!
 
 }//END OF MAIN!!!!!
-
-
-
 
 

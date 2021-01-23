@@ -3,10 +3,6 @@
 
 #define ESC 0x1B
 
-/***********************/
-/*** Print functions ***/
-/***********************/
-
 //Outline game borders. Border is drawn by printing colored background spaces.
 void window(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2, uint8_t lineColor) {
 //Input: x start point, x end point, y start point, y end point, color of border (number between 0 and 7 (see bgcolor))
