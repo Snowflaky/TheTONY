@@ -1,7 +1,9 @@
 #include "inout.h"
 #include "string.h"
 
-
+/******************************/
+/*** Input/Output functions ***/
+/******************************/
 
 
 //Puts a string into buffer array, for writing on LCD display
@@ -25,6 +27,13 @@ void lcd_write_string (char text[], uint16_t slice, uint8_t row, uint8_t (*buff)
             (*buff)[slice+g+6*h]=character_data[text[h]-0x20][g];
         }
    }
+}
+
+//Initiates GPIO pin A, B and C
+void initGPIO(){
+    RCC->AHBENR |= RCC_AHBPeriph_GPIOA;
+    RCC->AHBENR |= RCC_AHBPeriph_GPIOB;
+    RCC->AHBENR |= RCC_AHBPeriph_GPIOC;
 }
 
 //Sets LED diode to a specific color
@@ -103,42 +112,36 @@ void setLed(uint8_t color) {
     }
 }
 
-//Changes frequency of buzzer sound
-void setFreq(uint16_t freq){
-    uint32_t reload = 64e6 / freq / (0x01FF + 1) - 1;
-    TIM2->ARR = reload; // Set auto reload value
-    TIM2->CCR3 = reload/2; // Set compare register
-    TIM2->EGR |= 0x01;
-}
 
-void TIM1_BRK_TIM15_IRQHandler() {
-//Counts 100ths of a second, seconds and minutes.
-    timeFlagPrint=1;
-    timetime.mikroSec++;
-    if (timetime.mikroSec>=1000){
-        timetime.milliSec++;
-        timetime.mikroSec=0;
-        if (timetime.milliSec>=10) {
-            timeFlagBullet++;
-            timeFlagA1++;
-            timeFlagA2++;
-            timeFlagEnemy++;
-            toneFlag++;
-            timetime.centiSec++;
-            timetime.milliSec=0;
-            if (timetime.centiSec>=50){
-                timetime.second++;
-                timetime.centiSec=0;
-                if (timetime.second%10==0){
-                    timeFlagGame++;
-                }
-                if (timetime.second>=60){
-                    timetime.minute++;
-                    timetime.second=0;
-                }
-            }
 
-        }
+//Detect if keyboard input is w (up), s (down), b (boss) or p (shoot, phew!)
+uint8_t keyInput(){
+//Any other key --> return 0.
+    uint8_t x=0;
+    uint8_t input=uart_get_char();
+    if (input=='w'){
+        x=1;
     }
-    TIM15->SR &= ~0x0001; // Clear interrupt bit
- }
+    else if (input=='s'){
+        x=2;
+    }
+    else if (input=='b'){   //boss-button
+        x=3;
+    }
+    else if (input=='p'){  //phew! gun trigger
+        x=4;
+    }
+    else if (input=='1'){
+        x=5;
+    }
+    else if (input=='2'){
+        x=6;
+    }
+    else if (input=='3'){
+        x=7;
+    }
+    else if (input=='0'){
+        x=8;
+    }
+    return x;
+}

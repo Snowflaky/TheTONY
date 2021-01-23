@@ -1,9 +1,7 @@
 #include "movement.h"
 #include "string.h"
 
-/****************************************/
-/*** Functions for updating positions ***/
-/****************************************/
+
 
 //Moves spaceship
 void moveShip (uint8_t x, struct ship_t *ship, struct ship_t *oldShip){
