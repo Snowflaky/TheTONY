@@ -356,7 +356,6 @@ int main(void)
                     printDodge(dodge9,oldDodge9);
                     printDodge(dodge10,oldDodge10);
                 }
-
                 ADFlag1=0;
             }
 
@@ -373,6 +372,7 @@ int main(void)
                 }
                 ADFlag2=0;
             }
+
 //LED showing how much time is left
             if( fuel>5000){
                 setLed(0);
@@ -386,14 +386,10 @@ int main(void)
                 setLed(0);
                 setLed(1);//green
             }
-            else {
-                    setLed(2);
-                    setLed(3);
-            }
 
 //Prints the spaceship and bullet, and reads input from player
             if(timeFlagPrint==1){
-                if (powerFlag==1){
+                if (powerFlag==1){//Prints ship in a different color when power up is activated
                     printPowerShip(ship, oldShip);
                 }
                 else{
@@ -419,26 +415,28 @@ int main(void)
                     }
                 }
                 moveShip(u,&ship, &oldShip);
-                if (shooting3==0 && shooting>0 && shooting2>0){
-                    shooting3=startBullet(ship,u);
+                //Starts bullets when trigger is pulled
+                if (shooting3==0 && shooting>0 && shooting2>0){//bullet3 can only be activated when bullet and bullet2 is active
+                    shooting3=startBullet(ship,u);//shooting gets ships y-axis position as it's value
                 }
-                if (shooting2==0 && shooting>0){
+                if (shooting2==0 && shooting>0){//bullet2 can only be activated when bullet is active
                     shooting2=startBullet(ship,u);
                 }
-                if (shooting==0){//Starts bullet when trigger is pulled
-                    shooting=startBullet(ship,u);//shooting gets ships y-axis position as it's value
+                if (shooting==0){
+                    shooting=startBullet(ship,u);
                 }
 
                 bullet.position.y=shooting; // bullet gets ships y-axis position at bullet initiation
                 bullet2.position.y=shooting2;
                 bullet3.position.y=shooting3;
 
-                if (fuel<6000 && power.position.x>2){
+//Power up
+                if (fuel<6000 && power.position.x>2){//Sends power up when fuel is 6000
                     printPower(power, oldPower);
                     movePower(&power, &oldPower);
                 }
 
-                if (fuel<2000){
+                if (fuel<2000){//Ends power up when fuel is 2000
                     powerFlag=0;
                 }
 
@@ -454,6 +452,7 @@ int main(void)
                         gotoxy(59,22);
                         printf("Press 0 to return to main menu");
                         if (u==8){
+                                //Resets and deletes bullets:
                             shooting = 0;
                             bullet.position.x=3;
                             gotoxy(oldBullet.position.x,oldBullet.position.y);
@@ -466,17 +465,18 @@ int main(void)
                             bullet3.position.x=3;
                             gotoxy(oldBullet3.position.x,oldBullet3.position.y);
                             printf(" ");
+
                             startLevel=0;
                             pause=1;
                         }
-                        //to be continued...
                     }
                 }
-                //ends game and returns to main menu
+//Ends game and returns to main menu when '0' is pressed
                 if (u==8) {
                     clrscr();
                     setLed(0);
                     setLed(3);//blue LED
+                        //Resets and deletes bullets:
                     shooting = 0;
                     bullet.position.x=3;
                     gotoxy(oldBullet.position.x,oldBullet.position.y);
@@ -489,16 +489,16 @@ int main(void)
                     bullet3.position.x=3;
                     gotoxy(oldBullet3.position.x,oldBullet3.position.y);
                     printf(" ");
+
                     startLevel=0;
-                    //pause=1;
                 }
 
-                timeFlagPrint=0;
+                timeFlagPrint=0;//Print cycle ends
             }
 
 
-    //Updates bullet position
-            if(timeFlagBullet>=1){//change this number for change of bullet speed
+//Updates bullet position
+            if(timeFlagBullet>=1){
                 if (shooting>0){//only updates position if bullet has been started
                     moveBullet(shooting, &bullet, &oldBullet);
                 }
@@ -511,17 +511,17 @@ int main(void)
                 if (bullet.position.x==139){//bullet position and initialization is reset when the bullet reaches the end of the game field
                     shooting=0;
                 }
-                if (bullet2.position.x==139){//bullet position and initialization is reset when the bullet reaches the end of the game field
+                if (bullet2.position.x==139){
                     shooting2=0;
                 }
-                if (bullet3.position.x==139){//bullet position and initialization is reset when the bullet reaches the end of the game field
+                if (bullet3.position.x==139){
                     shooting3=0;
                 }
                 timeFlagBullet=0;
             }
 
-    //Moves asteroids and enemy nets
-            if(timeFlagA1>=10){//change this number for change of asteroid speed
+//Moves asteroids and enemy nets
+            if(timeFlagA1>=10){//Moves obstacles every 1/10 second
                 moveAsteroid(asteroid1.position.x,&asteroid1,&oldAsteroid1);
                 moveAsteroid(asteroid2.position.x,&asteroid2,&oldAsteroid2);
                 moveAsteroid(asteroid4.position.x,&asteroid4,&oldAsteroid4);
@@ -546,7 +546,7 @@ int main(void)
                 timeFlagA1=0;
                 ADFlag1=1;//Asteroid and net positions have updated
             }
-            if(timeFlagA2>=6){//change this number for change of asteroid speed
+            if(timeFlagA2>=6){//Moves obstacles 6/100 second
                 moveAsteroid(asteroid3.position.x,&asteroid3,&oldAsteroid3);
                 moveAsteroid(asteroid5.position.x,&asteroid5,&oldAsteroid5);
                 moveDodge(dodge2.position.y,&dodge2,&oldDodge2);
@@ -561,7 +561,7 @@ int main(void)
                 ADFlag2=1;//Asteroid and net positions have updated
             }
 
-    // Detects asteroid hit, by comparing bullet and asteroid positions
+// Detects asteroid hit, by comparing bullet and asteroid positions
             //if hit detected, bullet bounces back
             if (compBuAs(bullet,asteroid1)==1){
                 bullet.velocity.x=-1;
@@ -628,7 +628,7 @@ int main(void)
                     bullet3.velocity.x=-1;
                 }
             }
-    //Restarts reflected bullets
+//Restarts reflected bullets
             if (bullet.position.x==3 && bullet.velocity.x==-1){
                 shooting=0;
                 bullet.velocity.x=1;
@@ -643,7 +643,7 @@ int main(void)
             }
 
 
-    //Erases enemy when hit, resets bullet, adds +500 to score
+//Erases enemy when hit, resets bullet, adds +500 to score and indicate hit by sound
             if (compBuEn(bullet,e1)==1){
                 eraseEnemy(e1);
                 e1.position.x = 135;
@@ -751,6 +751,7 @@ int main(void)
                 printf(" ");
             }
 
+//Detects whether power up is activated and raises powerFlag
             if (compBuPo(bullet,power)==1){
                 shooting = 0;
                 bullet.position.x=3;
@@ -776,13 +777,13 @@ int main(void)
                 powerFlag=1;
             }
 
-    //Enemy positions is updated every 1/25 second
-    //If enemies get TONNY he loses time
+//Enemy positions is updated every 1/25 second
+    //If enemies get past TONNY he loses fuel
             if (timeFlagEnemy>=4){
                 eraseEnemy(e1);
                 enemyNextPos(&e1);
                 enemyMotion(&e1);
-                if (enemyBreach(e1)==1){//Detects that the enemy has breached and subtracts 1000 from time
+                if (enemyBreach(e1)==1){//Detects that the enemy has breached and subtracts 1000 from fuel
                     fuel-=1000;
                 }
                 if (startLevel<3){
@@ -790,7 +791,7 @@ int main(void)
                     enemyNextPos(&e2);
                     enemyMotion(&e2);
                     timeFlagEnemy=0;
-                    if (enemyBreach(e2)==1){//Detects that the enemy has breached and subtracts 1000 from time
+                    if (enemyBreach(e2)==1){
                         fuel-=1000;
                     }
                 }
@@ -799,16 +800,14 @@ int main(void)
                     enemyNextPos(&e3);
                     enemyMotion(&e3);
                     timeFlagEnemy=0;
-                    if (enemyBreach(e3)==1){//Detects that the enemy has breached and subtracts 1000 from time
+                    if (enemyBreach(e3)==1){
                         fuel-=1000;
                     }
                 }
                 enemyFlag=1;//enemies position has updated
-                //setLed(3);
-
             }
 
-
+//Fuel level indicated by sound. As it drops frequency gets higher
             if (fuel>7540){
                 setFreq(80);
             }
@@ -840,14 +839,14 @@ int main(void)
                 setFreq(20000);
             }
 
-    //gameTime is the remaining time the game
+//Fuel indicates the remaining fly time of the spaceship
     //counts down every 10th of a second
-            fuel=fuel-timeFlagGame;//genstart timeFlagGame!!!!!!!!!!
+            fuel -= timeFlagGame;
             highscore = updateHighscore(highscore,score);
 
     // Casting integers to strings
             char strFuel[10];
-            sprintf(strFuel, "%ld", fuel);//convert goTime to string
+            sprintf(strFuel, "%ld", fuel);//convert fuel to string
             char strScore[10];
             sprintf(strScore, "%d", score);//convert score to string
             char strLives[5];
@@ -855,7 +854,7 @@ int main(void)
             char strHighscore[10];
             sprintf(strHighscore, "%d", highscore);
 
-
+            //fills buffer with 0's and pushes it (clears display)
             memset (buffer,0x00,512);
             lcd_push_buffer(buffer);
 
@@ -870,7 +869,7 @@ int main(void)
             lcd_write_string(strScore,40,3,&buffer);
 
             lcd_write_string("Highscore:",0,4,&buffer);
-            lcd_write_string(strHighscore,60,4,&buffer);
+            lcd_write_string(strHighscore,65,4,&buffer);
 
     //Push buffer
             lcd_push_buffer(buffer);
@@ -882,150 +881,8 @@ int main(void)
             }
         }//   END OF GAME WHILE LOOP
 
-    }//END OF PRIORITY WHILE LOOP!!!
+    }//END OF MENU WHILE LOOP!!!
 
 }//END OF MAIN!!!!!
 
 
-/*
-    struct asteroid_t dodge1;
-    dodge1.position.x=139;
-    dodge1.position.y=7;
-    dodge1.velocity.x=-1;
-    struct asteroid_t oldDodge1;
-    struct asteroid_t dodge2;
-    dodge2.position.x=117;
-    dodge2.position.y=16;
-    dodge2.velocity.x=-1;
-    struct asteroid_t oldDodge2;
-    struct asteroid_t dodge3;
-    dodge3.position.x=130;
-    dodge3.position.y=23;
-    dodge3.velocity.x=-1;
-    struct asteroid_t oldDodge3;
-    struct asteroid_t dodge4;
-    dodge4.position.x=107;
-    dodge4.position.y=29;
-    dodge4.velocity.x=-1;
-    struct asteroid_t oldDodge4;
-    struct asteroid_t dodge5;
-    dodge5.position.x=125;
-    dodge5.position.y=34;
-    dodge5.velocity.x=-1;
-    struct asteroid_t oldDodge5;
-    struct asteroid_t dodge6;
-    dodge6.position.x=126;
-    dodge6.position.y=11;
-    dodge6.velocity.x=-1;
-    struct asteroid_t oldDodge6;
-    struct asteroid_t dodge7;
-    dodge7.position.x=98;
-    dodge7.position.y=20;
-    dodge7.velocity.x=-1;
-    struct asteroid_t oldDodge7;
-    struct asteroid_t dodge8;
-    dodge8.position.x=50;
-    dodge8.position.y=35;
-    dodge8.velocity.x=-1;
-    struct asteroid_t oldDodge8;
-    struct asteroid_t dodge9;
-    dodge9.position.x=70;
-    dodge9.position.y=28;
-    dodge9.velocity.x=-1;
-    struct asteroid_t oldDodge9;
-    struct asteroid_t dodge10;
-    dodge10.position.x=82;
-    dodge10.position.y=31;
-    dodge10.velocity.x=-1;
-    struct asteroid_t oldDodge10;
-    */
-
-/*
-    struct asteroid_t asteroid1;
-    asteroid1.position.x=20;
-    asteroid1.position.y=2;
-    asteroid1.velocity.y=1;
-    struct asteroid_t oldAsteroid1;
-    struct asteroid_t asteroid2;
-    asteroid2.position.x=35;
-    asteroid2.position.y=20;
-    asteroid2.velocity.y=1;
-    struct asteroid_t oldAsteroid2;
-    struct asteroid_t asteroid3;
-    asteroid3.position.x=50;
-    asteroid3.position.y=2;
-    asteroid3.velocity.y=1;
-    struct asteroid_t oldAsteroid3;
-    struct asteroid_t asteroid4;
-    asteroid4.position.x=62;
-    asteroid4.position.y=32;
-    asteroid4.velocity.y=1;
-    struct asteroid_t oldAsteroid4;
-    struct asteroid_t asteroid5;
-    asteroid5.position.x=70;
-    asteroid5.position.y=10;
-    asteroid5.velocity.y=1;
-    struct asteroid_t oldAsteroid5;
-    struct asteroid_t asteroid6;
-    asteroid6.position.x=41;
-    asteroid6.position.y=33;
-    asteroid6.velocity.y=1;
-    struct asteroid_t oldAsteroid6;
-    struct asteroid_t asteroid7;
-    asteroid7.position.x=83;
-    asteroid7.position.y=18;
-    asteroid7.velocity.y=1;
-    struct asteroid_t oldAsteroid7;*/
-
-
-/*
-    bullet.position.x = 3;
-    bullet.position.y = ship.position.y;
-    bullet.velocity.x = 1;
-    struct bullet_t oldBullet;
-    struct bullet_t bullet2;
-    bullet2.position.x = 3;
-    bullet2.position.y = ship.position.y;
-    bullet2.velocity.x = 1;
-    struct bullet_t oldBullet2;
-    struct bullet_t bullet3;
-    bullet3.position.x = 3;
-    bullet3.position.y = ship.position.y;
-    bullet3.velocity.x = 1;
-    struct bullet_t oldBullet3;*/
-/*
-    struct enemy e1;
-    e1.enemyType = 1;
-    e1.position.x = 135;
-    e1.position.y = 22;
-    decideVel(&e1);
-    e1.firstx = 135;
-    e1.firsty = e1.position.y;
-
-    struct enemy e2;
-    e2.enemyType = 2;
-    e2.position.x = 135;
-    e2.position.y = 30;
-    decideVel(&e2);
-    e2.firstx = 135;
-    e2.firsty = e2.position.y;
-
-    struct enemy e3;
-    e3.enemyType = 1;
-    e3.position.x = 135;
-    e3.position.y = 13;
-    decideVel(&e3);
-    e3.firstx = 135;
-    e3.firsty = e3.position.y;
-*/
-
-
-
-/*RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2;
-    TIM2->CR1 = 0x0000;//0000 0000 0000 0000
-    TIM2->ARR = 0x0000003F;//set reload value to 63 (microseconds)
-    TIM2->PSC = 0x0000;//set prescale to 0 (microseconds)
-    TIM2->CR1 |= 0x0001;//enable timer
-    TIM2->DIER |= 0x0001; // Enable timer 2 interrupts
-    NVIC_SetPriority(TIM2_IRQn, 0001); // Set interrupt priority=1 (high)
-    NVIC_EnableIRQ(TIM2_IRQn); // Enable interrupt*/
