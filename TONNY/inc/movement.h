@@ -11,8 +11,6 @@
 #ifndef _movement_H_
 #define _movement_H_
 
-
-
 void moveShip (uint8_t x, struct ship_t *ship, struct ship_t *oldShip);
 void moveAsteroid (uint8_t x, struct asteroid_t *asteroid, struct asteroid_t *oldAsteroid);
 uint8_t startBullet (struct ship_t ship, uint8_t p);

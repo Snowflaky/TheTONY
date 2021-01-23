@@ -3,6 +3,11 @@
 
 #define ESC 0x1B
 
+/*********************************/
+/*** Terminal output Functions ***/
+/*********************************/
+
+
 //function for setting foreground color (letters and symbols)
 void fgcolor(uint8_t foreground) {
 /*  Value      foreground     Value     foreground

@@ -1,6 +1,9 @@
 #include "game.h"
 #include "string.h"
 
+/*****************************************************/
+/*** Component initiation and comparison functions ***/
+/*****************************************************/
 
 //initialize ship
 void initShip(struct ship_t *ship, int32_t x, int32_t y){

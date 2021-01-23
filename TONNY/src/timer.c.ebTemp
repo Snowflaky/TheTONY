@@ -1,9 +1,5 @@
 #include "timer.h"
 
-/****************************/
-/***** Timer Functions ******/
-/****************************/
-
 //Initiate timer 15:
 void initTimer15(){
     RCC->APB2ENR |= RCC_APB2Periph_TIM15; //enable clock line to timer 15?
@@ -21,7 +17,7 @@ void initTimer2(){
     RCC->APB1ENR |= 0x00000001; // Enable clock line to timer 2;
     TIM2->CR1 = 0x0000; // Disable timer
     TIM2->ARR = 1000; // Set auto reload value
-    TIM2->PSC = 0x0C7F;//PRESCALER_VALUE; // Set prescale value
+    TIM2->PSC = 0x0C7F;//PRESCALER_VALUE; // Set pre-scaler value****************************
         //0x003F = millieconds
         //0x18FF = centiseconds
         //0x0C7F
@@ -46,10 +42,10 @@ void TIM1_BRK_TIM15_IRQHandler() {
 //Counts 100ths of a second, seconds and minutes.
     timeFlagPrint=1;
     timetime.mikroSec++;
-    if (timetime.mikroSec>=1000){//milliseconds
+    if (timetime.mikroSec>=1000){
         timetime.milliSec++;
         timetime.mikroSec=0;
-        if (timetime.milliSec>=10) {//centiseconds
+        if (timetime.milliSec>=10) {
             timeFlagBullet++;
             timeFlagA1++;
             timeFlagA2++;
@@ -57,23 +53,24 @@ void TIM1_BRK_TIM15_IRQHandler() {
             toneFlag++;
             timetime.centiSec++;
             timetime.milliSec=0;
-            if (timetime.centiSec>=50){//seconds
+            if (timetime.centiSec>=50){
                 timetime.second++;
                 timetime.centiSec=0;
                 if (timetime.second%10==0){
                     timeFlagGame++;
                 }
-                if (timetime.second>=60){//minutes
+                if (timetime.second>=60){
                     timetime.minute++;
                     timetime.second=0;
                 }
             }
+
         }
     }
     TIM15->SR &= ~0x0001; // Clear interrupt bit
  }
 
-//Changes frequency of buzzer sound
+ //Changes frequency of buzzer sound
 void setFreq(uint16_t freq){
     uint32_t reload = 64e6 / freq / (0x01FF + 1) - 1;
     TIM2->ARR = reload; // Set auto reload value

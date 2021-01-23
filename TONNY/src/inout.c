@@ -1,7 +1,9 @@
 #include "inout.h"
 #include "string.h"
 
-
+/******************************/
+/*** Input/Output functions ***/
+/******************************/
 
 
 //Puts a string into buffer array, for writing on LCD display
