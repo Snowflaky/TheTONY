@@ -112,8 +112,6 @@ void setLed(uint8_t color) {
     }
 }
 
-
-
 //Detect if keyboard input is w (up), s (down), b (boss) or p (shoot, phew!)
 uint8_t keyInput(){
 //Any other key --> return 0.

@@ -87,7 +87,7 @@ int main(void)
 
 //Power up initiated
     struct bullet_t power, oldPower;
-    initBullet(&power, 135, 16, -1, 0);
+    initBullet(&power, 135, 3, -1, 0);
 
 //Enemies are initiated
     struct enemy e1, e2, e3;
@@ -95,9 +95,9 @@ int main(void)
     initEnemy(&e2,2,135,30);
     initEnemy(&e3,1,135,13);
 
-    /* ********************************************************************************
+    // ********************************************************************************
     //The first time you run the program please include the following code. This clears the address for the highscore.
-    FLASH_Unlock();
+    /*FLASH_Unlock();
     FLASH_ClearFlag( FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPERR );
     FLASH_ErasePage(0x0800F800);//erase page
     FLASH_ProgramHalfWord(0x0800F800,0);//write data
@@ -185,7 +185,7 @@ int main(void)
             shooting2=0;
             shooting3=0;
             pause=0;
-            initBullet(&power, 135, 16, -1, 0);
+            initBullet(&power, 135, 3, -1, 0);
             window(50,90,15,27,4);
             gotoxy(64,17);
             printf("CHOOSE LEVEL");
@@ -431,12 +431,12 @@ int main(void)
                 bullet3.position.y=shooting3;
 
 //Power up
-                if (fuel<6000 && power.position.x>2){//Sends power up when fuel is 6000
+                if (((fuel<9850 && fuel>8500) || (fuel<5050 && fuel>5000)) && power.position.x>2){//Sends power up when fuel is 8000 or 5000
                     printPower(power, oldPower);
                     movePower(&power, &oldPower);
                 }
 
-                if (fuel<2000){//Ends power up when fuel is 2000
+                if ((fuel<6050 && fuel>6000) || (fuel<3050 && fuel>3000)){//Ends power up when fuel is 2000
                     powerFlag=0;
                 }
 
@@ -783,6 +783,7 @@ int main(void)
                 eraseEnemy(e1);
                 enemyNextPos(&e1);
                 enemyMotion(&e1);
+                powerMotion(&power);
                 if (enemyBreach(e1)==1){//Detects that the enemy has breached and subtracts 1000 from fuel
                     fuel-=1000;
                 }

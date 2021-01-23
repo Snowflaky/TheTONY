@@ -59,6 +59,7 @@ void moveBullet (uint8_t y, struct bullet_t *bullet, struct bullet_t *oldBullet)
     (*bullet).position.x=(*bullet).position.x + (*bullet).velocity.x*k;//movement of bullet in x-direction
     (*bullet).position.y=y;//has the same constant height as the spaceship when bullet was fired(
 }
+
 //Moves enemies nets
 void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge) {
 //Moves nets -1 along x-axis
@@ -82,6 +83,20 @@ void movePower (struct bullet_t *power, struct bullet_t *oldPower){
     (*oldPower).position.x=(*power).position.x;
     (*oldPower).position.y=(*power).position.y;
     (*power).position.x=(*power).position.x+(*power).velocity.x;
+    (*power).position.y=(*power).position.y+(*power).velocity.y;
+}
+
+void powerMotion(struct bullet_t (*p)) { //moves the power up in a stepped staircase shape from top right to bottom left
+    if (((*p).position.y < 4 && (*p).position.x == 120) || (*p).position.y < 6 && (*p).position.x == 100 || (*p).position.y < 11 && (*p).position.x == 80 ||
+        (*p).position.y < 16 && (*p).position.x == 60 || (*p).position.y < 21 && (*p).position.x == 40 || (*p).position.y < 26 && (*p).position.x == 20){
+            (*p).velocity.x = 0;
+            (*p).velocity.y = 1;
+    }
+    else if (((*p).position.y == 5 && (*p).position.x == 120) || (*p).position.y == 10 && (*p).position.x == 100 || (*p).position.y == 15 && (*p).position.x == 80 ||
+        (*p).position.y == 20 && (*p).position.x == 60 || (*p).position.y == 25 && (*p).position.x == 40 || (*p).position.y == 30 && (*p).position.x == 20){
+            (*p).velocity.x = -1;
+            (*p).velocity.y = 0;
+    }
 }
 
 void enemyMotion (struct enemy (*e)) {
@@ -146,6 +161,7 @@ void enemyNextPos (struct enemy *e) {
     (*e).position.x = (*e).position.x + (*e).velocity.x*k;
     (*e).position.y = (*e).position.y + (*e).velocity.y*k;
 }
+
 
 
 

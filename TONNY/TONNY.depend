@@ -484,16 +484,16 @@
 	"stm32f30x_conf.h"
 	<stdio.h>
 
-1610964368 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\charset.c
+1611405669 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\charset.c
 	"charset.h"
 
 1610964368 c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\inc\charset.h
 
-1611218795 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\movement.c
+1611412925 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\movement.c
 	"movement.h"
 	"string.h"
 
-1611218795 c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\inc\movement.h
+1611409682 c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\inc\movement.h
 	"30010_io.h"
 	"stm32f30x_conf.h"
 	<stdio.h>
@@ -504,7 +504,7 @@
 	"ANSI.h"
 	"game.h"
 
-1611237296 c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\inc\ansi.h
+1611405669 c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\inc\ansi.h
 	"30010_io.h"
 	"stm32f30x_conf.h"
 	<stdio.h>
@@ -513,7 +513,7 @@
 	<charset.h>
 	<time.h>
 
-1611237296 c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\inc\game.h
+1611405669 c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\inc\game.h
 	"30010_io.h"
 	"stm32f30x_conf.h"
 	<stdio.h>
@@ -523,11 +523,11 @@
 	<time.h>
 	"ANSI.h"
 
-1611310305 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\print.c
+1611405669 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\print.c
 	"print.h"
 	"string.h"
 
-1611218795 c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\inc\print.h
+1611405669 c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\inc\print.h
 	"30010_io.h"
 	"stm32f30x_conf.h"
 	<stdio.h>
@@ -543,19 +543,19 @@
 1610442594 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\system_stm32f30x.c
 	"stm32f30x.h"
 
-1611237296 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\ansi.c
+1611405669 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\ansi.c
 	"ansi.h"
 	"string.h"
 
-1611236093 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\game.c
+1611405669 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\game.c
 	"game.h"
 	"string.h"
 
-1611231588 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\inout.c
+1611409854 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\inout.c
 	"inout.h"
 	"string.h"
 
-1611218795 c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\inc\inout.h
+1611405669 c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\inc\inout.h
 	"30010_io.h"
 	"stm32f30x_conf.h"
 	<stdio.h>
@@ -565,7 +565,7 @@
 	<time.h>
 	"ANSI.h"
 
-1611314044 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\main.c
+1611412814 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\main.c
 	"stm32f30x_conf.h"
 	"ANSI.h"
 	"string.h"
@@ -573,11 +573,20 @@
 	"print.h"
 	"movement.h"
 	"game.h"
+	"timer.h"
 
 1611326982 source:c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\src\timer.c
 	"timer.h"
 
 1611326982 c:\users\sara\desktop\programmeringsprojekt\gitprog\thetony\tonny\inc\timer.h
+	<charset.h>
+	<time.h>
+	"stm32f30x_conf.h"
+
+1611405669 source:c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\src\timer.c
+	"timer.h"
+
+1611405390 c:\users\erik\onedrive\desktop\uni\2021_january\programming_project\project\tonygit\thetony\tonny\inc\timer.h
 	<charset.h>
 	<time.h>
 	"stm32f30x_conf.h"
