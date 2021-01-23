@@ -36,6 +36,7 @@ struct bullet_t {
     struct vector_t velocity;
 };
 
+
 void initShip(struct ship_t *ship, int32_t x, int32_t y);
 void initAsteroid(struct asteroid_t *asteroid, int32_t x, int32_t y, int32_t vx, int32_t vy);
 void initBullet(struct bullet_t *bullet, int32_t x, int32_t y, int32_t vx, int32_t vy);

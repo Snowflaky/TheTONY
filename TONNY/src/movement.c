@@ -73,33 +73,39 @@ void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge
     (*dodge).position.y=y;
 }
 
+//Moves power up
 void movePower (struct bullet_t *power, struct bullet_t *oldPower){
+//Moves power up -1 along x-axis
+//Input: pointer to power struct and old power struct
     (*oldPower).position.x=(*power).position.x;
     (*oldPower).position.y=(*power).position.y;
     (*power).position.x=(*power).position.x+(*power).velocity.x;
 }
 
 void enemyMotion (struct enemy (*e)) {
-    uint8_t k=1;
+//Moves enemy in pattern determined by enemy type
     if ((*e).position.x<5){
         (*e).position.x=135;
     }
     if ((*e).enemyType == 1) {
-        //uint32_t firsty = (*e).firsty;   // motion
+        //Trang (enemy type 1) moves in a zig zag motion, shifting y-velocity based on y-position.
         if (((*e).position.y - (*e).firsty) >= 4 || ((*e).position.y - (*e).firsty) <= -4) {
-            (*e).velocity.y *= -1; //If the current y position is
-        }               //farther from starting y position than 4,
-    }                   // y velocity is reversed (Trang). This motion
-    else if ((*e).enemyType == 2) { // pattern is specified by enemyType
+            (*e).velocity.y *= -1;
+        }
+    }
+    else if ((*e).enemyType == 2) {
+        //Skwoq (enemy type 2) moves in a square wave.
+            //Moves upwards
         if ((((*e).position.x - (*e).firstx == -10) && ((*e).position.y - (*e).firsty == 0)) ||
             (((*e).position.x - (*e).firstx == -30) && ((*e).position.y - (*e).firsty == 0)) ||
             (((*e).position.x - (*e).firstx == -50) && ((*e).position.y - (*e).firsty == 0)) ||
             (((*e).position.x - (*e).firstx == -70) && ((*e).position.y - (*e).firsty == 0)) ||
             (((*e).position.x - (*e).firstx == -90) && ((*e).position.y - (*e).firsty == 0)) ||
             (((*e).position.x - (*e).firstx == -110) && ((*e).position.y - (*e).firsty == 0))) {
-            (*e).velocity.y = -1; //This second if (else if) statement
-            (*e).velocity.x = 0;  //specifies the motion of sqwog, and
-        }          //also uses the enemyType variable to choose function
+            (*e).velocity.y = -1;
+            (*e).velocity.x = 0;
+        }
+            //Moves forward
         else if (((*e).position.y - (*e).firsty == -5 && (*e).position.x - (*e).firstx == -10) ||
             (((*e).position.y - (*e).firsty == -5) && ((*e).position.x - (*e).firstx == -30)) ||
             (((*e).position.y - (*e).firsty == -5) && ((*e).position.x - (*e).firstx == -50)) ||
@@ -109,6 +115,7 @@ void enemyMotion (struct enemy (*e)) {
             (*e).velocity.y = 0;
             (*e).velocity.x = -1;
         }
+            //Moves downward
         else if (((*e).position.x - (*e).firstx == -20 && (*e).position.y - (*e).firsty == -5) ||
             (((*e).position.x - (*e).firstx == -40) && ((*e).position.y - (*e).firsty == -5)) ||
             (((*e).position.x - (*e).firstx == -60) && ((*e).position.y - (*e).firsty == -5)) ||
@@ -118,6 +125,7 @@ void enemyMotion (struct enemy (*e)) {
             (*e).velocity.y = 1;
             (*e).velocity.x = 0;
         }
+            //Moves forward
         else if (((*e).position.y - (*e).firsty == 0 && (*e).position.x - (*e).firstx == -20) ||
             (((*e).position.y - (*e).firsty == 0) && ((*e).position.x - (*e).firstx == -40)) ||
             (((*e).position.y - (*e).firsty == 0) && ((*e).position.x - (*e).firstx == -60)) ||
@@ -129,18 +137,6 @@ void enemyMotion (struct enemy (*e)) {
         }
     }
 }
-
-
-/*void decideVel (struct enemy (*e)) {
-    if ((*e).enemyType == 1) {
-        (*e).velocity.x = -1;
-        (*e).velocity.y = 1;
-    } else if ((*e).enemyType == 2) {
-        (*e).velocity.x = -1;
-        (*e).velocity.y = 0;
-    }
-}
-included in initEnemy!!*/
 
 void enemyNextPos (struct enemy *e) {
     //Calculate new position for Trang. Input is a pointer.

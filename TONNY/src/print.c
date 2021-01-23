@@ -71,17 +71,17 @@ void printShip (struct ship_t ship, struct ship_t oldShip) {
     gotoxy(ship.position.x,ship.position.y);
     printf("=");
     color(1,0);
-    printf("%c[1m", ESC);
+    printf("%c[1m", ESC);//bold script
     gotoxy(ship.position.x + 1,ship.position.y - 1);
     printf("-");
     gotoxy(ship.position.x + 1,ship.position.y + 1);
     printf("-");
-    printf("%c[22m", ESC);
+    printf("%c[22m", ESC);//normal script
     color(15,0);
 }
 
 void printPowerShip (struct ship_t ship, struct ship_t oldShip) {
-//Delete ship at old position and prints spaceship at position (x,y).
+//Same function as printShip, but prints ship in another color to indicate power up
 //Input: pointer to ship structure.
     color(0,0);
     gotoxy(oldShip.position.x + 1,oldShip.position.y);
@@ -109,12 +109,12 @@ void printPowerShip (struct ship_t ship, struct ship_t oldShip) {
     gotoxy(ship.position.x,ship.position.y);
     printf("=");
     color(1,0);
-    printf("%c[1m", ESC);
+    printf("%c[1m", ESC);//bold script
     gotoxy(ship.position.x + 1,ship.position.y - 1);
     printf("-");
     gotoxy(ship.position.x + 1,ship.position.y + 1);
     printf("-");
-    printf("%c[22m", ESC);
+    printf("%c[22m", ESC);//normal script
     color(15,0);
 }
 
@@ -142,10 +142,10 @@ void printBullet (struct bullet_t bullet, struct bullet_t oldBullet) {
         if (bullet.position.x<139){//only prints bullet as long as it is within the game field
             gotoxy(bullet.position.x,bullet.position.y);
             fgcolor(6);
-            printf("%c[1m",ESC);
+            printf("%c[1m",ESC);//bold script
             printf("=");
             fgcolor(15);
-            printf("%c[22m",ESC);
+            printf("%c[22m",ESC);//normal script
         }
     }
 }
@@ -154,30 +154,31 @@ void printBullet (struct bullet_t bullet, struct bullet_t oldBullet) {
 void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge){
 //Delete nets at old position and prints nets at position (x,y).
 //Input: pointer to dodge structure.
-    //if (dodge.position.y<40)
-        gotoxy(oldDodge.position.x,oldDodge.position.y);
-        printf(" ");
-        gotoxy(dodge.position.x,dodge.position.y);
-        fgcolor(13);
-        printf("%c[1m", ESC);
-        printf("#");
-        fgcolor(15);
-        printf("%c[22m", ESC);
+    gotoxy(oldDodge.position.x,oldDodge.position.y);
+    printf(" ");
+    gotoxy(dodge.position.x,dodge.position.y);
+    fgcolor(13);
+    printf("%c[1m", ESC);//bold script
+    printf("#");
+    fgcolor(15);
+    printf("%c[22m", ESC);//normal script
 }
 
-//Prints power uo
+//Prints power up and deletes power up at previous position
 void printPower (struct bullet_t power, struct bullet_t oldPower){
-    if (power.position.x>2){
+//Delete power up at old position and prints power up at position (x,y).
+//Input: pointer to power up structure.
+    if (power.position.x>2){//erase
         gotoxy(oldPower.position.x,oldPower.position.y);
         printf(" ");
     }
-    if (power.position.x>3){
+    if (power.position.x>3){//print
         gotoxy(power.position.x,power.position.y);
         color(14,2);
-        printf("%c[1m", ESC);
+        printf("%c[1m", ESC);//bold script
         printf("¤");
         color(15,0);
-        printf("%c[22m", ESC);
+        printf("%c[22m", ESC);//normal script
     }
 }
 

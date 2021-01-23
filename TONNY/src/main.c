@@ -42,28 +42,13 @@ int main(void)
     color(15,0);
     clrscr();
 
-    uint8_t startLevel=0;
-    uint8_t v=0;
-    uint8_t levelMenu=0;
-    uint8_t useMenu=0;
-    uint8_t creditMenu=0;
-    uint8_t u=0;
-    uint8_t shooting=0;
-    uint8_t shooting2=0;
-    uint8_t shooting3=0;
+    uint8_t startLevel=0, v=0, levelMenu=0, useMenu=0, creditMenu=0, u=0, shooting=0, shooting2=0, shooting3=0, pause=0, powerFlag=0, ADFlag1=1, ADFlag2=1, enemyFlag=1;
     timeFlagGame=0;
     int32_t fuel=10000;
-    uint16_t score=0;
-    uint8_t pause=0;
+    uint16_t score=0, highscore;
     int8_t lives=3;
-    uint16_t highscore;
-    uint8_t powerFlag=0;
 
 //flags for printing enemies, asteroids and nets
-    uint8_t ADFlag1=1;
-    uint8_t ADFlag2=1;
-    uint8_t enemyFlag=1;
-
 //TONNY's Spaceship is built
     struct ship_t ship;
     struct ship_t oldShip;
@@ -100,6 +85,7 @@ int main(void)
     initBullet(&bullet2,3,ship.position.y,1,0);
     initBullet(&bullet3,3,ship.position.y,1,0);
 
+//Power up initiated
     struct bullet_t power, oldPower;
     initBullet(&power, 135, 16, -1, 0);
 
@@ -176,11 +162,9 @@ int main(void)
                     creditMenu=0;
                 }
             }
-
         }
 //Level menu
         if (v==5){
-                //initall(&setFreq, &ADFlag..)********************'
             setFreq(0);
             levelMenu=1;
             clrscr();
@@ -242,111 +226,107 @@ int main(void)
                 }
             }
         }
-
+//This code plays the title melody in main menu
         uint16_t q=16;
-        uint16_t fac = 1;
-        if (toneFlag<10*fac){
+        if (toneFlag<10){
             setFreq(123*q);
         }
-        else if (toneFlag>10*fac && toneFlag<20*fac){
+        else if (toneFlag>10 && toneFlag<20){
             setFreq(82*q);
         }
-        else if (toneFlag>20*fac && toneFlag<30*fac){
+        else if (toneFlag>20 && toneFlag<30){
             setFreq(98*q);
         }
-        else if (toneFlag>30*fac && toneFlag<40*fac){
+        else if (toneFlag>30 && toneFlag<40){
             setFreq(61*q);
         }
-        else if (toneFlag>40*fac && toneFlag<50*fac){//5
+        else if (toneFlag>40 && toneFlag<50){//5
             setFreq(82*q);
         }
-        else if (toneFlag>50*fac && toneFlag<60*fac){
+        else if (toneFlag>50 && toneFlag<60){
             setFreq(49*q);
         }
-        else if (toneFlag>60*fac && toneFlag<70*fac){
+        else if (toneFlag>60 && toneFlag<70){
             setFreq(41*q);
         }
-        else if (toneFlag>70*fac && toneFlag<80*fac){
+        else if (toneFlag>70 && toneFlag<80){
             setFreq(123*q);
         }
-        else if (toneFlag>80*fac && toneFlag<90*fac){
+        else if (toneFlag>80 && toneFlag<90){
             setFreq(110*q);
         }
-        else if (toneFlag>90*fac && toneFlag<100*fac){//10
+        else if (toneFlag>90 && toneFlag<100){//10
             setFreq(73*q);
         }
-        else if (toneFlag>100*fac && toneFlag<110*fac){
+        else if (toneFlag>100 && toneFlag<110){
             setFreq(93*q);
         }
-        else if (toneFlag>110*fac && toneFlag<120*fac){
+        else if (toneFlag>110 && toneFlag<120){
             setFreq(55*q);
         }
-        else if (toneFlag>120*fac && toneFlag<130*fac){
+        else if (toneFlag>120 && toneFlag<130){
             setFreq(73*q);
         }
-        else if (toneFlag>130*fac && toneFlag<140*fac){
+        else if (toneFlag>130 && toneFlag<140){
             setFreq(46*q);
         }
-        else if (toneFlag>140*fac && toneFlag<150*fac){ //15
+        else if (toneFlag>140 && toneFlag<150){ //15
             setFreq(36*q);
         }
-        else if (toneFlag>150*fac && toneFlag<160*fac){
+        else if (toneFlag>150 && toneFlag<160){
             setFreq(110*q);
         }
-        else if (toneFlag>160*fac && toneFlag<170*fac){
+        else if (toneFlag>160 && toneFlag<170){
             setFreq(123*q);
         }
-        else if (toneFlag>170*fac && toneFlag<180*fac){
+        else if (toneFlag>170 && toneFlag<180){
             setFreq(93*q);
         }
-        else if (toneFlag>180*fac && toneFlag<190*fac){
+        else if (toneFlag>180 && toneFlag<190){
             setFreq(98*q);
         }
-        else if (toneFlag>190*fac && toneFlag<200*fac){ //20
+        else if (toneFlag>190 && toneFlag<200){ //20
             setFreq(65*q);
         }
-        else if (toneFlag>200*fac && toneFlag<210*fac){
+        else if (toneFlag>200 && toneFlag<210){
             setFreq(49*q);
         }
-        else if (toneFlag>210*fac && toneFlag<220*fac){
+        else if (toneFlag>210 && toneFlag<220){
             setFreq(65*q);
         }
-        else if (toneFlag>220*fac && toneFlag<230*fac){
+        else if (toneFlag>220 && toneFlag<230){
             setFreq(49*q);
         }
-        else if (toneFlag>230*fac && toneFlag<240*fac){
+        else if (toneFlag>230 && toneFlag<240){
             setFreq(41*q);
         }
-        else if (toneFlag>240*fac && toneFlag<250*fac){ //25
+        else if (toneFlag>240 && toneFlag<250){ //25
             setFreq(110*q);
         }
-        else if (toneFlag>250*fac && toneFlag<260*fac){
+        else if (toneFlag>250 && toneFlag<260){
             setFreq(55*q);
         }
-        else if (toneFlag>260*fac && toneFlag<270*fac){
+        else if (toneFlag>260 && toneFlag<270){
             setFreq(36*q);
         }
-        else if (toneFlag>270*fac && toneFlag<280*fac){
+        else if (toneFlag>270 && toneFlag<280){
             setFreq(73*q);
         }
-        else if (toneFlag>280*fac && toneFlag<290*fac){
+        else if (toneFlag>280 && toneFlag<290){
             setFreq(36*q);
         }
-        else if (toneFlag>290*fac && toneFlag<300*fac){ //30
+        else if (toneFlag>290 && toneFlag<300){ //30
             setFreq(93*q);
         }
-        else if (toneFlag>300*fac && toneFlag<310*fac){
+        else if (toneFlag>300 && toneFlag<310){
             setFreq(73*q);
         }
-        else if (toneFlag>310*fac && toneFlag<320*fac){
+        else if (toneFlag>310 && toneFlag<320){
             setFreq(110);
         }
         else{
             toneFlag=0;
         }
-
-
-           // timeFlagPrint=0;
 
 //GAME WHILE LOOP BEGINS
         while(startLevel>0){

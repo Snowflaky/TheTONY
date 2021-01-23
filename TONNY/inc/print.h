@@ -16,6 +16,7 @@
 
 void window(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2, uint8_t lineColor);
 void printShip (struct ship_t ship, struct ship_t oldShip);
+void printPowerShip (struct ship_t ship, struct ship_t oldShip);
 void printAsteroid (struct asteroid_t asteroid, struct asteroid_t oldAsteroid);
 void printBullet (struct bullet_t bullet, struct bullet_t oldBullet);
 void printDodge (struct asteroid_t dodge, struct asteroid_t oldDodge);

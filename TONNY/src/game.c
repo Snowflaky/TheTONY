@@ -1,6 +1,7 @@
 #include "game.h"
 #include "string.h"
 
+
 //initialize ship
 void initShip(struct ship_t *ship, int32_t x, int32_t y){
     (*ship).position.x=x;
@@ -113,13 +114,13 @@ uint8_t enemyBreach(struct enemy e){
     return breach;
 }
 
-
+//Detects if bullet hits power up
 uint8_t compBuPo(struct bullet_t bullet, struct bullet_t power){
+//Input: bullet struct, power struct
 //if collision is detected, 1 is returned
     uint8_t g=0;
     if ((bullet.position.x==power.position.x-1 || bullet.position.x==power.position.x) && bullet.position.y==power.position.y){
         g=1;
     }
-
     return g;
 }
