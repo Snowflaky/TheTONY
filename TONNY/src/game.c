@@ -1,6 +1,10 @@
 #include "game.h"
 #include "string.h"
 
+/*****************************************************/
+/*** Component initiation and comparison functions ***/
+/*****************************************************/
+
 //initialize ship
 void initShip(struct ship_t *ship, int32_t x, int32_t y){
     (*ship).position.x=x;
@@ -61,7 +65,7 @@ uint8_t compBuEn(struct bullet_t bullet, struct enemy e){
          bullet.position.x==e.position.x + 1 ||
          bullet.position.x==e.position.x + 2 ||
          bullet.position.x==e.position.x - 1 ||
-         bullet.position.x==e.position.x - 1)
+         bullet.position.x==e.position.x - 2)
         &&
         (bullet.position.y==e.position.y ||
         bullet.position.y==e.position.y+1 ||
@@ -77,7 +81,7 @@ uint8_t compBuEn(struct bullet_t bullet, struct enemy e){
 uint8_t compDoSh(struct ship_t ship, struct asteroid_t dodge){
     //if collision is detected, 1 is returned
     uint8_t g=0;
-    if (ship.position.x==dodge.position.x-1 && (ship.position.y==dodge.position.y ||
+    if ((ship.position.x==dodge.position.x-1||ship.position.x==dodge.position.x) && (ship.position.y==dodge.position.y ||
                                                 ship.position.y==dodge.position.y+1 ||
                                                 ship.position.y==dodge.position.y-1 )){
         g=1;
@@ -111,4 +115,15 @@ uint8_t enemyBreach(struct enemy e){
         breach=1;
     }
     return breach;
+}
+
+//Detects if bullet hits power up
+uint8_t compBuPo(struct bullet_t bullet, struct bullet_t power){
+//Input: bullet struct, power struct
+//if collision is detected, 1 is returned
+    uint8_t g=0;
+    if ((bullet.position.x==power.position.x-1 || bullet.position.x==power.position.x) && bullet.position.y==power.position.y){
+        g=1;
+    }
+    return g;
 }
