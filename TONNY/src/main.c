@@ -431,12 +431,12 @@ int main(void)
                 bullet3.position.y=shooting3;
 
 //Power up
-                if (((fuel<9850 && fuel>8500) || (fuel<5050 && fuel>5000)) && power.position.x>2){//Sends power up when fuel is 8000 or 5000
+                if (((fuel<8550 && fuel>8500) || (fuel<5050 && fuel>5000)) && power.position.x>2){//Sends power up when fuel is 8000 or 5000
                     printPower(power, oldPower);
                     movePower(&power, &oldPower);
                 }
 
-                if ((fuel<6050 && fuel>6000) || (fuel<3050 && fuel>3000)){//Ends power up when fuel is 2000
+                if ((fuel<6050 && fuel>6000) || (fuel<3050 && fuel>3000)){//Ends power up when fuel is 6000 or 3000.
                     powerFlag=0;
                 }
 
