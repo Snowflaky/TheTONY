@@ -77,30 +77,28 @@ void moveDodge (uint8_t y, struct asteroid_t *dodge, struct asteroid_t *oldDodge
 }
 
 //Moves power up
-void movePower (struct bullet_t *power, struct bullet_t *oldPower){
+void movePower (struct bullet_t (*power), struct bullet_t *oldPower){
 //Moves power up -1 along x-axis
 //Input: pointer to power struct and old power struct
     (*oldPower).position.x=(*power).position.x;
     (*oldPower).position.y=(*power).position.y;
     (*power).position.x=(*power).position.x+(*power).velocity.x;
     (*power).position.y=(*power).position.y+(*power).velocity.y;
+
+    if (((*power).position.y == 3 && (*power).position.x == 120) || ((*power).position.y == 5 && (*power).position.x == 100) || ((*power).position.y == 10 && (*power).position.x == 80) ||
+        ((*power).position.y == 15 && (*power).position.x == 60) || ((*power).position.y == 20 && (*power).position.x == 40) || ((*power).position.y == 25 && (*power).position.x == 20)){
+            (*power).velocity.x = 0;
+            (*power).velocity.y = 1;
+    }
+    if (((*power).position.y == 5 && (*power).position.x == 120) || ((*power).position.y == 10 && (*power).position.x == 100) || ((*power).position.y == 15 && (*power).position.x == 80) ||
+        ((*power).position.y == 20 && (*power).position.x == 60) || ((*power).position.y == 25 && (*power).position.x == 40) || ((*power).position.y == 30 && (*power).position.x == 20)){
+            (*power).velocity.x = -1;
+            (*power).velocity.y = 0;
+    }//the above if statements are what control the power-ups' motion, as a staircase going down from top right to bottom left
 }
 
-void powerMotion(struct bullet_t (*p)) { //moves the power up in a stepped staircase shape from top right to bottom left
-    if (((*p).position.y < 4 && (*p).position.x == 120) || (*p).position.y < 6 && (*p).position.x == 100 || (*p).position.y < 11 && (*p).position.x == 80 ||
-        (*p).position.y < 16 && (*p).position.x == 60 || (*p).position.y < 21 && (*p).position.x == 40 || (*p).position.y < 26 && (*p).position.x == 20){
-            (*p).velocity.x = 0;
-            (*p).velocity.y = 1;
-    }
-    else if (((*p).position.y == 5 && (*p).position.x == 120) || (*p).position.y == 10 && (*p).position.x == 100 || (*p).position.y == 15 && (*p).position.x == 80 ||
-        (*p).position.y == 20 && (*p).position.x == 60 || (*p).position.y == 25 && (*p).position.x == 40 || (*p).position.y == 30 && (*p).position.x == 20){
-            (*p).velocity.x = -1;
-            (*p).velocity.y = 0;
-    }
-}
-
-void enemyMotion (struct enemy (*e)) {
 //Moves enemy in pattern determined by enemy type
+void enemyMotion (struct enemy (*e)) {
     if ((*e).position.x<5){
         (*e).position.x=135;
     }
@@ -155,8 +153,9 @@ void enemyMotion (struct enemy (*e)) {
     }
 }
 
+//Calculates the enemies' next position, relating velocity to position
 void enemyNextPos (struct enemy *e) {
-    //Calculate new position for Trang. Input is a pointer.
+    //Calculate new position for enemies. Input is a pointer.
     uint32_t k = 1;
     (*e).position.x = (*e).position.x + (*e).velocity.x*k;
     (*e).position.y = (*e).position.y + (*e).velocity.y*k;

@@ -783,7 +783,6 @@ int main(void)
                 eraseEnemy(e1);
                 enemyNextPos(&e1);
                 enemyMotion(&e1);
-                powerMotion(&power);
                 if (enemyBreach(e1)==1){//Detects that the enemy has breached and subtracts 1000 from fuel
                     fuel-=1000;
                 }

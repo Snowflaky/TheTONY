@@ -84,6 +84,7 @@ void printShip (struct ship_t ship, struct ship_t oldShip) {
     color(15,0);
 }
 
+//Super-ship
 void printPowerShip (struct ship_t ship, struct ship_t oldShip) {
 //Same function as printShip, but prints ship in another color to indicate power up
 //Input: pointer to ship structure.
@@ -186,7 +187,7 @@ void printPower (struct bullet_t power, struct bullet_t oldPower){
     }
 }
 
-
+//Prints the enemies
 void drawEnemy (struct enemy e) {
     if (e.enemyType == 1) {
         color(0,0);
@@ -254,6 +255,7 @@ void drawEnemy (struct enemy e) {
     color(15,0);
 }
 
+//Erases the enemies
 void eraseEnemy (struct enemy e) {
     if (e.enemyType == 1) {
         //color(0,0);
