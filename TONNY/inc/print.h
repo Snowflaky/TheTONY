@@ -28,6 +28,7 @@ void printMain();
 void printUserMenu();
 void printCredit();
 void printLevel();
+void printWarning();
 
 
 #endif

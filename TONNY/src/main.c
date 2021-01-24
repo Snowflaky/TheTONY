@@ -95,19 +95,34 @@ int main(void)
     initEnemy(&e2,2,135,30);
     initEnemy(&e3,1,135,13);
 
-    // ********************************************************************************
-    //The first time you run the program please include the following code. This clears the address for the highscore.
-    /*FLASH_Unlock();
-    FLASH_ClearFlag( FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPERR );
-    FLASH_ErasePage(0x0800F800);//erase page
-    FLASH_ProgramHalfWord(0x0800F800,0);//write data
-    FLASH_Lock();//lock flash*/
-
 //Main menu
     while(1){
         printMain();
         v = keyInput();
-
+//Initialize or reset the flash memory containing the high score
+        if (v==3) {
+            v = 0;
+            uint8_t var;
+            var=1;
+            while(var==1){
+                uint8_t rstr;
+                rstr = keyInput();
+                printWarning();
+                if (rstr==8) {
+                    rstr=0;
+                    clrscr();
+                    printMain();
+                    var=0;
+                }
+                if (rstr==4) {
+                    resetHS();
+                    rstr=0;
+                    var=0;
+                    clrscr();
+                    printMain();
+                }
+            }
+        }
 //How to play
         if (v==6){
             setFreq(0);
@@ -394,13 +409,15 @@ int main(void)
                 bullet3.position.y=shooting3;
 
 //Power up
-                if (((fuel<8550 && fuel>8500) || (fuel<5050 && fuel>5000)) && power.position.x>2){//Sends power up when fuel is 8000 or 5000
+                if (((fuel<9850 && fuel>8500) || (fuel<3050 && fuel>2000)) && power.position.x>2){//Sends power up when fuel is 8000 or 5000
                     printPower(power, oldPower);
                     movePower(&power, &oldPower);
                 }
 
-                if ((fuel<6050 && fuel>6000) || (fuel<3050 && fuel>3000)){//Ends power up when fuel is 6000 or 3000.
+                if ((fuel<7550 && fuel>3500) || fuel<950){//Ends power up when fuel is 6000 or 3000.
                     powerFlag=0;
+                    power.position.x = 135;
+                    power.position.y = 3;
                 }
 
 //If time runs out or you have no lives left it is GAME OVER!

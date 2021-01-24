@@ -143,3 +143,11 @@ uint8_t keyInput(){
     }
     return x;
 }
+
+void resetHS() {
+    FLASH_Unlock();
+    FLASH_ClearFlag( FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPERR );
+    FLASH_ErasePage(0x0800F800);//erase page
+    FLASH_ProgramHalfWord(0x0800F800,0);//write data
+    FLASH_Lock();//lock flash
+}

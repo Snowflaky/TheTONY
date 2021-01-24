@@ -381,3 +381,15 @@ void printLevel(){
     gotoxy(57,25);
     printf("Press 0 to go back to main menu");
 }
+
+void printWarning(){
+    gotoxy(52,30);
+    printf("You are now trying to reset the high score, do you wish to continue?");
+    gotoxy(52,32);
+    printf("[WARNING!!! THIS CANNOT BE UNDONE!!!]");
+    gotoxy(52,35);
+    printf("Oh heavens no, take me back to the main menu! (press 0)");
+    gotoxy(52,37);
+    printf("Aye, I shall reign supreme over this Cortex M4! (press p)");
+}
+
