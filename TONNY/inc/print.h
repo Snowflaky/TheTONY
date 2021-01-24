@@ -24,7 +24,10 @@ void printPower (struct bullet_t power, struct bullet_t oldPower);
 void drawEnemy (struct enemy e);
 void eraseEnemy (struct enemy e);
 void boss ();
-
+void printMain();
+void printUserMenu();
+void printCredit();
+void printLevel();
 
 
 #endif

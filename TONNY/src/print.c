@@ -330,4 +330,54 @@ void boss (){
         printf("Press '0'");
 }
 
+void printMain(){
+    window(50,90,15,27,4);
+    gotoxy(65,17);
+    printf("MAIN MENU");
+    gotoxy(62,19);
+    printf("1. Game levels");
+    gotoxy(62,21);
+    printf("2. How to play");
+    gotoxy(62,23);
+    printf("3. Credits");
+}
 
+void printUserMenu(){
+    gotoxy(0,10);
+    printf("The spaceship moves up when you press 'w' and down when you press 's'.\nTo shoot at your enemy, press 'p'.\n");
+    printf("The enemies have different paths of movements, so observe them closely!\nThey also throw quantum nets.");
+    printf("They damage your spaceship so be careful to avoid them.\nIt can only withstand 2 hits. A third is fatal.\n");
+    printf("Space is also filled with asteroid which may help you or hinder you in your quest to shoot enemies.\n");
+    printf("You only have so much fuel in your tank and your spaceship burns through it as you travel through space.\n");
+    printf("Every time an enemy get past you they suck a little bit of it.\nWhen your tank is empty the game ends.\n");
+    printf("Your fuel level, lives and score is displayed on the LCD screen\n");
+    printf("An LED in your control-room indicates your fuel levels.\nIt changes at a half-tank and a quarter-tank.\n");
+    printf("And if you are wondering what that sound is, don't worry.\nThat's just the sound of your fuel tank emptying!\n");
+    printf("You can always end a game and return to the main menu by pressing '0'\n");
+    printf("\nPress 0 to go back to main menu\n\n");
+    printf("*********************************************************************\n");
+    printf("      PSSSTTT!!!\n");
+    printf("If your Boss suddenly walks by while you are playing, just press 'B',\n");
+    printf("he won't suspect a thing ;)\n");
+    printf("*********************************************************************\n");
+}
+
+void printCredit(){
+    gotoxy(0,10);
+    printf("This game is made by:\nSara\nJosefine\n& Erik\n");
+    printf("\nPress 0 to go back to main menu");
+}
+
+void printLevel(){
+    window(50,90,15,27,4);
+    gotoxy(64,17);
+    printf("CHOOSE LEVEL");
+    gotoxy(62,19);
+    printf("1. Level 1");
+    gotoxy(62,21);
+    printf("2. Level 2");
+    gotoxy(62,23);
+    printf("3. Level 3");
+    gotoxy(57,25);
+    printf("Press 0 to go back to main menu");
+}
